@@ -78,7 +78,7 @@ def nivel_dificil():
                        '4, 11': '*rojo',
                        '5, 10': '*rojo',
                        '14, 5': '*rojo',
-                       '14, 15': '*verde'},  # ver de armarl ode forma random
+                       '14, 14': '*verde'},  # ver de armarl ode forma random
         'timepo': 15,  # minutos
         # el indice es la letra y e lvalor la cantidad de fichas de esa letra
 
