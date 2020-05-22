@@ -5,11 +5,18 @@ class Tablero ():
         self.__casilleros = self.__inicializarCasilleros(configuracion)
 
     def __inicializarCasilleros(self, configuracion):
+        """Crea la matriz donde se insertarán las fichas a partir de una configuración.
+        Si hay casilleros especiales, representados con un diccionario bajo
+        el formato {'coordx, coordy': '*<color>'}, graba '*<color>' en la matriz,
+        según las coordenadas de la clave."""
         matriz = []
         espacios_especiales = configuracion.getEspeciales()
         for x in range(0, configuracion.getFilas()):
             fila = []
+            #Crea la fila, moviéndose entre columnas
             for y in range(0, configuracion.getColumnas()):
+                #Si la coordenada actual está en el diccionario para espacios
+                #especiales, toma el color y lo inserta en la matriz
                 if (f'{x}, {y}' in espacios_especiales) or (f'{x},{y}' in espacios_especiales):
                     fila.append(espacios_especiales[f'{x}, {y}'])
                 else:
@@ -18,9 +25,11 @@ class Tablero ():
         return matriz
 
     def getCasilleros(self):
+        """Devuelve la matriz que representa el tablero"""
         return self.__casilleros
 
     def setCasilleros(self, casilleros):
+        """Recibe una matriz y la asigna como tablero"""
         self.__casilleros = casilleros
 
     def insertarPalabra(self, fichas, posicion, sentido):
@@ -70,6 +79,8 @@ class Tablero ():
             return isinstance(ficha, dict)
 
     def imprimirCasilleros(self):
+        """Imprime la matriz en formato string.
+        Tiene propositos de testeo."""
         casilleros = self.getCasilleros()
         for fila in casilleros:
             for dato in fila:
