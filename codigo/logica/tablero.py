@@ -23,37 +23,64 @@ class Tablero ():
     def setCasilleros(self, casilleros):
         self.__casilleros = casilleros
 
-    def insertarPalabra(self, palabra, posicion, sentido):
-        """Recibe una palabra en formato string, una posicion en formato tupla
-        (x, y) y un sentido en formato string ("h" o "v").
-        Luego, si hubiese lugar, inserta la palabra en el tablero siguiendo
-        esas indicaciones.
+    def insertarPalabra(self, fichas, posicion, sentido):
+        """Recibe una lista de fichas en formato diccionario,
+        una posicion en formato tupla (x, y) y un sentido en formato string
+        ("h" o "v"). Luego, si hubiese lugar, inserta la palabra en el tablero
+        siguiendo esas indicaciones.
         Además, retorna el puntaje para esa inserción."""
-        lista_caracteres = [caracter for caracter in palabra]
         casilleros = self.getCasilleros()
         x = posicion[0]
         y = posicion[1]
         puntaje = 0
         penitencia = 0
         if (sentido == 'h'):
-            while (y < len(casilleros[posicion[0]])) and (y < (posicion[1] + len(palabra))):
-                if (casilleros[x][y] == '') or (casilleros[x][y][0] == '*'):
-                    y += 1
-            if (len(palabra) == y - posicion[1]):
+            while (y < len(casilleros[posicion[0]])) and (y < (posicion[1] + len(fichas))):
+                if (self.esFicha(x, y)):
+                    break
+                y += 1
+            if (len(fichas) == y - posicion[1]):
                 y = posicion[1]
-                for caracter in palabra:
-                    casilleros[posicion[0]][y] = caracter
+                for f in fichas:
+                    casilleros[posicion[0]][y] = f
                     y += 1
                 self.setCasilleros(casilleros)
         else:
-            pass
-
+            while (x < len(casilleros)) and (x < posicion[0] + len(fichas)):
+                if (self.esFicha(x, y)):
+                    break
+                x += 1
+            if (len(fichas) == x - posicion[0]):
+                x = posicion[0]
+                for f in fichas:
+                    casilleros[x][posicion[1]] = f
+                    x += 1
+                self.setCasilleros(casilleros)
         return puntaje
 
+    def esFicha(self, x=-1, y=-1, ficha=None):
+        """Determina si un objeto es o no una ficha, y retorna True o False
+        dependiendo de ello.
+        Si recibe una coordenada, busca la ficha en el tablero.
+        Si recibe una ficha, ignora las coordenadas y evalúa esa ficha en
+        particular."""
+        if (ficha == None):
+            return isinstance(self.getCasilleros()[x][y], dict)
+        else:
+            return isinstance(ficha, dict)
 
-    def verCasilleros(self):
-        for fila in self.getCasilleros():
-            print(fila)
+    def imprimirCasilleros(self):
+        casilleros = self.getCasilleros()
+        for fila in casilleros:
+            for dato in fila:
+                if (self.esFicha(ficha=dato)):
+                    print(list(dato.keys())[0], end='  ')
+                else:
+                    if (dato == ''):
+                        print('-', end='  ')
+                    else:
+                        print(dato[0:2], end='  ')
+            print()
 
 confi = nivel_dificil()
 
@@ -61,9 +88,15 @@ confi = nivel_dificil()
 configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'])
 
 unTablero = Tablero(configuracion)
+<<<<<<< HEAD
 #puntaje = unTablero.insertarPalabra("hola", (4,4), "h")
 unTablero.verCasilleros()
 
+=======
+>>>>>>> 923eb9a454034ac93c7952eae7e2ac2800715753
 
-matriz = unTablero.getCasilleros()[4][4]
-print(matriz)
+lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
+nuevas_fichas = [{'a': 4}, {'g': 5}]
+unTablero.insertarPalabra(lista_fichas, (2,4), "v")
+unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
+unTablero.imprimirCasilleros()
