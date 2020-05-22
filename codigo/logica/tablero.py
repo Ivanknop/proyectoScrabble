@@ -1,5 +1,6 @@
 from preferencias import Preferencias
 from configuracion import *
+
 class Tablero ():
     def __init__(self, configuracion):
         self.__casilleros = self.__inicializarCasilleros(configuracion)
@@ -95,16 +96,9 @@ class Tablero ():
 
 confi = nivel_dificil()
 
-#configuracion = Preferencias(6, 8, {'5, 5': '*rojo','3, 5': '*rojo'})
 configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'])
 
 unTablero = Tablero(configuracion)
-<<<<<<< HEAD
-#puntaje = unTablero.insertarPalabra("hola", (4,4), "h")
-unTablero.verCasilleros()
-
-=======
->>>>>>> 923eb9a454034ac93c7952eae7e2ac2800715753
 
 lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
 nuevas_fichas = [{'a': 4}, {'g': 5}]
