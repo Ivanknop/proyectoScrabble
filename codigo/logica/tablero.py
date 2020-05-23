@@ -1,5 +1,5 @@
-from preferencias import Preferencias
-from configuracion import *
+from logica.preferencias import Preferencias
+from logica.configuracion import *
 
 class Tablero ():
     def __init__(self, configuracion):
@@ -94,14 +94,14 @@ class Tablero ():
                         print(dato[0:2], end='  ')
             print()
 
-confi = nivel_dificil()
-
-configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'])
-
-unTablero = Tablero(configuracion)
-
-lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
-nuevas_fichas = [{'a': 4}, {'g': 5}]
-unTablero.insertarPalabra(lista_fichas, (2,4), "v")
-unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
-unTablero.imprimirCasilleros()
+# confi = nivel_dificil()
+#
+# configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'])
+#
+# unTablero = Tablero(configuracion)
+#
+# lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
+# nuevas_fichas = [{'a': 4}, {'g': 5}]
+# unTablero.insertarPalabra(lista_fichas, (2,4), "v")
+# unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
+# unTablero.imprimirCasilleros()
