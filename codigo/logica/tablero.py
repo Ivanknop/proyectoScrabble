@@ -71,7 +71,7 @@ class Tablero ():
     def esFicha(self, x=-1, y=-1, ficha=None):
         """Determina si un objeto es o no una ficha, y retorna True o False
         dependiendo de ello.
-        Si recibe una coordenada, busca la ficha en el tablero.
+        Si recibe una coordenada, evalúa lo que hay en esa posición.
         Si recibe una ficha, ignora las coordenadas y evalúa esa ficha en
         particular."""
         if (ficha == None):

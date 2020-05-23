@@ -20,5 +20,3 @@ def check_jugador(palabra):
 
 def check_compu(palabra):
     pass
-
-
