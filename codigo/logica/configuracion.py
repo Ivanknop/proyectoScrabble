@@ -72,8 +72,8 @@ def nivel_dificil():
     # y menor tiempo de juego
     # tendra mas casilleros que restan puntos
     conf = {
-        'filas': 15,
-        'columnas': 15,
+        'filas': 10,
+        'columnas': 10,
         'especiales': {'10, 5': '*rojo',
                        '4, 11': '*rojo',
                        '5, 10': '*rojo',
