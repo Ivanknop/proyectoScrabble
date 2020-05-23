@@ -22,4 +22,3 @@ def check_compu(palabra):
     pass
 
 
-print(check_jugador('corriendo'))
