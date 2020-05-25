@@ -2,6 +2,7 @@
 
 def nivel_facil():
     conf = {
+        'nivel':'facil',
         'filas':20,
         'columnas':20,
         'especiales': {'10, 5': '*rojo',
@@ -33,6 +34,7 @@ def nivel_medio():
     #el tablero sera un poco mas chico
     #y menor tiempo de juego
     conf = {
+        'nivel': 'medio',
         'filas':15,
         'columnas':15,
         'especiales': {'10, 5': '*rojo',
@@ -72,6 +74,7 @@ def nivel_dificil():
     # y menor tiempo de juego
     # tendra mas casilleros que restan puntos
     conf = {
+        'nivel': 'dificil',
         'filas': 10,
         'columnas': 10,
         'especiales': {'10, 5': '*rojo',
