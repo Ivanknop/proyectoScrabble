@@ -53,9 +53,11 @@ def check_jugador(palabra):
 
 def check_compu(palabra):
     pass
-#TIPO sera una varible global que nos permite chequiar que la palabra a ingresar, este dentor
-#de las clasificaciones permitidas en el juego  adj = adjetivos, sus= sustantivo, verb = verbos
-
+'''TIPO sera una varible global que nos permite chequiar que la palabra a ingresar, este dentor
+de las clasificaciones permitidas en el juego  adj = adjetivos, sus= sustantivo, verb = verbos
+las clasificiaciones estan tomadas dle modulo pattern, pero la construccio nde este modulo 
+facilita su comprovacion
+'''
 TIPO= {'adj':["AO", "JJ","AQ","DI","DT"],
          'sus':["NC", "NN", "NCS","NCP", "NNS","NP", "NNP","W"],
           'verb':[ "VAG", "VBG", "VAI","VAN", "MD", "VAS" , "VMG" , "VMI", "VB", "VMM" ,"VMN" , "VMP", "VBN","VMS","VSG",  "VSI","VSN", "VSP","VSS"  ]
