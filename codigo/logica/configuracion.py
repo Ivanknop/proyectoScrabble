@@ -1,15 +1,30 @@
+import random
 
+
+def especial(fila, col):
+    esp = ['*rojo', '*verde']
+    especiales = {}
+
+    for row in range(fila):
+        for col in range(col):
+            if random.randint(0, 100) > 10:
+                pass
+            else:
+                # aca asigno el casillero especial
+                l = [str(row), ',', str(col)]
+                c = ''.join(l)
+
+                random.shuffle(esp)
+                especiales[c] = esp[0]
+    return especiales
 
 def nivel_facil():
     conf = {
         'nivel':'facil',
         'filas':20,
         'columnas':20,
-        'especiales': {'10, 5': '*rojo',
-                     '4, 11': '*verde',
-                     '20, 5': '*rojo',
-                     '14, 5': '*verde',
-                     '14, 15': '*verde'}, #ver de armarl ode forma random
+        'especiales':{},
+
         'timepo': 20, #minutos
         'cant_fichas': {'A':11, 'E':11, 'O':8, 'S':7, 'I':6,'U': 6, 'N': 5, 'L': 4, 'R': 4, 'T': 4,'C': 4, 'D': 4, 'G': 2, 'M': 3, 'B': 3,'P': 2, 'F': 2, 'H': 2, 'V': 2, 'Y': 1,'J': 2, 'K': 1, 'Ñ': 1, 'Q': 1, 'W': 1, 'X': 1, 'Z': 1 },
 
@@ -25,6 +40,7 @@ def nivel_facil():
         10: ['Z']
     }
     }
+    conf['especiales']=especial(conf['filas'], conf['columnas'])
     return conf
 
 
@@ -37,11 +53,7 @@ def nivel_medio():
         'nivel': 'medio',
         'filas':15,
         'columnas':15,
-        'especiales': {'10, 5': '*rojo',
-                     '4, 11': '*verde',
-                     '9, 5': '*rojo',
-                     '14, 5': '*verde',
-                     '9, 9': '*verde'}, #ver de armarl ode forma random
+        'especiales': {},
         'timepo': 15, #minutos
         # el indice es la letra y e lvalor la cantidad de fichas de esa letra
 
@@ -64,6 +76,7 @@ def nivel_medio():
         10: ['Z']
     }
     }
+    conf['especiales'] = especial(conf['filas'], conf['columnas'])
     return conf
 
 
@@ -77,11 +90,7 @@ def nivel_dificil():
         'nivel': 'dificil',
         'filas': 10,
         'columnas': 10,
-        'especiales': {'10, 5': '*rojo',
-                       '4, 11': '*rojo',
-                       '5, 10': '*rojo',
-                       '14, 5': '*rojo',
-                       '14, 14': '*verde'},  # ver de armarl ode forma random
+        'especiales': {},  # ver de armarl ode forma random
         'timepo': 15,  # minutos
         # el indice es la letra y e lvalor la cantidad de fichas de esa letra
 
@@ -104,4 +113,7 @@ def nivel_dificil():
             10: ['Z']
         }
     }
+    conf['especiales'] = especial(conf['filas'], conf['columnas'])
     return conf
+
+
