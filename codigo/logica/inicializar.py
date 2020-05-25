@@ -1,3 +1,5 @@
+#Escoge nivel e inicializa tablero y bolsa de fichas. Crea Atril 1
+
 from configuracion import *
 from tablero import *
 from preferencias import Preferencias
