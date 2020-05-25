@@ -11,7 +11,7 @@ def especial(fila, col):
                 pass
             else:
                 # aca asigno el casillero especial
-                l = [str(row), ',', str(col)]
+                l = [str(row), ', ', str(col)]
                 c = ''.join(l)
 
                 random.shuffle(esp)
