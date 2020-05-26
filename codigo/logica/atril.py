@@ -4,7 +4,7 @@ import random
 
 class Atril():
     '''
-        Recibe la bolsa de fichas y la cantidad de fichas 
+        Recibe la bolsa de fichas y la cantidad de fichas
         que se deben repartir en la partida.
         Sus métodos son devolver una ficha determinando su posición,
         cambiar todas las fichas del atril si es que hay fichas en la bolsa
@@ -18,10 +18,10 @@ class Atril():
         for i in range(cant_fichas):
             self._lista_Fichas.append(bolsa_fichas[0])
             bolsa_fichas.remove(bolsa_fichas[0])
-            
-    def get_ficha(self, pos): 
+
+    def get_ficha(self, pos):
         return self._lista_Fichas[pos]
-    
+
     def cambiar_fichas (self,bolsa_fichas,cant_fichas):
         self._cant_Fichas = 0
         self._lista_Fichas = []
@@ -32,7 +32,7 @@ class Atril():
 
     def ver_atril(self):
         return self._lista_Fichas
-    
+
     def get_cant_fichas(self):
         return self._cant_Fichas
 
