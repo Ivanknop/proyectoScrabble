@@ -117,4 +117,4 @@ TIPO= {'adj':["AO", "JJ","AQ","DI","DT"],
           }
 
 
-print(check_jugador('magia'))
+#print(check_jugador('magia'))
