@@ -45,10 +45,11 @@ class Dibujar():
                             [sg.Text('Puntuación actual:      ', font=('Arial', 14), key='puntaje')],
                             [sg.Text('Tiempo transcurrido:', font=('Arial', 14))],
                             [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
-                            [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), style='xpnative', key='progreso')],
+                            [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
-                            [sg.Text(' ---TUS FICHAS--- ', background_color='black', font=('Arial', 14), text_color='White')],
+                            [sg.Text(' ---TUS FICHAS--- ', background_color='black', font=('Arial', 14), text_color='White', key='palabra')],
                             fichas,
+                            [sg.Button('Validar', font=('Arial', 14), key='validar')],
                             [sg.Text('_'*30)],
                             [sg.Text(' ---FICHAS DEL OPONENTE--- ', background_color='black', font=('Arial', 14), text_color='White')],
                             fichas_oponente]
@@ -129,6 +130,9 @@ class Dibujar():
         if (f_inferior < pref.getFilas()):
             self._getInterfaz()[f'tablero {f_inferior},{c}'].Update(image_filename='orientacionAbajo.png', image_size=(29,31))
 
+    def actualizarPalabra(self, palabra):
+        self._getInterfaz()['palabra'].Update(palabra, background_color='black', font=('Arial', 14), text_color='White')
+
     def _getInterfaz(self):
         return self._interfaz
     def _setInterfaz(self, unaInterfaz):
@@ -148,22 +152,28 @@ configu = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], con
 unTablero = Tablero(configu)
 bolsa_fichas = crear_bolsa(confi['cant_fichas'],confi['puntaje_ficha'])
 jugador = Atril (bolsa_fichas, 7)
-unTablero.insertarPalabra([{'a': 4}, {'a': 4}], (2, 3), 'h')
 interfaz = Dibujar(unTablero, configu, jugador)
 
 prueba_mostrar = True
 interfaz.setTimer(1)
 
-while True:
+jugar = True
+while jugar:
     event, value = interfaz.leer()
-    if prueba_mostrar:
-        interfaz.actualizarPuntaje(9)
-        prueba_mostrar = False
-    if event == 'tablero 0,1':
-        interfaz.actualizarPuntaje(12)
-        interfaz.seleccionarOrientacion('0,1', configu)
-    if event == 'tablero 0,2':
-        interfaz.actualizarTablero(unTablero)
+    if ('ficha' in event):
+        palabra = ''
+        validar = False
+        palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
+        interfaz.actualizarPalabra(palabra)
+        while (not validar):
+            event, value = interfaz.leer()
+            if (event == 'validar'):
+                validar = True
+            if ('ficha' in event):
+                palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
+                interfaz.actualizarPalabra(palabra)
+            interfaz.actualizarTimer()
+        print('este evento terminó')
     if interfaz.terminoTimer():
         break
     interfaz.actualizarTimer()

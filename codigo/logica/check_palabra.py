@@ -108,7 +108,7 @@ def check_compu(palabra):
 
 '''TIPO sera una varible global que nos permite chequiar que la palabra a ingresar, este dentor
 de las clasificaciones permitidas en el juego  adj = adjetivos, sus= sustantivo, verb = verbos
-las clasificiaciones estan tomadas dle modulo pattern, pero la construccio nde este modulo 
+las clasificiaciones estan tomadas dle modulo pattern, pero la construccio nde este modulo
 facilita su comprovacion
 '''
 TIPO= {'adj':["AO", "JJ","AQ","DI","DT"],
@@ -117,4 +117,4 @@ TIPO= {'adj':["AO", "JJ","AQ","DI","DT"],
           }
 
 
-#print(check_jugador('magia'))
+#print(check_jugador('abaco'))
