@@ -1,21 +1,47 @@
 import random
 
 
-def especial(fila, col):
-    esp = ['*rojo', '*verde']
+def especial(fila, col,nivel):
+    ''' esta funci{on genera casilleros especiales, segun el nivel
+    teniendo en cuenta la cantidad de columnas y filas, y la dificultad dle mismo
+    y siempre controla que tenga cierta cantidad de casilleros especiales'''
+
+
+
+    if nivel == 'facil':
+        esp = ['*-', '*+']
+        minEsp= 10
+    elif nivel == 'medio':
+        esp = ['*-', '*+', '**', '*0']
+        minEsp = 7
+    elif nivel == 'dificil':
+        esp = ['*-', '*+', '**', '*0', '*/']
+        minEsp = 7
+    else:
+        esp = []
+
+
+
     especiales = {}
+    minok = False
+    while not minok:
+        for row in range(fila):
+            for col in range(col):
+                if random.randint(0, 100) > 10:
+                    pass
+                else:
+                    # aca asigno el casillero especial
+                    l = [str(row), ', ', str(col)]
+                    c = ''.join(l)
 
-    for row in range(fila):
-        for col in range(col):
-            if random.randint(0, 100) > 10:
-                pass
-            else:
-                # aca asigno el casillero especial
-                l = [str(row), ', ', str(col)]
-                c = ''.join(l)
+                    random.shuffle(esp)
+                    especiales[c] = esp[0]
+        # controlo el minimo de casilleros
+        print(especiales)
+        print(len(especiales))
+        if len(especiales) >= minEsp:
+            minok = True
 
-                random.shuffle(esp)
-                especiales[c] = esp[0]
     return especiales
 
 def nivel_facil():
@@ -40,7 +66,7 @@ def nivel_facil():
         10: ['Z']
     }
     }
-    conf['especiales']=especial(conf['filas'], conf['columnas'])
+    conf['especiales']=especial(conf['filas'], conf['columnas'],conf['nivel'])
     return conf
 
 
@@ -76,7 +102,7 @@ def nivel_medio():
         10: ['Z']
     }
     }
-    conf['especiales'] = especial(conf['filas'], conf['columnas'])
+    conf['especiales'] = especial(conf['filas'], conf['columnas'],conf['nivel'])
     return conf
 
 
@@ -113,7 +139,8 @@ def nivel_dificil():
             10: ['Z']
         }
     }
-    conf['especiales'] = especial(conf['filas'], conf['columnas'])
+    conf['especiales'] = especial(conf['filas'], conf['columnas'],conf['nivel'])
     return conf
 
 
+e = nivel_facil()
