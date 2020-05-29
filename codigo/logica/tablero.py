@@ -8,18 +8,18 @@ class Tablero ():
     def __inicializarCasilleros(self, configuracion):
         """Crea la matriz donde se insertarán las fichas a partir de una configuración.
         Si hay casilleros especiales, representados con un diccionario bajo
-        el formato {'coordx, coordy': '*<color>'}, graba '*<color>' en la matriz,
+        el formato {'fila, columna': '*<color>'}, graba '*<color>' en la matriz,
         según las coordenadas de la clave."""
         matriz = []
         espacios_especiales = configuracion.getEspeciales()
-        for x in range(0, configuracion.getFilas()):
+        for f in range(0, configuracion.getFilas()):
             fila = []
             #Crea la fila, moviéndose entre columnas
-            for y in range(0, configuracion.getColumnas()):
-                #Si la coordenada actual está en el diccionario para espacios
+            for c in range(0, configuracion.getColumnas()):
+                #Si la ubicación actual está en el diccionario para espacios
                 #especiales, toma el color y lo inserta en la matriz
-                if (f'{x}, {y}' in espacios_especiales) or (f'{x},{y}' in espacios_especiales):
-                    fila.append(espacios_especiales[f'{x}, {y}'])
+                if (f'{f}, {c}' in espacios_especiales) or (f'{f},{c}' in espacios_especiales):
+                    fila.append(espacios_especiales[f'{f}, {c}'])
                 else:
                     fila.append('')
             matriz.append(fila)
@@ -35,47 +35,49 @@ class Tablero ():
 
     def insertarPalabra(self, fichas, posicion, sentido):
         """Recibe una lista de fichas en formato diccionario,
-        una posicion en formato tupla (x, y) y un sentido en formato string
+        una posicion en formato tupla (fila, columna) y un sentido en formato string
         ("h" o "v"). Luego, si hubiese lugar, inserta la palabra en el tablero
         siguiendo esas indicaciones.
         Además, retorna el puntaje para esa inserción."""
         casilleros = self.getCasilleros()
-        x = posicion[0]
-        y = posicion[1]
+        #Fila
+        f = posicion[0]
+        #Columna
+        c = posicion[1]
         puntaje = 0
         penitencia = 0
         if (sentido == 'h'):
-            while (y < len(casilleros[posicion[0]])) and (y < (posicion[1] + len(fichas))):
-                if (self.esFicha(x, y)):
+            while (c < len(casilleros[posicion[0]])) and (c < (posicion[1] + len(fichas))):
+                if (self.esFicha(f, c)):
                     break
-                y += 1
-            if (len(fichas) == y - posicion[1]):
-                y = posicion[1]
-                for f in fichas:
-                    casilleros[posicion[0]][y] = f
-                    y += 1
+                c += 1
+            if (len(fichas) == c - posicion[1]):
+                c = posicion[1]
+                for fic in fichas:
+                    casilleros[posicion[0]][c] = fic
+                    c += 1
                 self.setCasilleros(casilleros)
         else:
-            while (x < len(casilleros)) and (x < posicion[0] + len(fichas)):
-                if (self.esFicha(x, y)):
+            while (f < len(casilleros)) and (f < posicion[0] + len(fichas)):
+                if (self.esFicha(f, c)):
                     break
-                x += 1
-            if (len(fichas) == x - posicion[0]):
-                x = posicion[0]
-                for f in fichas:
-                    casilleros[x][posicion[1]] = f
-                    x += 1
+                f += 1
+            if (len(fichas) == f - posicion[0]):
+                f = posicion[0]
+                for fic in fichas:
+                    casilleros[f][posicion[1]] = fic
+                    f += 1
                 self.setCasilleros(casilleros)
         return puntaje
 
-    def esFicha(self, x=-1, y=-1, ficha=None):
+    def esFicha(self, f=-1, c=-1, ficha=None):
         """Determina si un objeto es o no una ficha, y retorna True o False
         dependiendo de ello.
-        Si recibe una coordenada, evalúa lo que hay en esa posición.
+        Si recibe fila y columna, evalúa lo que hay en esa posición.
         Si recibe una ficha, ignora las coordenadas y evalúa esa ficha en
         particular."""
         if (ficha == None):
-            return isinstance(self.getCasilleros()[x][y], dict)
+            return isinstance(self.getCasilleros()[f][c], dict)
         else:
             return isinstance(ficha, dict)
 

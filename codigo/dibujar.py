@@ -14,18 +14,23 @@ class Dibujar():
         self._tiempo_fin = 0
         #Prepara y agrega a la columna izquierda todos los casilleros del tablero
         columna_izquierda = []
-        x = 0
-        y = 0
+        #Filas
+        f = 0
+        #Columnas
+        c = 0
         for fila in tablero.getCasilleros():
             insercion = []
             for dato in fila:
-                if (dato==''):
-                    insercion.append(sg.Button(image_filename='azul.png', pad=(0,0), key=f'tablero {x}{y}', image_size=(29,31), enable_events=True))
+                if (tablero.esFicha(ficha=dato)):
+                    insercion.append(sg.Button(image_filename=f'ficha {list(dato.keys())[0]}.png', pad=(0,0), key=f'tablero {f},{c}', image_size=(29,31), enable_events=True))
                 else:
-                    insercion.append(sg.Button(image_filename=f'{dato[1:]}.png', pad=(0,0), key=f'tablero {x}{y}', image_size=(29,31), enable_events=True))
-                y += 1
-            y = 0
-            x += 1
+                    if (dato==''):
+                        insercion.append(sg.Button(image_filename='azul.png', pad=(0,0), key=f'tablero {f},{c}', image_size=(29,31), enable_events=True))
+                    else:
+                        insercion.append(sg.Button(image_filename=f'{dato[1:]}.png', pad=(0,0), key=f'tablero {f},{c}', image_size=(29,31), enable_events=True))
+                c += 1
+            f += 1
+            c = 0
             columna_izquierda.append(insercion)
 
         fichas = []
@@ -77,25 +82,49 @@ class Dibujar():
         lo hubiese, y su respectivo valor. Si ningún evento ocurrió, el
         programa sigue su curso con normalidad.
         Los eventos posibles son:
-        "tablero {x}{y}", donde x e y son las coordenadas del botón;
-        "ficha {i}", donde i representa el número de ficha elegido, siendo i >= 0 & i <= cant_total_fichas'''
+        "tablero f,c", donde f y c son la fila y columna donde está el botón;
+        "ficha i", donde i representa el número de ficha elegido, siendo i >= 0 & i <= cant_total_fichas'''
         return self._getInterfaz().Read(timeout=0)
 
     def actualizarTablero(self, tablero):
         '''Analiza la matriz y la proyecta en la GUI. Si durante el proceso
         se topa con una ficha, busca la imagen PNG que le corresponde.'''
-        x = 0
-        y = 0
+        #Filas
+        f = 0
+        #Columnas
+        c = 0
         for fila in tablero.getCasilleros():
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    self._getInterfaz()[f'tablero {x}{y}'].Update(image_filename=f'ficha {list(dato.keys())[0]}.png', image_size=(29,31))
-                y += 1
-            y = 0
-            x += 1
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'ficha {list(dato.keys())[0]}.png', image_size=(29,31))
+                else:
+                    if (dato == ''):
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename='azul.png', image_size=(29,31))
+                    else:
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{dato[1:]}.png', image_size=(29,31))
+                c += 1
+            c = 0
+            f += 1
 
     def actualizarPuntaje(self, nuevo_puntaje):
         self._getInterfaz()['puntaje'].Update(f'Puntuación actual: {nuevo_puntaje}', font=('Arial', 14))
+
+    def seleccionarOrientacion(self, coordenada, pref):
+        '''Una vez validada la palabra, permite mostrar los botones para
+        seleccionar su orientación. La coordenada recibida por parámetro, en
+        formato string "f,c", se corresponde con la fila y columna del tablero
+        a partir de las cuáles se seleccionarán el sentido.
+        Las preferencias son necesarias para no insertar un botón de
+        "sentido" fuera del límite.'''
+        f = int(coordenada.split(",")[0])
+        c = int(coordenada.split(",")[1])
+        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename='orientacion.png', image_size=(29,31))
+        c_contiguo = c + 1
+        if (c_contiguo != pref.getColumnas()):
+            self._getInterfaz()[f'tablero {f},{c_contiguo}'].Update(image_filename='orientacionDerecha.png', image_size=(29,31))
+        f_inferior = f + 1
+        if (f_inferior < pref.getFilas()):
+            self._getInterfaz()[f'tablero {f_inferior},{c}'].Update(image_filename='orientacionAbajo.png', image_size=(29,31))
 
     def _getInterfaz(self):
         return self._interfaz
@@ -112,12 +141,12 @@ class Dibujar():
 
 
 confi = nivel_medio()
-configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
-unTablero = Tablero(configuracion)
+configu = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
+unTablero = Tablero(configu)
 bolsa_fichas = crear_bolsa(confi['cant_fichas'],confi['puntaje_ficha'])
 jugador = Atril (bolsa_fichas, 7)
-interfaz = Dibujar(unTablero, configuracion, jugador)
-unTablero.insertarPalabra([{'a': 4}, {'a': 4}], (2, 2), 'h')
+interfaz = Dibujar(unTablero, configu, jugador)
+unTablero.insertarPalabra([{'a': 4}, {'a': 4}], (2, 3), 'h')
 prueba_mostrar = True
 interfaz.setTimer(1)
 
@@ -127,8 +156,11 @@ while True:
         interfaz.actualizarTablero(unTablero)
         interfaz.actualizarPuntaje(9)
         prueba_mostrar = False
-    if event == 'tablero 01':
+    if event == 'tablero 0,1':
         interfaz.actualizarPuntaje(12)
+        interfaz.seleccionarOrientacion('0,1', configu)
+    if event == 'tablero 0,2':
+        interfaz.actualizarTablero(unTablero)
     if interfaz.terminoTimer():
         break
     interfaz.actualizarTimer()
