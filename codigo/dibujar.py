@@ -12,7 +12,7 @@ class Dibujar():
     def __init__ (self, tablero, preferencias, atril):
         self._tiempo_inicio = 0
         self._tiempo_fin = 0
-        #Prepara y agrega a la columna izquierda todos los casilleros del tablero
+        #Prepara y agrega a la columna izquierda de la interfaz todos los casilleros del tablero
         columna_izquierda = []
         #Filas
         f = 0
@@ -43,8 +43,9 @@ class Dibujar():
         columna_derecha = [[sg.Image('scrabbleArLogo.png')],
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
                             [sg.Text('Puntuación actual:      ', font=('Arial', 14), key='puntaje')],
-                            [sg.Text('Tiempo transcurrido:', font=('Impact', 14))],
+                            [sg.Text('Tiempo transcurrido:', font=('Arial', 14))],
                             [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
+                            [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), style='xpnative', key='progreso')],
                             [sg.Text('_'*30)],
                             [sg.Text(' ---TUS FICHAS--- ', background_color='black', font=('Arial', 14), text_color='White')],
                             fichas,
@@ -65,11 +66,13 @@ class Dibujar():
         self._setTiempoInicio(time.time())
         #Y el tiempo de finalización
         self._setTiempoFin(self._getTiempoInicio() + (minutos * 60))
+        self._getInterfaz()['progreso'].UpdateBar(0, max=(self._getTiempoFin() - self._getTiempoInicio()))
 
     def actualizarTimer(self):
         '''Actualiza el timer en la interfaz.'''
         tiempo_actual = time.time() - self._getTiempoInicio()
         self._getInterfaz()['timer'].Update('{:02d}:{:02d}'.format(int(tiempo_actual // 60), int(tiempo_actual % 60)))
+        self._getInterfaz()['progreso'].UpdateBar(self._getTiempoFin()-time.time())
 
     def terminoTimer(self):
         """
@@ -113,7 +116,7 @@ class Dibujar():
         '''Una vez validada la palabra, permite mostrar los botones para
         seleccionar su orientación. La coordenada recibida por parámetro, en
         formato string "f,c", se corresponde con la fila y columna del tablero
-        a partir de las cuáles se seleccionarán el sentido.
+        a partir de las cuáles se seleccionará el sentido.
         Las preferencias son necesarias para no insertar un botón de
         "sentido" fuera del límite.'''
         f = int(coordenada.split(",")[0])
@@ -145,15 +148,15 @@ configu = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], con
 unTablero = Tablero(configu)
 bolsa_fichas = crear_bolsa(confi['cant_fichas'],confi['puntaje_ficha'])
 jugador = Atril (bolsa_fichas, 7)
-interfaz = Dibujar(unTablero, configu, jugador)
 unTablero.insertarPalabra([{'a': 4}, {'a': 4}], (2, 3), 'h')
+interfaz = Dibujar(unTablero, configu, jugador)
+
 prueba_mostrar = True
 interfaz.setTimer(1)
 
 while True:
     event, value = interfaz.leer()
     if prueba_mostrar:
-        interfaz.actualizarTablero(unTablero)
         interfaz.actualizarPuntaje(9)
         prueba_mostrar = False
     if event == 'tablero 0,1':
