@@ -57,6 +57,8 @@ class Tablero ():
                     casilleros[posicion[0]][c] = fic
                     c += 1
                 self.setCasilleros(casilleros)
+            else:
+                puntaje = -1
         else:
             while (f < len(casilleros)) and (f < posicion[0] + len(fichas)):
                 if (self.esFicha(f, c)):
@@ -68,6 +70,8 @@ class Tablero ():
                     casilleros[f][posicion[1]] = fic
                     f += 1
                 self.setCasilleros(casilleros)
+            else:
+                puntaje = -1
         return puntaje
 
     def esFicha(self, f=-1, c=-1, ficha=None):
@@ -93,7 +97,7 @@ class Tablero ():
                     if (dato == ''):
                         print('-', end='  ')
                     else:
-                        print(dato[0:2], end='  ')
+                        print(dato[1:2], end='  ')
             print()
 
 # confi = nivel_dificil()

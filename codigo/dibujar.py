@@ -40,7 +40,7 @@ class Dibujar():
             fichas.append(sg.Button(image_filename='ficha a.png', image_size=(29,31), key=f'ficha {str(i)}'))
         fichas_oponente = []
         for i in range(0, atril.get_cant_fichas()):
-            fichas_oponente.append(sg.Button(image_filename='unaFichaOponente.png', image_size=(29,31), key=f'ficha_oponente {str(i)}'))
+            fichas_oponente.append(sg.Button(image_filename='unaFichaOponente.png', image_size=(29,31), key=f'oponente {str(i)}'))
 
         columna_derecha = [[sg.Image('scrabbleArLogo.png')],
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
@@ -51,10 +51,11 @@ class Dibujar():
                             [sg.Text('_'*30)],
                             [sg.Text(' ---TUS FICHAS--- ', background_color='black', font=('Arial', 14), text_color='White', key='palabra')],
                             fichas,
-                            [sg.Button('Validar', font=('Arial', 14), key='validar')],
+                            [sg.Button('Validar', font=('Arial', 12), key='validar'), sg.Button('Cambiar fichas', font=('Arial', 12), key='cambiar')],
                             [sg.Text('_'*30)],
                             [sg.Text(' ---FICHAS DEL OPONENTE--- ', background_color='black', font=('Arial', 14), text_color='White')],
-                            fichas_oponente]
+                            fichas_oponente,
+                            [sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
 
         #Crea la ventana y la muestra
         diseño = [[sg.Column(columna_izquierda), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
@@ -141,6 +142,9 @@ class Dibujar():
     def invisibilizarElemento(self, clave):
         self._getInterfaz()[clave].Update(visible=False)
 
+    def popUp(self, cadena):
+        sg.popup(cadena)
+
     def _getInterfaz(self):
         return self._interfaz
     def _setInterfaz(self, unaInterfaz):
@@ -176,7 +180,7 @@ while jugar:
             break
         if ('ficha' in event):
             fichas_seleccionadas = []
-            fichas_seleccionadas.append(event)
+            fichas_seleccionadas.append(int(event.split(" ")[1]))
             palabra = ''
             click_validar = False
             palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
@@ -187,6 +191,7 @@ while jugar:
                 if (event == 'validar'):
                     click_validar = True
                 if ('ficha' in event):
+                    fichas_seleccionadas.append(int(event.split(" ")[1]))
                     interfaz.invisibilizarElemento(event)
                     palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
                     interfaz.actualizarPalabra(palabra)
@@ -196,9 +201,37 @@ while jugar:
                 interfaz.actualizarTimer()
             if (click_validar):
                 if(cp.check_jugador(palabra)):
-                    print('palabra valida')
-                    #ACÁ SE ELIMINARÍAN LAS FICHAS USADAS DEL ATRIL DEL BACKEND
-                    #ACÁ SE SOLICITARÍA ELEGIR LA POS EN EL TABLERO
+                    interfaz.popUp('Seleccione la posición en el tablero y la orientación')
+                    elegir_posicion = True
+                    while elegir_posicion:
+                        event, value = interfaz.leer()
+                        if 'tablero' in event:
+                            interfaz.seleccionarOrientacion(event.split()[1], configu)
+                            elegir_orientacion = True
+                            fila = event.split(" ")[1].split(',')[0]
+                            columna = event.split(" ")[1].split(',')[1]
+                            coord_derecha = fila + ',' + str(int(columna) + 1)
+                            coord_inferior = str(int(fila) + 1) + ',' + columna
+                            while elegir_orientacion:
+                                event, value =interfaz.leer()
+                                if event == f'tablero {coord_derecha}':
+                                    lista_insercion = []
+                                    for f in fichas_seleccionadas:
+                                        lista_insercion.append(jugador.get_ficha(f))
+                                    unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h')
+                                    elegir_orientacion = False
+                                if event == f'tablero {coord_inferior}':
+                                    lista_insercion = []
+                                    for f in fichas_seleccionadas:
+                                        lista_insercion.append(jugador.get_ficha(f))
+                                    unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'v')
+                                    elegir_orientacion = False
+                                interfaz.actualizarTimer()
+
+
+                        interfaz.actualizarTimer()
+                    #for f in fichas_seleccionadas:
+                    #    jugador.usar_ficha(f)
                 else:
                     pass
                     #ACÁ SE VOLVERÍAN A HACER VISIBLES LAS FICHAS QUE SE USARON

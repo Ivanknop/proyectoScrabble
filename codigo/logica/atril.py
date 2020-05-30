@@ -30,6 +30,18 @@ class Atril():
             bolsa_fichas.remove(bolsa_fichas[0])
             self._cant_Fichas += 1
 
+    def usar_ficha (self,pos):
+        self._lista_Fichas.pop(pos)
+
+    def llenar_atril (self, bolsa_fichas, cant_fichas):
+        total = cant_fichas - self._cant_Fichas
+        for i in range(total):
+            if len(bolsa_fichas)>0:
+                self._lista_Fichas.append(bolsa_fichas[0])
+                bolsa_fichas.remove(bolsa_fichas[0])
+            else:
+                break
+
     def ver_atril(self):
         return self._lista_Fichas
 
