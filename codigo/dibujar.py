@@ -4,7 +4,9 @@ from logica.configuracion import *
 from logica.preferencias import Preferencias
 from logica.atril import Atril
 from logica.bolsa_fichas import *
+import logica.check_palabra as cp
 import time
+import random
 
 class Dibujar():
     '''Recibe objetos de tipo atril, tablero y preferencias e inicializa
@@ -133,6 +135,12 @@ class Dibujar():
     def actualizarPalabra(self, palabra):
         self._getInterfaz()['palabra'].Update(palabra, background_color='black', font=('Arial', 14), text_color='White')
 
+    def textoEstandar(self):
+        self._getInterfaz()['palabra'].Update(' ---TUS FICHAS--- ', background_color='black', font=('Arial', 14), text_color='White')
+
+    def invisibilizarElemento(self, clave):
+        self._getInterfaz()[clave].Update(visible=False)
+
     def _getInterfaz(self):
         return self._interfaz
     def _setInterfaz(self, unaInterfaz):
@@ -158,22 +166,41 @@ prueba_mostrar = True
 interfaz.setTimer(1)
 
 jugar = True
+#turno_jugador = random.choice([True, False])
+turno_jugador = True
 while jugar:
-    event, value = interfaz.leer()
-    if ('ficha' in event):
-        palabra = ''
-        validar = False
-        palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
-        interfaz.actualizarPalabra(palabra)
-        while (not validar):
-            event, value = interfaz.leer()
-            if (event == 'validar'):
-                validar = True
-            if ('ficha' in event):
-                palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
-                interfaz.actualizarPalabra(palabra)
-            interfaz.actualizarTimer()
-        print('este evento terminó')
-    if interfaz.terminoTimer():
-        break
-    interfaz.actualizarTimer()
+    if (turno_jugador):
+        event, value = interfaz.leer()
+        if interfaz.terminoTimer():
+            jugar = False
+            break
+        if ('ficha' in event):
+            fichas_seleccionadas = []
+            fichas_seleccionadas.append(event)
+            palabra = ''
+            click_validar = False
+            palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
+            interfaz.actualizarPalabra(palabra)
+            interfaz.invisibilizarElemento(event)
+            while (not click_validar):
+                event, value = interfaz.leer()
+                if (event == 'validar'):
+                    click_validar = True
+                if ('ficha' in event):
+                    interfaz.invisibilizarElemento(event)
+                    palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
+                    interfaz.actualizarPalabra(palabra)
+                if (interfaz.terminoTimer()):
+                    jugar = False
+                    break
+                interfaz.actualizarTimer()
+            if (click_validar):
+                if(cp.check_jugador(palabra)):
+                    print('palabra valida')
+                    #ACÁ SE ELIMINARÍAN LAS FICHAS USADAS DEL ATRIL DEL BACKEND
+                    #ACÁ SE SOLICITARÍA ELEGIR LA POS EN EL TABLERO
+                else:
+                    pass
+                    #ACÁ SE VOLVERÍAN A HACER VISIBLES LAS FICHAS QUE SE USARON
+            print('este evento terminó')
+        interfaz.actualizarTimer()
