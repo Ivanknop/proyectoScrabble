@@ -37,7 +37,8 @@ class Dibujar():
 
         fichas = []
         for i in range(0, atril.get_cant_fichas()):
-            fichas.append(sg.Button(image_filename='ficha a.png', image_size=(29,31), key=f'ficha {str(i)}'))
+            letra = list(atril.get_ficha(i).keys())[0]
+            fichas.append(sg.Button(image_filename=f'ficha {letra}.png', image_size=(29,31), key=f'ficha {str(i)}'))
         fichas_oponente = []
         for i in range(0, atril.get_cant_fichas()):
             fichas_oponente.append(sg.Button(image_filename='unaFichaOponente.png', image_size=(29,31), key=f'oponente {str(i)}'))
@@ -220,16 +221,20 @@ while jugar:
                                         lista_insercion.append(jugador.get_ficha(f))
                                     unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h')
                                     elegir_orientacion = False
+                                    interfaz.actualizarTablero(unTablero)
                                 if event == f'tablero {coord_inferior}':
                                     lista_insercion = []
                                     for f in fichas_seleccionadas:
                                         lista_insercion.append(jugador.get_ficha(f))
                                     unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'v')
                                     elegir_orientacion = False
+                                    interfaz.actualizarTablero(unTablero)
                                 interfaz.actualizarTimer()
 
 
+
                         interfaz.actualizarTimer()
+                    #Esto de abajo solamente se hace si encontró espacio
                     #for f in fichas_seleccionadas:
                     #    jugador.usar_ficha(f)
                 else:
