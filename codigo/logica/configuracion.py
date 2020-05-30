@@ -9,13 +9,13 @@ def especial(fila, col,nivel):
 
 
     if nivel == 'facil':
-        esp = ['*-', '*+']
+        esp = ['*rest', '*sum']
         minEsp= 10
     elif nivel == 'medio':
-        esp = ['*-', '*+', '**', '*0']
+        esp = ['*rest', '*sum', '*mult', '*0']
         minEsp = 7
     elif nivel == 'dificil':
-        esp = ['*-', '*+', '**', '*0', '*/']
+        esp = ['*rest', '*sum', '*mult', '*0', '*div']
         minEsp = 7
     else:
         esp = []
@@ -23,24 +23,25 @@ def especial(fila, col,nivel):
 
 
     especiales = {}
-    minok = False
-    while not minok:
-        for row in range(fila):
-            for col in range(col):
-                if random.randint(0, 100) > 10:
-                    pass
-                else:
-                    # aca asigno el casillero especial
-                    l = [str(row), ', ', str(col)]
-                    c = ''.join(l)
+    # minok = False
+    # while not minok:
+    for row in range(fila):
+        for col in range(col):
+            if random.randint(0, 100) > 10:
+                pass
+            else:
+                # aca asigno el casillero especial
+                l = [str(row), ', ', str(col)]
+                c = ''.join(l)
 
-                    random.shuffle(esp)
-                    especiales[c] = esp[0]
+                random.shuffle(esp)
+                especiales[c] = esp[0]
+
         # controlo el minimo de casilleros
-        print(especiales)
-        print(len(especiales))
-        if len(especiales) >= minEsp:
-            minok = True
+        # print(especiales)
+        # print(len(especiales))
+        # if len(especiales) >= minEsp:
+        #     minok = True
 
     return especiales
 
@@ -143,4 +144,5 @@ def nivel_dificil():
     return conf
 
 
-e = nivel_facil()
+e = nivel_dificil()
+print(e['especiales'])
