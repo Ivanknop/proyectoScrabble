@@ -50,11 +50,11 @@ class Dibujar():
                             [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
-                            [sg.Text(' ---TUS FICHAS--- ', background_color='black', font=('Arial', 14), text_color='White', key='palabra')],
+                            [sg.Text('              ---TUS FICHAS---             ', background_color='black', font=('Arial', 14), text_color='White', key='palabra')],
                             fichas,
                             [sg.Button('Validar', font=('Arial', 12), key='validar'), sg.Button('Cambiar fichas', font=('Arial', 12), key='cambiar')],
                             [sg.Text('_'*30)],
-                            [sg.Text(' ---FICHAS DEL OPONENTE--- ', background_color='black', font=('Arial', 14), text_color='White')],
+                            [sg.Text('    ---FICHAS DEL OPONENTE---    ', background_color='black', font=('Arial', 14), text_color='White')],
                             fichas_oponente,
                             [sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
 
@@ -114,6 +114,12 @@ class Dibujar():
             c = 0
             f += 1
 
+    def actualizarAtril(self, atril):
+        for f in range(0, atril.get_cant_fichas()):
+            letra = list(atril.get_ficha(f).keys())[0]
+            self._getInterfaz()[f'ficha {f}'].Update(image_filename=f'ficha {letra}.png', image_size=(29,31), disabled=False)
+
+
     def actualizarPuntaje(self, nuevo_puntaje):
         self._getInterfaz()['puntaje'].Update(f'Puntuación actual: {nuevo_puntaje}', font=('Arial', 14))
 
@@ -134,14 +140,17 @@ class Dibujar():
         if (f_inferior < pref.getFilas()):
             self._getInterfaz()[f'tablero {f_inferior},{c}'].Update(image_filename='orientacionAbajo.png', image_size=(29,31))
 
-    def actualizarPalabra(self, palabra):
-        self._getInterfaz()['palabra'].Update(palabra, background_color='black', font=('Arial', 14), text_color='White')
+    def actualizarPalabra(self, palabra, color=None, fondo=None, tamaño=14):
+        self._getInterfaz()['palabra'].Update(palabra, font=('Arial', tamaño), text_color=color, background_color=fondo)
 
     def textoEstandar(self):
-        self._getInterfaz()['palabra'].Update(' ---TUS FICHAS--- ', background_color='black', font=('Arial', 14), text_color='White')
+        self._getInterfaz()['palabra'].Update('              ---TUS FICHAS---             ', background_color='black', font=('Arial', 14), text_color='White')
 
-    def invisibilizarElemento(self, clave):
-        self._getInterfaz()[clave].Update(visible=False)
+    def inhabilitarElemento(self, clave):
+        self._getInterfaz()[clave].Update(disabled=True)
+
+    def habilitarElemento(self, clave):
+        self._getInterfaz()[clave].Update(disabled=False)
 
     def popUp(self, cadena):
         sg.popup(cadena)
@@ -186,14 +195,16 @@ while jugar:
             click_validar = False
             palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
             interfaz.actualizarPalabra(palabra)
-            interfaz.invisibilizarElemento(event)
+            interfaz.inhabilitarElemento(event)
+            interfaz.inhabilitarElemento('guardar')
+            interfaz.inhabilitarElemento('cambiar')
             while (not click_validar):
                 event, value = interfaz.leer()
                 if (event == 'validar'):
                     click_validar = True
                 if ('ficha' in event):
                     fichas_seleccionadas.append(int(event.split(" ")[1]))
-                    interfaz.invisibilizarElemento(event)
+                    interfaz.inhabilitarElemento(event)
                     palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
                     interfaz.actualizarPalabra(palabra)
                 if (interfaz.terminoTimer()):
@@ -202,10 +213,13 @@ while jugar:
                 interfaz.actualizarTimer()
             if (click_validar):
                 if(cp.check_jugador(palabra)):
-                    interfaz.popUp('Seleccione la posición en el tablero y la orientación')
+                    interfaz.actualizarPalabra('SELECCIONE DÓNDE INSERTAR', tamaño=12, color='green', fondo='white')
                     elegir_posicion = True
                     while elegir_posicion:
                         event, value = interfaz.leer()
+                        if interfaz.terminoTimer():
+                            jugar = False
+                            break
                         if 'tablero' in event:
                             interfaz.seleccionarOrientacion(event.split()[1], configu)
                             elegir_orientacion = True
@@ -215,30 +229,35 @@ while jugar:
                             coord_inferior = str(int(fila) + 1) + ',' + columna
                             while elegir_orientacion:
                                 event, value =interfaz.leer()
-                                if event == f'tablero {coord_derecha}':
+                                if interfaz.terminoTimer():
+                                    jugar = False
+                                    break
+                                if (event == f'tablero {coord_derecha}') or (event == f'tablero {coord_inferior}'):
                                     lista_insercion = []
                                     for f in fichas_seleccionadas:
                                         lista_insercion.append(jugador.get_ficha(f))
-                                    unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h')
+                                    puntaje = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
                                     elegir_orientacion = False
+                                    if puntaje == -1:
+                                        interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white')
+                                    else:
+                                        fichas_seleccionadas.sort(reverse=True)
+                                        for f in fichas_seleccionadas:
+                                            jugador.usar_ficha(f)
+                                        jugador.llenar_atril(bolsa_fichas, 7)
+                                    interfaz.actualizarAtril(jugador)
+                                    interfaz.textoEstandar()
                                     interfaz.actualizarTablero(unTablero)
-                                if event == f'tablero {coord_inferior}':
-                                    lista_insercion = []
-                                    for f in fichas_seleccionadas:
-                                        lista_insercion.append(jugador.get_ficha(f))
-                                    unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'v')
-                                    elegir_orientacion = False
-                                    interfaz.actualizarTablero(unTablero)
+                                    elegir_posicion = False
+                                    break
                                 interfaz.actualizarTimer()
-
-
-
                         interfaz.actualizarTimer()
-                    #Esto de abajo solamente se hace si encontró espacio
-                    #for f in fichas_seleccionadas:
-                    #    jugador.usar_ficha(f)
                 else:
-                    pass
-                    #ACÁ SE VOLVERÍAN A HACER VISIBLES LAS FICHAS QUE SE USARON
-            print('este evento terminó')
+                    interfaz.actualizarPalabra('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
+                    interfaz.actualizarAtril(jugador)
+                interfaz.habilitarElemento('guardar')
+                interfaz.habilitarElemento('cambiar')
         interfaz.actualizarTimer()
+    #Si es el turno de la PC...
+    else:
+        pass
