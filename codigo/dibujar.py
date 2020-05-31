@@ -181,6 +181,7 @@ interfaz.setTimer(1)
 
 jugar = True
 #turno_jugador = random.choice([True, False])
+cant_cambiar = 3
 turno_jugador = True
 while jugar:
     if (turno_jugador):
@@ -256,7 +257,16 @@ while jugar:
                     interfaz.actualizarPalabra('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
                     interfaz.actualizarAtril(jugador)
                 interfaz.habilitarElemento('guardar')
-                interfaz.habilitarElemento('cambiar')
+                if (cant_cambiar > 0):
+                    interfaz.habilitarElemento('cambiar')
+        if (event == 'cambiar') and (cant_cambiar > 0):
+            cant_cambiar = cant_cambiar - 1
+            jugador.cambiar_fichas(bolsa_fichas, 7)
+            interfaz.actualizarAtril(jugador)
+            if (cant_cambiar == 0):
+                interfaz.inhabilitarElemento('cambiar')
+        if event == 'guardar':
+            pass
         interfaz.actualizarTimer()
     #Si es el turno de la PC...
     else:
