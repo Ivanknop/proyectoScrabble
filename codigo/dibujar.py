@@ -80,10 +80,20 @@ class Dibujar():
         self._getInterfaz()['progreso'].UpdateBar(self._getTiempoFin()-time.time())
 
     def terminoTimer(self):
-        """
-        Retorna True o False dependiendo de si el timer llegó a su tiempo límite.
-        """
+        '''Retorna True o False dependiendo de si el timer llegó a su tiempo límite.'''
         return time.time() > self._getTiempoFin()
+
+    def paralizarTimer(self, instante):
+        '''Paraliza el timer en el instante indicado durante una fracción
+        extremadamente pequeña de tiempo, y retorna el momento siguiente.
+        Si se almacena ese nuevo momento y se lo utiliza para volver a llamar a
+        la función dentro de un bucle, el timer se paralizará indefinidamente.'''
+        if instante < time.time():
+            instante = time.time() - instante
+            interfaz._tiempo_inicio += instante
+            interfaz._tiempo_fin += instante
+            instante = time.time()
+        return instante
 
     def leer(self):
         '''Retorna en formato de tupla el último evento de la interfaz, si
@@ -153,7 +163,10 @@ class Dibujar():
         self._getInterfaz()[clave].Update(disabled=False)
 
     def popUp(self, cadena):
-        sg.popup(cadena)
+        sg.popup(cadena, keep_on_top=True)
+
+    def popUpOkCancel(self, cadena):
+        return sg.popup_ok_cancel(cadena, keep_on_top=True)
 
     def _getInterfaz(self):
         return self._interfaz
@@ -189,6 +202,8 @@ while jugar:
         if interfaz.terminoTimer():
             jugar = False
             break
+        if event == None:
+            break
         if ('ficha' in event):
             fichas_seleccionadas = []
             fichas_seleccionadas.append(int(event.split(" ")[1]))
@@ -201,6 +216,9 @@ while jugar:
             interfaz.inhabilitarElemento('cambiar')
             while (not click_validar):
                 event, value = interfaz.leer()
+                if (interfaz.terminoTimer()) or (event == None):
+                    jugar = False
+                    break
                 if (event == 'validar'):
                     click_validar = True
                 if ('ficha' in event):
@@ -208,9 +226,6 @@ while jugar:
                     interfaz.inhabilitarElemento(event)
                     palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
                     interfaz.actualizarPalabra(palabra)
-                if (interfaz.terminoTimer()):
-                    jugar = False
-                    break
                 interfaz.actualizarTimer()
             if (click_validar):
                 if(cp.check_jugador(palabra)):
@@ -218,7 +233,7 @@ while jugar:
                     elegir_posicion = True
                     while elegir_posicion:
                         event, value = interfaz.leer()
-                        if interfaz.terminoTimer():
+                        if (interfaz.terminoTimer()) or (event == None):
                             jugar = False
                             break
                         if 'tablero' in event:
@@ -230,7 +245,7 @@ while jugar:
                             coord_inferior = str(int(fila) + 1) + ',' + columna
                             while elegir_orientacion:
                                 event, value =interfaz.leer()
-                                if interfaz.terminoTimer():
+                                if (interfaz.terminoTimer()) or (event == None):
                                     jugar = False
                                     break
                                 if (event == f'tablero {coord_derecha}') or (event == f'tablero {coord_inferior}'):
@@ -256,9 +271,10 @@ while jugar:
                 else:
                     interfaz.actualizarPalabra('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
                     interfaz.actualizarAtril(jugador)
-                interfaz.habilitarElemento('guardar')
-                if (cant_cambiar > 0):
-                    interfaz.habilitarElemento('cambiar')
+                if (event != None):
+                    interfaz.habilitarElemento('guardar')
+                    if (cant_cambiar > 0):
+                        interfaz.habilitarElemento('cambiar')
         if (event == 'cambiar') and (cant_cambiar > 0):
             cant_cambiar = cant_cambiar - 1
             jugador.cambiar_fichas(bolsa_fichas, 7)
@@ -266,7 +282,12 @@ while jugar:
             if (cant_cambiar == 0):
                 interfaz.inhabilitarElemento('cambiar')
         if event == 'guardar':
-            pass
+            instante = time.time()
+            eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
+            interfaz.paralizarTimer(instante)
+            if eleccion == 'OK':
+                #ACÁ SE GUARDA LA PARTIDA Y SE CIERRA EL JUEGO
+                pass
         interfaz.actualizarTimer()
     #Si es el turno de la PC...
     else:
