@@ -33,6 +33,23 @@ class Tablero ():
         """Recibe una matriz y la asigna como tablero"""
         self.__casilleros = casilleros
 
+    def _calcularPuntaje(self, puntaje, especiales):
+        if '*0' in especiales:
+            return 0
+        else:
+            for especial in especiales:
+                if especial == '*sum':
+                    puntaje = puntaje + 5
+                elif especial == '*mult':
+                    puntaje = puntaje * 2
+                elif especial == '*rest':
+                    puntaje = puntaje - 5
+                elif especial == '*div':
+                    puntaje = puntaje // 2
+            if puntaje < 0:
+                return 0
+        return puntaje
+
     def insertarPalabra(self, fichas, posicion, sentido):
         """Recibe una lista de fichas en formato diccionario,
         una posicion en formato tupla (fila, columna) y un sentido en formato string
@@ -45,11 +62,16 @@ class Tablero ():
         #Columna
         c = posicion[1]
         puntaje = 0
-        penitencia = 0
+        especiales = []
+        indice_fichas = 0
         if (sentido == 'h'):
             while (c < len(casilleros[posicion[0]])) and (c < (posicion[1] + len(fichas))):
                 if (self.esFicha(f, c)):
                     break
+                puntaje += list(fichas[indice_fichas].values())[0]
+                if (self.getCasilleros()[f][c] != ''):
+                    especiales.append(self.getCasilleros()[f][c])
+                indice_fichas += 1
                 c += 1
             if (len(fichas) == c - posicion[1]):
                 c = posicion[1]
@@ -57,12 +79,17 @@ class Tablero ():
                     casilleros[posicion[0]][c] = fic
                     c += 1
                 self.setCasilleros(casilleros)
+                puntaje = self._calcularPuntaje(puntaje, especiales)
             else:
                 puntaje = -1
         else:
             while (f < len(casilleros)) and (f < posicion[0] + len(fichas)):
                 if (self.esFicha(f, c)):
                     break
+                puntaje += list(fichas[indice_fichas].values())[0]
+                if (self.getCasilleros()[f][c] != ''):
+                    especiales.append(self.getCasilleros()[f][c])
+                indice_fichas += 1
                 f += 1
             if (len(fichas) == f - posicion[0]):
                 f = posicion[0]
@@ -70,6 +97,7 @@ class Tablero ():
                     casilleros[f][posicion[1]] = fic
                     f += 1
                 self.setCasilleros(casilleros)
+                puntaje = self._calcularPuntaje(puntaje, especiales)
             else:
                 puntaje = -1
         return puntaje
@@ -92,22 +120,26 @@ class Tablero ():
         for fila in casilleros:
             for dato in fila:
                 if (self.esFicha(ficha=dato)):
-                    print(list(dato.keys())[0], end='  ')
+                    print(list(dato.keys())[0], end='   ')
                 else:
                     if (dato == ''):
-                        print('-', end='  ')
+                        print('-', end='   ')
                     else:
-                        print(dato[1:2], end='  ')
+                        print(dato[0:2].upper(), end='  ')
             print()
 
-# confi = nivel_dificil()
-#
-# configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'])
-#
-# unTablero = Tablero(configuracion)
-#
+confi = nivel_dificil()
+
+pref = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
+
+unTablero = Tablero(pref)
+
 # lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
 # nuevas_fichas = [{'a': 4}, {'g': 5}]
-# unTablero.insertarPalabra(lista_fichas, (2,4), "v")
-# unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
 # unTablero.imprimirCasilleros()
+# puntaje1 = unTablero.insertarPalabra(lista_fichas, (2,4), "v")
+# puntaje2 = unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
+# print('_________2 inserciones_________')
+# unTablero.imprimirCasilleros()
+# print(puntaje1)
+# print(puntaje2)

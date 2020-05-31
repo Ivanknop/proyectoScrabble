@@ -142,7 +142,4 @@ def nivel_dificil():
     }
     conf['especiales'] = especial(conf['filas'], conf['columnas'],conf['nivel'])
     return conf
-
-
-e = nivel_dificil()
-print(e['especiales'])
+    

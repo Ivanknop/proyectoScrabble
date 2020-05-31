@@ -45,7 +45,7 @@ class Dibujar():
 
         columna_derecha = [[sg.Image('scrabbleArLogo.png')],
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
-                            [sg.Text('Puntuación actual:      ', font=('Arial', 14), key='puntaje')],
+                            [sg.Text('Puntuación actual: 0    ', font=('Arial', 14), key='puntaje')],
                             [sg.Text('Tiempo transcurrido:', font=('Arial', 14))],
                             [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
@@ -84,14 +84,16 @@ class Dibujar():
         return time.time() > self._getTiempoFin()
 
     def paralizarTimer(self, instante):
-        '''Paraliza el timer en el instante indicado durante una fracción
-        extremadamente pequeña de tiempo, y retorna el momento siguiente.
-        Si se almacena ese nuevo momento y se lo utiliza para volver a llamar a
-        la función dentro de un bucle, el timer se paralizará indefinidamente.'''
+        '''Recibe el instante, en segundos, a partir del cual se dejó de tener
+        en cuenta el timer. Luego, cálcula el tiempo perdido desde ese momento
+        hasta la llamada de la función, y lo añade al tiempo de inicio y final,
+        permitiendo reestablecer el cronómetro como si no hubiera avanzado el tiempo.
+        Retorna el momento siguiente a ese cálculo.
+        Si el resultado se utiliza en un búcle, el timer se paraliza indefinidamente'''
         if instante < time.time():
             instante = time.time() - instante
-            interfaz._tiempo_inicio += instante
-            interfaz._tiempo_fin += instante
+            interfaz._setTiempoInicio(interfaz._getTiempoInicio() + instante)
+            interfaz._setTiempoFin(interfaz._getTiempoFin() + instante)
             instante = time.time()
         return instante
 
@@ -196,6 +198,7 @@ jugar = True
 #turno_jugador = random.choice([True, False])
 cant_cambiar = 3
 turno_jugador = True
+puntaje = 0
 while jugar:
     if (turno_jugador):
         event, value = interfaz.leer()
@@ -252,15 +255,17 @@ while jugar:
                                     lista_insercion = []
                                     for f in fichas_seleccionadas:
                                         lista_insercion.append(jugador.get_ficha(f))
-                                    puntaje = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
+                                    puntaje_palabra = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
                                     elegir_orientacion = False
-                                    if puntaje == -1:
+                                    if puntaje_palabra == -1:
                                         interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white')
                                     else:
                                         fichas_seleccionadas.sort(reverse=True)
                                         for f in fichas_seleccionadas:
                                             jugador.usar_ficha(f)
                                         jugador.llenar_atril(bolsa_fichas, 7)
+                                        puntaje += puntaje_palabra
+                                        interfaz.actualizarPuntaje(puntaje)
                                     interfaz.actualizarAtril(jugador)
                                     interfaz.textoEstandar()
                                     interfaz.actualizarTablero(unTablero)
