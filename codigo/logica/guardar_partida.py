@@ -1,6 +1,6 @@
-import pickle 
-from tablero import*
-from configuracion import*
+import pickle
+from logica.tablero import*
+from logica.configuracion import*
 
 class Juego_Guardado:
     '''
@@ -8,58 +8,78 @@ class Juego_Guardado:
     Está construído para utilizar un botón para guardar y otro para cargar
     '''
     juego = []
-    def __init__(self, tablero, jugador, pc,b_fichas):
+    def __init__(self, tablero=None, jugador=None, atril=None, b_fichas=None, puntaje=None, tiempo_restante=None, pref=None, cant_cambiar=None):
         self.tablero = tablero
         self.jugador = jugador
-        self.pc = pc
+        self.atril = atril
         self.bolsa_fichas = b_fichas
-        #Los gets son de prueba
-#    def getJugador (self):
-#        return self.jugador
-#    def getPc (self):
-#        return self.pc
-#    def getBolsaFichas (self):
-#        return self.bolsa_fichas
-#    def getTablero (self):
-#        self.tablero.imprimirCasilleros()
+        self.puntaje = puntaje
+        self.tiempo_restante = tiempo_restante
+        self.preferencias = pref
+        self.cant_cambiar = cant_cambiar
+
+    def getTablero (self):
+        return self.tablero
+    def getJugador (self):
+        return self.jugador
+    def getAtril (self):
+        return self.atril
+    def getBolsaFichas (self):
+        return self.bolsa_fichas
+    def getPuntaje (self):
+        return self.puntaje
+    def getTiempoRestante(self):
+        return self.tiempo_restante
+    def getPreferencias(self):
+        return self.preferencias
+    def getCantCambiar(self):
+        return self.cant_cambiar
+
     def crear_guardado(self):
         '''
         Cada vez que se lo invoca sobreescribe el archivo. Guarda una única partida
         '''
         fichero = open('juego_guardado.pckl', 'wb')
-        self.juego = [self.tablero,self.jugador,self.pc,self.bolsa_fichas]
-        pickle.dump(juego, fichero)
+        self.juego = [self.tablero, self.jugador, self.atril, self.bolsa_fichas, self.puntaje, self.tiempo_restante, self.preferencias, self.cant_cambiar]
+        pickle.dump(self.juego, fichero)
         fichero.close()
-    def mostrar(self): 
-        fichero = open('juego_guardado.pckl', 'rb')
-        fichero.seek(0)
+
+    def cargar_guardado(self):
         try:
-           self.juego = pickle.load (fichero)
+            fichero = open('juego_guardado.pckl', 'rb')
+            self.juego = pickle.load (fichero)
+            fichero.close()
+            self.tablero = self.juego[0]
+            self.jugador = self.juego[1]
+            self.atril = self.juego[2]
+            self.bolsa_fichas = self.juego[3]
+            self.puntaje = self.juego[4]
+            self.tiempo_restante = self.juego[5]
+            self.preferencias = self.juego[6]
+            self.cant_cambiar = self.juego[7]
+            return True
         except:
             print ('No hay partidas guardadas')
-        finally:
-            fichero.close()
-        print(juego.jugador)
-        print (juego.pc)
-        print (juego.bolsa_fichas)
-        juego.tablero.imprimirCasilleros()
-#A modo de prueba
-'''
-confi = nivel_dificil()
-#
-configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'])
-#
-unTablero = Tablero(configuracion)
-#
-lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
-nuevas_fichas = [{'y': 4}, {'i': 5}]
-unTablero.insertarPalabra(lista_fichas, (2,4), "v")
-unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
+            return False
 
-copiaTablero = unTablero
-jugador = 'Pepe'
-pc = 'Linux'
-bolsa_fichas = 'nada'
-juego = Juego_Guardado (copiaTablero,jugador,pc,bolsa_fichas)
-juego.mostrar()
-'''
+
+#A modo de prueba
+
+# confi = nivel_dificil()
+#
+# configuracion = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
+#
+# unTablero = Tablero(configuracion)
+#
+# lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
+# nuevas_fichas = [{'y': 4}, {'i': 5}]
+# unTablero.insertarPalabra(lista_fichas, (2,4), "v")
+# unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
+#
+# copiaTablero = unTablero
+# jugador = 'Pepe'
+# pc = 'Linux'
+# bolsa_fichas = 'nada'
+# juego = Juego_Guardado (copiaTablero,jugador,pc,bolsa_fichas, 66)
+# #juego.crear_guardado()
+# juego.mostrar()

@@ -5,6 +5,7 @@ from logica.preferencias import Preferencias
 from logica.atril import Atril
 from logica.bolsa_fichas import *
 import logica.check_palabra as cp
+from logica.guardar_partida import Juego_Guardado
 import time
 import random
 
@@ -96,6 +97,9 @@ class Dibujar():
             interfaz._setTiempoFin(interfaz._getTiempoFin() + instante)
             instante = time.time()
         return instante
+
+    def getTiempoRestante(self):
+        return self._getTiempoFin() - time.time()
 
     def leer(self):
         '''Retorna en formato de tupla el último evento de la interfaz, si
@@ -189,16 +193,33 @@ configu = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], con
 unTablero = Tablero(configu)
 bolsa_fichas = crear_bolsa(confi['cant_fichas'],confi['puntaje_ficha'])
 jugador = Atril (bolsa_fichas, 7)
-interfaz = Dibujar(unTablero, configu, jugador)
 
-prueba_mostrar = True
-interfaz.setTimer(1)
 
 jugar = True
 #turno_jugador = random.choice([True, False])
 cant_cambiar = 3
 turno_jugador = True
 puntaje = 0
+
+archivo_partida = Juego_Guardado()
+if (archivo_partida.cargar_guardado()):
+    puntaje = archivo_partida.getPuntaje()
+    unTablero = archivo_partida.getTablero()
+    jugador = archivo_partida.getAtril()
+    bolsa_fichas = archivo_partida.getBolsaFichas()
+    configu = archivo_partida.getPreferencias()
+    turno_jugador = True
+    cant_cambiar = archivo_partida.getCantCambiar()
+    interfaz = Dibujar(unTablero, configu, jugador)
+    if (cant_cambiar == 0):
+        interfaz.inhabilitarElemento('cambiar')
+    interfaz.setTimer(archivo_partida.getTiempoRestante() / 60)
+    interfaz.actualizarPuntaje(puntaje)
+else:
+    interfaz = Dibujar(unTablero, configu, jugador)
+    interfaz.setTimer(1)
+
+
 while jugar:
     if (turno_jugador):
         event, value = interfaz.leer()
@@ -291,8 +312,9 @@ while jugar:
             eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
             interfaz.paralizarTimer(instante)
             if eleccion == 'OK':
-                #ACÁ SE GUARDA LA PARTIDA Y SE CIERRA EL JUEGO
-                pass
+                archivo_partida = Juego_Guardado(unTablero, 'NombreUsuario', jugador, bolsa_fichas, puntaje, interfaz.getTiempoRestante(), configu, cant_cambiar)
+                archivo_partida.crear_guardado()
+                jugar = False
         interfaz.actualizarTimer()
     #Si es el turno de la PC...
     else:
