@@ -8,7 +8,7 @@ class Tablero ():
     def __inicializarCasilleros(self, configuracion):
         """Crea la matriz donde se insertarán las fichas a partir de una configuración.
         Si hay casilleros especiales, representados con un diccionario bajo
-        el formato {'fila, columna': '*<color>'}, graba '*<color>' en la matriz,
+        el formato {'fila, columna': '*<accion del casillero>'}, graba '*<accion del casillero>' en la matriz,
         según las coordenadas de la clave."""
         matriz = []
         espacios_especiales = configuracion.getEspeciales()
