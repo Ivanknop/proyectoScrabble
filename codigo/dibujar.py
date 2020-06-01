@@ -297,6 +297,7 @@ while jugar:
                 else:
                     interfaz.actualizarPalabra('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
                     interfaz.actualizarAtril(jugador)
+                turno_jugador = False
                 if (event != None):
                     interfaz.habilitarElemento('guardar')
                     if (cant_cambiar > 0):
@@ -307,6 +308,7 @@ while jugar:
             interfaz.actualizarAtril(jugador)
             if (cant_cambiar == 0):
                 interfaz.inhabilitarElemento('cambiar')
+            turno_jugador = False
         if event == 'guardar':
             instante = time.time()
             eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
@@ -318,4 +320,6 @@ while jugar:
         interfaz.actualizarTimer()
     #Si es el turno de la PC...
     else:
-        pass
+        time.sleep(2)
+        print ('Juega la pc')
+        turno_jugador = True
