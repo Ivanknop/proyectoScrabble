@@ -133,7 +133,8 @@ class Tablero ():
         la palabra. Si existiese más de un espacio disponible, evalúa cada camino
         y selecciona el que aporte el máximo interés (el puntaje).
         Retorna un diccionario que contiene la coordenada y el sentido en el que
-        debería ser insertada, además del interés que generó.'''
+        debería ser insertada, además del interés que generó.
+        Si no se encontró ningún espacio, devuelve "-1" como coordenada.'''
         tablero = self.getCasilleros()
         #Reduce el tamaño del tablero para evitar coordenadas cercanas al límite
         #en las que no cabría la palabra
@@ -141,7 +142,7 @@ class Tablero ():
         cant_columnas = len(tablero[0]) - longitud_palabra
         cant_filas = len(tablero) - longitud_palabra
         puntaje_bruto = sum([list(punto.values())[0] for punto in fichas])
-        espacio_optimo = {'coordenada': (-1,-1), 'interes': -1, 'sentido': ''}
+        espacio_optimo = {'coordenada': -1, 'interes': -1, 'sentido': ''}
 
         for f in range(0, cant_filas+1):
             for c in range (0, cant_columnas+1):
