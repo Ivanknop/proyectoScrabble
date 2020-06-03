@@ -1,5 +1,5 @@
-from preferencias import Preferencias
-from configuracion import *
+from logica.preferencias import Preferencias
+from logica.configuracion import *
 
 class Tablero ():
     def __init__(self, configuracion):
@@ -131,10 +131,11 @@ class Tablero ():
     def buscarEspacio(self, fichas):
         '''Recibe una lista de fichas y localiza una coordenada en la que cabría
         la palabra. Si existiese más de un espacio disponible, evalúa cada camino
-        y selecciona el que aporte el máximo interés (el puntaje).
+        y selecciona el que aporte el máximo interés (mayor puntaje).
         Retorna un diccionario que contiene la coordenada y el sentido en el que
         debería ser insertada, además del interés que generó.
         Si no se encontró ningún espacio, devuelve "-1" como coordenada.'''
+
         tablero = self.getCasilleros()
         #Reduce el tamaño del tablero para evitar coordenadas cercanas al límite
         #en las que no cabría la palabra

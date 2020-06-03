@@ -1,5 +1,6 @@
 import pattern.es as pes
 from pattern.es import verbs, tag, spelling, lexicon
+import itertools as it
 
 def posibles_palabras (palabra):
     '''por cada vocal, que tenga la palabra, genera una posibilidad con Tilde
@@ -95,14 +96,49 @@ def check_jugador(palabra):
 
                 ok = False
 
-            print("se chequeo {} el contador es {} y ok esta en {}".format(pal,cont,ok))
+#            print("se chequeo {} el contador es {} y ok esta en {}".format(pal,cont,ok))
             cont += 1
     else:
         return False
     return ok
 
-def check_compu(palabra):
-    pass
+def check_compu(atril_pc, tablero):
+    fichas_pc = atril_pc.ver_atril()
+    letras = ''
+    for ficha in fichas_pc:
+        letras += list(ficha.keys())[0]
+    palabras = set()
+    for i in range(2, len(letras)+1):
+        palabras.update(map(''.join, it.permutations(letras, i)))
+    posibilidades = {}
+    for pal in palabras:
+        if check_jugador(pal):
+            fichas_pal = []
+            for letra in pal:
+                for ficha in fichas_pc:
+                    if list(ficha.keys())[0] == letra:
+                        fichas_pal.append(ficha)
+                        break
+            busqueda = tablero.buscarEspacio(fichas_pal)
+            if busqueda['coordenada'] != -1:
+                busqueda['fichas'] = fichas_pal
+                posibilidades[pal] = busqueda
+    for clave, valor in posibilidades.items():
+        print(clave, ':', valor['interes'])
+    print('')
+    if len(posibilidades) > 0:
+        mejor_opcion = max(posibilidades, key = lambda d: posibilidades[d]['interes'])
+        print('la mejor opcion es: ', mejor_opcion)
+        return posibilidades[mejor_opcion]
+    return posibilidades
+
+
+
+    #Iterar "palabras" por check_palabra. Si es válida, guardar en un diccionario
+    #la palabra y la coordenada (si hubiese espacio) en la que obtendría mayor
+    #puntaje. Luego, quedarse con la palabra que haya arrojado mayor puntaje.
+    #Observar que una palabra de 2 letras puede dar mayor puntaje si, por ejemplo,
+    #cabe en una parte del tablero muy beneficiosa en la que una de 4 letras no.
 
 
 

@@ -1,5 +1,5 @@
-from configuracion import*
-from bolsa_fichas import*
+from logica.configuracion import*
+from logica.bolsa_fichas import*
 import random
 
 class Atril():
@@ -13,6 +13,7 @@ class Atril():
     '''
     def __init__ (self,bolsa_fichas,cant_fichas):
         random.shuffle(bolsa_fichas)
+        self._cant_maxima = cant_fichas
         self._cant_Fichas = cant_fichas
         self._lista_Fichas = []
         for i in range(cant_fichas):
@@ -22,10 +23,10 @@ class Atril():
     def get_ficha(self, pos):
         return self._lista_Fichas[pos]
 
-    def cambiar_fichas (self,bolsa_fichas,cant_fichas):
+    def cambiar_fichas (self,bolsa_fichas):
         self._cant_Fichas = 0
         self._lista_Fichas = []
-        while bolsa_fichas and self._cant_Fichas < cant_fichas:
+        while bolsa_fichas and self._cant_Fichas < self._cant_maxima:
             self._lista_Fichas.append(bolsa_fichas[0])
             bolsa_fichas.remove(bolsa_fichas[0])
             self._cant_Fichas += 1
@@ -34,8 +35,8 @@ class Atril():
         self._lista_Fichas.pop(pos)
         self._cant_Fichas = self._cant_Fichas - 1
 
-    def llenar_atril (self, bolsa_fichas, cant_fichas):
-        total = cant_fichas - self._cant_Fichas
+    def llenar_atril (self, bolsa_fichas):
+        total = self._cant_maxima - self._cant_Fichas
         for i in range(total):
             if len(bolsa_fichas)>0:
                 self._lista_Fichas.append(bolsa_fichas[0])
@@ -49,6 +50,9 @@ class Atril():
 
     def get_cant_fichas(self):
         return self._cant_Fichas
+
+    def getCantMaxima(self):
+        return self._cant_maxima
 
 #Hay que ver cómo exportar el nivel de dificultad
 '''

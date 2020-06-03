@@ -1,4 +1,4 @@
-from configuracion import *
+from logica.configuracion import *
 
 
 

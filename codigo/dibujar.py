@@ -47,7 +47,8 @@ class Dibujar():
 
         columna_derecha = [[sg.Image('scrabbleArLogo.png')],
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
-                            [sg.Text('Puntuación actual: 0    ', font=('Arial', 14), key='puntaje')],
+                            [sg.Text('Puntuación jugador: 0    ', font=('Arial', 14), key='puntaje')],
+                            [sg.Text('Puntuación PC: 0    ', font=('Arial', 14), key='puntaje_pc')],
                             [sg.Text('Tiempo transcurrido:', font=('Arial', 14))],
                             [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
@@ -138,7 +139,10 @@ class Dibujar():
 
 
     def actualizarPuntaje(self, nuevo_puntaje):
-        self._getInterfaz()['puntaje'].Update(f'Puntuación actual: {nuevo_puntaje}', font=('Arial', 14))
+        self._getInterfaz()['puntaje'].Update(f'Puntuación jugador: {nuevo_puntaje}', font=('Arial', 14))
+
+    def actualizarPuntajePC(self, nuevo_puntaje):
+        self._getInterfaz()['puntaje_pc'].Update(f'Puntuación PC: {nuevo_puntaje}', font=('Arial', 14))
 
     def seleccionarOrientacion(self, coordenada, pref):
         '''Una vez validada la palabra, permite mostrar los botones para
@@ -203,6 +207,8 @@ jugar = True
 cant_cambiar = 3
 turno_jugador = True
 puntaje = 0
+puntaje_pc = 0
+atril_pc = Atril(bolsa_fichas, 7)
 
 archivo_partida = Juego_Guardado()
 if (archivo_partida.cargar_guardado()):
@@ -282,12 +288,12 @@ while jugar:
                                     puntaje_palabra = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
                                     elegir_orientacion = False
                                     if puntaje_palabra == -1:
-                                        interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white', tamaño=10)
+                                        interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white', tamaño=12)
                                     else:
                                         fichas_seleccionadas.sort(reverse=True)
                                         for f in fichas_seleccionadas:
                                             jugador.usar_ficha(f)
-                                        jugador.llenar_atril(bolsa_fichas, 7)
+                                        jugador.llenar_atril(bolsa_fichas)
                                         puntaje += puntaje_palabra
                                         interfaz.actualizarPuntaje(puntaje)
                                         interfaz.textoEstandar()
@@ -307,7 +313,7 @@ while jugar:
                         interfaz.habilitarElemento('cambiar')
         if (event == 'cambiar') and (cant_cambiar > 0):
             cant_cambiar = cant_cambiar - 1
-            jugador.cambiar_fichas(bolsa_fichas, 7)
+            jugador.cambiar_fichas(bolsa_fichas)
             interfaz.actualizarAtril(jugador)
             if (cant_cambiar == 0):
                 interfaz.inhabilitarElemento('cambiar')
@@ -323,6 +329,12 @@ while jugar:
         interfaz.actualizarTimer()
     #Si es el turno de la PC...
     else:
-        time.sleep(2)
-        print ('Juega la pc')
+        if (interfaz.terminoTimer()):
+            break
+        mejor_opcion = cp.check_compu(atril_pc, unTablero)
+        if len(mejor_opcion) != 0:
+            puntaje_pc += unTablero.insertarPalabra(mejor_opcion['fichas'], mejor_opcion['coordenada'], mejor_opcion['sentido'])
+            unTablero.imprimirCasilleros()
+            interfaz.actualizarTablero(unTablero)
+            interfaz.actualizarPuntajePC(puntaje_pc)
         turno_jugador = True
