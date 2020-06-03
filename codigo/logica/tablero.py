@@ -1,5 +1,5 @@
-from logica.preferencias import Preferencias
-from logica.configuracion import *
+from preferencias import Preferencias
+from configuracion import *
 
 class Tablero ():
     def __init__(self, configuracion):
@@ -128,12 +128,50 @@ class Tablero ():
                         print(dato[0:2].upper(), end='  ')
             print()
 
-confi = nivel_dificil()
+    def buscarEspacio(self, fichas):
+        '''Recibe una lista de fichas y localiza una coordenada en la que cabría
+        la palabra. Si existiese más de un espacio disponible, evalúa cada camino
+        y selecciona el que aporte el máximo interés (el puntaje).
+        Retorna un diccionario que contiene la coordenada y el sentido en el que
+        debería ser insertada, además del interés que generó.'''
+        tablero = self.getCasilleros()
+        #Reduce el tamaño del tablero para evitar coordenadas cercanas al límite
+        #en las que no cabría la palabra
+        longitud_palabra = len(fichas)
+        cant_columnas = len(tablero[0]) - longitud_palabra
+        cant_filas = len(tablero) - longitud_palabra
+        puntaje_bruto = sum([list(punto.values())[0] for punto in fichas])
+        espacio_optimo = {'coordenada': (-1,-1), 'interes': -1, 'sentido': ''}
 
-pref = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
+        for f in range(0, cant_filas+1):
+            for c in range (0, cant_columnas+1):
+                fila = f
+                for sentido in ['h', 'v']:
+                    camino = []
+                    columna = c
+                    longitud_palabra = len(fichas)
+                    while (longitud_palabra != 0) and not (self.esFicha(fila, columna)):
+                        if (tablero[fila][columna] != ''):
+                            camino.append(tablero[fila][columna])
+                        longitud_palabra = longitud_palabra - 1
+                        if (sentido == 'h'):
+                            columna = columna + 1
+                        else:
+                            fila = fila + 1
+                        if (longitud_palabra == 0):
+                            puntaje_final = self._calcularPuntaje(puntaje_bruto, camino)
+                            if (puntaje_final > espacio_optimo['interes']):
+                                espacio_optimo['interes'] = puntaje_final
+                                espacio_optimo['coordenada'] = (f, c)
+                                espacio_optimo['sentido'] = sentido
+        return espacio_optimo
 
-unTablero = Tablero(pref)
-
+# confi = nivel_dificil()
+#
+# pref = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
+#
+# unTablero = Tablero(pref)
+#
 # lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
 # nuevas_fichas = [{'a': 4}, {'g': 5}]
 # unTablero.imprimirCasilleros()
@@ -143,3 +181,4 @@ unTablero = Tablero(pref)
 # unTablero.imprimirCasilleros()
 # print(puntaje1)
 # print(puntaje2)
+# print(unTablero.buscarEspacio(lista_fichas))

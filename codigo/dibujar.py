@@ -15,6 +15,7 @@ class Dibujar():
     def __init__ (self, tablero, preferencias, atril):
         self._tiempo_inicio = 0
         self._tiempo_fin = 0
+        self._ficha_tamano = (35,37)
         #Prepara y agrega a la columna izquierda de la interfaz todos los casilleros del tablero
         columna_izquierda = []
         #Filas
@@ -39,10 +40,10 @@ class Dibujar():
         fichas = []
         for i in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(i).keys())[0]
-            fichas.append(sg.Button(image_filename=f'ficha {letra}.png', image_size=(29,31), key=f'ficha {str(i)}'))
+            fichas.append(sg.Button(image_filename=f'ficha {letra}.png', key=f'ficha {str(i)}', pad=(0, None), image_size=self._ficha_tamano))
         fichas_oponente = []
         for i in range(0, atril.get_cant_fichas()):
-            fichas_oponente.append(sg.Button(image_filename='unaFichaOponente.png', image_size=(29,31), key=f'oponente {str(i)}'))
+            fichas_oponente.append(sg.Button(image_filename='unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
         columna_derecha = [[sg.Image('scrabbleArLogo.png')],
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
@@ -133,7 +134,7 @@ class Dibujar():
     def actualizarAtril(self, atril):
         for f in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(f).keys())[0]
-            self._getInterfaz()[f'ficha {f}'].Update(image_filename=f'ficha {letra}.png', image_size=(29,31), disabled=False)
+            self._getInterfaz()[f'ficha {f}'].Update(image_filename=f'ficha {letra}.png', disabled=False, image_size=self._getFichaTamano())
 
 
     def actualizarPuntaje(self, nuevo_puntaje):
@@ -174,6 +175,8 @@ class Dibujar():
     def popUpOkCancel(self, cadena):
         return sg.popup_ok_cancel(cadena, keep_on_top=True)
 
+    def _getFichaTamano(self):
+        return self._ficha_tamano
     def _getInterfaz(self):
         return self._interfaz
     def _setInterfaz(self, unaInterfaz):
@@ -279,7 +282,7 @@ while jugar:
                                     puntaje_palabra = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
                                     elegir_orientacion = False
                                     if puntaje_palabra == -1:
-                                        interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white')
+                                        interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white', tamaño=10)
                                     else:
                                         fichas_seleccionadas.sort(reverse=True)
                                         for f in fichas_seleccionadas:
@@ -287,8 +290,9 @@ while jugar:
                                         jugador.llenar_atril(bolsa_fichas, 7)
                                         puntaje += puntaje_palabra
                                         interfaz.actualizarPuntaje(puntaje)
+                                        interfaz.textoEstandar()
+                                        turno_jugador = False
                                     interfaz.actualizarAtril(jugador)
-                                    interfaz.textoEstandar()
                                     interfaz.actualizarTablero(unTablero)
                                     elegir_posicion = False
                                     break
@@ -297,7 +301,6 @@ while jugar:
                 else:
                     interfaz.actualizarPalabra('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
                     interfaz.actualizarAtril(jugador)
-                turno_jugador = False
                 if (event != None):
                     interfaz.habilitarElemento('guardar')
                     if (cant_cambiar > 0):
