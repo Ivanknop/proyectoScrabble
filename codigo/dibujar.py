@@ -334,6 +334,10 @@ while jugar:
         mejor_opcion = cp.check_compu(atril_pc, unTablero)
         if len(mejor_opcion) != 0:
             puntaje_pc += unTablero.insertarPalabra(mejor_opcion['fichas'], mejor_opcion['coordenada'], mejor_opcion['sentido'])
+            for ficha in mejor_opcion['fichas']:
+                indice = atril_pc.ver_atril().index(ficha)
+                atril_pc.usar_ficha(indice)
+            atril_pc.llenar_atril(bolsa_fichas)
             unTablero.imprimirCasilleros()
             interfaz.actualizarTablero(unTablero)
             interfaz.actualizarPuntajePC(puntaje_pc)
