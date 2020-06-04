@@ -19,14 +19,14 @@ def crear_bolsa(cant, puntos):
                 if l in puntos[k]:
                     #aca armo la ficha
                     puntaje = k
-                    ficha[l] = puntaje
+                    ficha[l.lower()] = puntaje
                     ok = True
                 else:
                     k += 1
             else:
                 k += 1
         #aca la agrego la cantidad de veces especificada segun la dificultad, a la bolsa
-        for f in range(cant[l]):
+        for f in range(cant[l.upper()]):
             bolsa.append(ficha)
 
 
