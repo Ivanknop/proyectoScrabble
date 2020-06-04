@@ -54,8 +54,8 @@ class Atril():
     def getCantMaxima(self):
         return self._cant_maxima
 
-#Hay que ver cómo exportar el nivel de dificultad
 '''
+Ejemplo de uso ==>
 conf = nivel_dificil()
 bolsa_fichas = crear_bolsa(conf['cant_fichas'],conf['puntaje_ficha'])
 FICHAS = 7
