@@ -155,11 +155,32 @@ class Dibujar():
         c = int(coordenada.split(",")[1])
         self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename='orientacion.png', image_size=(29,31))
         c_contiguo = c + 1
-        if (c_contiguo != pref.getColumnas()):
+        if (c_contiguo < pref.getColumnas()):
             self._getInterfaz()[f'tablero {f},{c_contiguo}'].Update(image_filename='orientacionDerecha.png', image_size=(29,31))
         f_inferior = f + 1
         if (f_inferior < pref.getFilas()):
             self._getInterfaz()[f'tablero {f_inferior},{c}'].Update(image_filename='orientacionAbajo.png', image_size=(29,31))
+
+    def reestablecerOrientacion(self, coordenada, tablero, preferencias):
+        '''Desvanece los botones de selección de orientación en la coordenada
+        "f,c" indicada. Además, utiliza el tablero (que lo recibe como parámetro)
+        para conocer lo que había en ese casillero, y las preferencias para no
+        intentar reestablecer un botón de "sentido" fuera del límite.'''
+        casilleros = tablero.getCasilleros()
+        f = int(coordenada.split(",")[0])
+        c = int(coordenada.split(",")[1])
+        reestablecer = [{'f': f, 'c': c}, {'f': f, 'c': c + 1}, {'f': f + 1, 'c': c}]
+        for coords in reestablecer:
+            f = coords['f']
+            c = coords['c']
+            if (f < preferencias.getFilas()) and (c < preferencias.getColumnas()):
+                if (tablero.esFicha(f=f, c=c)):
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'ficha {list(casilleros[f][c].keys())[0]}.png', image_size=(29,31))
+                elif (casilleros[f][c] == ''):
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename='azul.png', image_size=(29,31))
+                else:
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{casilleros[f][c][1:]}.png', image_size=(29,31))
+
 
     def actualizarPalabra(self, palabra, color=None, fondo=None, tamaño=14):
         self._getInterfaz()['palabra'].Update(palabra, font=('Arial', tamaño), text_color=color, background_color=fondo)
@@ -226,7 +247,7 @@ if (archivo_partida.cargar_guardado()):
     interfaz.actualizarPuntaje(puntaje)
 else:
     interfaz = Dibujar(unTablero, configu, jugador)
-    interfaz.setTimer(1)
+    interfaz.setTimer(5)
 
 
 while jugar:
@@ -264,20 +285,21 @@ while jugar:
                 if(cp.check_jugador(palabra)):
                     interfaz.actualizarPalabra('SELECCIONE DÓNDE INSERTAR', tamaño=12, color='green', fondo='white')
                     elegir_posicion = True
+                    cambio_posicion = False
                     while elegir_posicion:
-                        event, value = interfaz.leer()
+                        if not (cambio_posicion):
+                            event, value = interfaz.leer()
                         if (interfaz.terminoTimer()) or (event == None):
                             jugar = False
                             break
                         if 'tablero' in event:
                             interfaz.seleccionarOrientacion(event.split()[1], configu)
-                            elegir_orientacion = True
                             fila = event.split(" ")[1].split(',')[0]
                             columna = event.split(" ")[1].split(',')[1]
                             coord_derecha = fila + ',' + str(int(columna) + 1)
                             coord_inferior = str(int(fila) + 1) + ',' + columna
-                            while elegir_orientacion:
-                                event, value =interfaz.leer()
+                            while True:
+                                event, value = interfaz.leer()
                                 if (interfaz.terminoTimer()) or (event == None):
                                     jugar = False
                                     break
@@ -286,7 +308,6 @@ while jugar:
                                     for f in fichas_seleccionadas:
                                         lista_insercion.append(jugador.get_ficha(f))
                                     puntaje_palabra = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
-                                    elegir_orientacion = False
                                     if puntaje_palabra == -1:
                                         interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white', tamaño=12)
                                     else:
@@ -301,6 +322,10 @@ while jugar:
                                     interfaz.actualizarAtril(jugador)
                                     interfaz.actualizarTablero(unTablero)
                                     elegir_posicion = False
+                                    break
+                                elif ('tablero' in event):
+                                    cambio_posicion = True
+                                    interfaz.reestablecerOrientacion(fila+','+columna, unTablero, configu)
                                     break
                                 interfaz.actualizarTimer()
                         interfaz.actualizarTimer()
@@ -338,7 +363,6 @@ while jugar:
                 indice = atril_pc.ver_atril().index(ficha)
                 atril_pc.usar_ficha(indice)
             atril_pc.llenar_atril(bolsa_fichas)
-            unTablero.imprimirCasilleros()
             interfaz.actualizarTablero(unTablero)
             interfaz.actualizarPuntajePC(puntaje_pc)
         turno_jugador = True

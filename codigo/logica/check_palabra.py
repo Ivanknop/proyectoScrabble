@@ -128,7 +128,7 @@ def check_compu(atril_pc, tablero):
     print('')
     if len(posibilidades) > 0:
         mejor_opcion = max(posibilidades, key = lambda d: posibilidades[d]['interes'])
-        print('la mejor opcion es: ', mejor_opcion)
+        print('La mejor opcion es: ' + mejor_opcion + '. En la coordenada ' + str(posibilidades[mejor_opcion]['coordenada'][0]) + ', ' + str(posibilidades[mejor_opcion]['coordenada'][1]))
         return posibilidades[mejor_opcion]
     return posibilidades
 
