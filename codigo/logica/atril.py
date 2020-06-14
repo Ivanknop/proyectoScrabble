@@ -1,5 +1,5 @@
-from logica.configuracion import*
-from logica.bolsa_fichas import*
+from codigo.logica.configuracion import*
+from codigo.logica.bolsa_fichas import*
 import random
 
 class Atril():

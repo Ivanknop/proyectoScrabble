@@ -1,5 +1,5 @@
-from logica.preferencias import Preferencias
-from logica.configuracion import *
+from codigo.logica.preferencias import Preferencias
+from codigo.logica.configuracion import *
 
 class Tablero ():
     def __init__(self, configuracion):

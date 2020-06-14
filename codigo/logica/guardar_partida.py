@@ -1,6 +1,6 @@
 import pickle
-from logica.tablero import*
-from logica.configuracion import*
+from codigo.logica.tablero import*
+from codigo.logica.configuracion import*
 
 class Juego_Guardado:
     '''
