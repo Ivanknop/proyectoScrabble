@@ -9,20 +9,11 @@ from codigo.logica.guardar_partida import Juego_Guardado
 import time
 import random
 
-confi = nivel_medio()
-configu = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
-unTablero = Tablero(configu)
-bolsa_fichas = crear_bolsa(confi['cant_fichas'],confi['puntaje_ficha'])
+configuracion = nivel_medio()
+preferencias = Preferencias(configuracion['filas'],configuracion['columnas'],configuracion['especiales'], configuracion['nivel'])
+unTablero = Tablero(preferencias)
+bolsa_fichas = crear_bolsa(configuracion['cant_fichas'],configuracion['puntaje_ficha'])
 jugador = Atril (bolsa_fichas, 7)
-
-
-jugar = True
-#turno_jugador = random.choice([True, False])
-cant_cambiar = 3
-turno_jugador = True
-puntaje = 0
-puntaje_pc = 0
-atril_pc = Atril(bolsa_fichas, 7)
 
 archivo_partida = Juego_Guardado()
 if (archivo_partida.cargar_guardado()):
@@ -30,19 +21,26 @@ if (archivo_partida.cargar_guardado()):
     unTablero = archivo_partida.getTablero()
     jugador = archivo_partida.getAtril()
     bolsa_fichas = archivo_partida.getBolsaFichas()
-    configu = archivo_partida.getPreferencias()
+    preferencias = archivo_partida.getPreferencias()
     turno_jugador = True
     cant_cambiar = archivo_partida.getCantCambiar()
-    interfaz = Dibujar(unTablero, configu, jugador)
+    interfaz = Dibujar(unTablero, preferencias, jugador)
+    puntaje_pc = archivo_partida.getPuntajePC()
     if (cant_cambiar == 0):
         interfaz.inhabilitarElemento('cambiar')
     interfaz.setTimer(archivo_partida.getTiempoRestante() / 60)
+    interfaz.actualizarPuntajePC(puntaje_pc)
     interfaz.actualizarPuntaje(puntaje)
 else:
-    interfaz = Dibujar(unTablero, configu, jugador)
+    turno_jugador = random.choice([True, False])
+    cant_cambiar = 3
+    puntaje = 0
+    puntaje_pc = 0
+    atril_pc = Atril(bolsa_fichas, 7)
+    interfaz = Dibujar(unTablero, preferencias, jugador)
     interfaz.setTimer(5)
 
-
+jugar = True
 while jugar:
     if (turno_jugador):
         event, value = interfaz.leer()
@@ -86,7 +84,7 @@ while jugar:
                             jugar = False
                             break
                         if 'tablero' in event:
-                            interfaz.seleccionarOrientacion(event.split()[1], configu)
+                            interfaz.seleccionarOrientacion(event.split()[1], preferencias)
                             fila = event.split(" ")[1].split(',')[0]
                             columna = event.split(" ")[1].split(',')[1]
                             coord_derecha = fila + ',' + str(int(columna) + 1)
@@ -118,7 +116,7 @@ while jugar:
                                     break
                                 elif ('tablero' in event):
                                     cambio_posicion = True
-                                    interfaz.reestablecerOrientacion(fila+','+columna, unTablero, configu)
+                                    interfaz.reestablecerOrientacion(fila+','+columna, unTablero, preferencias)
                                     break
                                 interfaz.actualizarTimer()
                         interfaz.actualizarTimer()
@@ -141,7 +139,7 @@ while jugar:
             eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
             interfaz.paralizarTimer(instante)
             if eleccion == 'OK':
-                archivo_partida = Juego_Guardado(unTablero, 'NombreUsuario', jugador, bolsa_fichas, puntaje, interfaz.getTiempoRestante(), configu, cant_cambiar)
+                archivo_partida = Juego_Guardado(unTablero, 'NombreUsuario', jugador, bolsa_fichas, puntaje, puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
                 archivo_partida.crear_guardado()
                 jugar = False
         interfaz.actualizarTimer()

@@ -8,7 +8,7 @@ class Juego_Guardado:
     Está construído para utilizar un botón para guardar y otro para cargar
     '''
     juego = []
-    def __init__(self, tablero=None, jugador=None, atril=None, b_fichas=None, puntaje=None, tiempo_restante=None, pref=None, cant_cambiar=None):
+    def __init__(self, tablero=None, jugador=None, atril=None, b_fichas=None, puntaje=None, puntaje_pc=None, tiempo_restante=None, pref=None, cant_cambiar=None):
         self.tablero = tablero
         self.jugador = jugador
         self.atril = atril
@@ -17,6 +17,7 @@ class Juego_Guardado:
         self.tiempo_restante = tiempo_restante
         self.preferencias = pref
         self.cant_cambiar = cant_cambiar
+        self.puntaje_pc = puntaje_pc
 
     def getTablero (self):
         return self.tablero
@@ -34,13 +35,15 @@ class Juego_Guardado:
         return self.preferencias
     def getCantCambiar(self):
         return self.cant_cambiar
+    def getPuntajePC(self):
+        return self.puntaje_pc
 
     def crear_guardado(self):
         '''
         Cada vez que se lo invoca sobreescribe el archivo. Guarda una única partida
         '''
         fichero = open('juego_guardado.pckl', 'wb')
-        self.juego = [self.tablero, self.jugador, self.atril, self.bolsa_fichas, self.puntaje, self.tiempo_restante, self.preferencias, self.cant_cambiar]
+        self.juego = [self.tablero, self.jugador, self.atril, self.bolsa_fichas, self.puntaje, self.tiempo_restante, self.preferencias, self.cant_cambiar, self.puntaje_pc]
         pickle.dump(self.juego, fichero)
         fichero.close()
 
@@ -57,6 +60,7 @@ class Juego_Guardado:
             self.tiempo_restante = self.juego[5]
             self.preferencias = self.juego[6]
             self.cant_cambiar = self.juego[7]
+            self.puntaje_pc = self.juego[8]
             return True
         except:
             print ('No hay partidas guardadas')
