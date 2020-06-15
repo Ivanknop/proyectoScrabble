@@ -24,12 +24,9 @@ class Puntuacion_Maxima():
         '''
         Recibe un jugador y evalúa si su puntuación es mayor a las guardadas. Produce el desplazamiento y elimina a la posición 11
         '''  
-        aux_jug = jug
-        for i in range(self.MAXIMOS):
-            if int(aux_jug.puntuacion) > int(self.puntajes[i].puntuacion) :
-                aux_jug = self.puntajes[i]
-                self.puntajes[i] = jug
-                jug = aux_jug
+        self.puntajes.append(jug)
+        self.puntajes.sort(key=lambda jugador: jugador.puntuacion,reverse=True)
+        self.puntajes.pop()
         self.guardar() 
 
     def cargar(self):
