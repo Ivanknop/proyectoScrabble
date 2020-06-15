@@ -7,10 +7,11 @@ class Jugador():
         self.puntuacion = puntaje
     
     def __str__(self):
-        return '{} ({})'.format(self.nombre, self.puntuacion)
+        return 'Jugador: {} - Puntuación:  {}'.format(self.nombre, self.puntuacion)
 
 class Puntuacion_Maxima():
-    puntajes = []    
+    puntajes = []
+    MAXIMOS = 10    
     def __init__ (self):
         self.cargar()
     
@@ -19,15 +20,18 @@ class Puntuacion_Maxima():
         pickle.dump(self.puntajes, fichero)
         fichero.close()
 
-    def agregar(self,jug):
-        self.puntajes.append(jug)
-        self.guardar()
+    def agregar(self,jug): 
+        '''
+        Recibe un jugador y evalúa si su puntuación es mayor a las guardadas. Produce el desplazamiento y elimina a la posición 11
+        '''  
         aux_jug = jug
-        for i in range(len(self.puntajes)):
-            if self.puntajes[i].puntuacion < aux_jug.puntuacion:
-                    aux = self.puntajes[i]                    
-                    self.puntajes[i]= aux_jug
-                    aux_jug = aux 
+        for i in range(self.MAXIMOS):
+            if int(aux_jug.puntuacion) > int(self.puntajes[i].puntuacion) :
+                aux_jug = self.puntajes[i]
+                self.puntajes[i] = jug
+                jug = aux_jug
+        self.guardar() 
+
     def cargar(self):
         fichero = open('puntuacion_maxima.pckl', 'ab+')
         fichero.seek(0)
@@ -37,7 +41,6 @@ class Puntuacion_Maxima():
             print("El fichero está vacío")
         finally:
             fichero.close()
-            print("Se han cargado {} jugadores".format(len(self.puntajes)))
 
     def mostrar(self):
         if len(self.puntajes) == 0:
@@ -45,11 +48,47 @@ class Puntuacion_Maxima():
             return
         for j in self.puntajes:
             print(j)
+    
+    def _vaciar_puntajes (self): 
+        '''
+            Es un método que solo se invoca desde la propia clase.
+            Vacía la lista de puntuaciones
+        '''
+        self.puntajes = []
+
+    def inicializar_puntuacion (self): 
+        '''
+        Reinicializa las puntuaciones máximas
+        '''        
+        self._vaciar_puntajes()
+        self.puntajes.append(Jugador('Enzo',300))
+        self.puntajes.append(Jugador('Iván',300))
+        self.puntajes.append(Jugador('Diego',300))
+        self.puntajes.append(Jugador('Kakaroto',280))
+        self.puntajes.append(Jugador('Vegetta',250))
+        self.puntajes.append(Jugador('Quién',230))
+        self.puntajes.append(Jugador('Cómo',200))
+        self.puntajes.append(Jugador('Cuándo',150))
+        self.puntajes.append(Jugador('Qué',120))
+        self.puntajes.append(Jugador('Por qué',100))
+        self.puntajes = self.puntajes[0:self.MAXIMOS]
+        self.guardar()
+
+    def borrar_puntuacion (self):
+        '''
+         Borra las puntuaciones máximas
+        '''
+        self._vaciar_puntajes()
+        jug = Jugador ('###',0)
+        for i in range(self.MAXIMOS):
+            self.puntajes.append(jug)
+        self.puntajes = self.puntajes[0:self.MAXIMOS]
+        self.guardar()
+'''
+Prueba
 
 puntuaciones = Puntuacion_Maxima()
-puntuaciones.agregar(Jugador('Enzo','200'))
-puntuaciones.agregar(Jugador('Iván','195'))
-puntuaciones.agregar(Jugador('Diego','194'))
-puntuaciones.agregar(Jugador('Kakaroto','150'))
-puntuaciones.agregar(Jugador('Vegetta','149'))
+#puntuaciones.borrar_puntuacion()
+puntuaciones.inicializar_puntuacion()
 puntuaciones.mostrar()
+'''
