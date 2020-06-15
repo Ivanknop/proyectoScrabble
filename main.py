@@ -6,16 +6,18 @@ from codigo.logica.bolsa_fichas import *
 from codigo.interfaz.dibujar import Dibujar
 import codigo.logica.check_palabra as cp
 from codigo.logica.guardar_partida import Juego_Guardado
+import os.path
 import time
 import random
 
+ruta_guardado = os.path.join('guardados', '')
 configuracion = nivel_medio()
 preferencias = Preferencias(configuracion['filas'],configuracion['columnas'],configuracion['especiales'], configuracion['nivel'])
 unTablero = Tablero(preferencias)
 bolsa_fichas = crear_bolsa(configuracion['cant_fichas'],configuracion['puntaje_ficha'])
 jugador = Atril (bolsa_fichas, 7)
 
-archivo_partida = Juego_Guardado()
+archivo_partida = Juego_Guardado(ruta_guardado)
 if (archivo_partida.cargar_guardado()):
     puntaje = archivo_partida.getPuntaje()
     unTablero = archivo_partida.getTablero()
@@ -139,7 +141,7 @@ while jugar:
             eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
             interfaz.paralizarTimer(instante)
             if eleccion == 'OK':
-                archivo_partida = Juego_Guardado(unTablero, 'NombreUsuario', jugador, bolsa_fichas, puntaje, puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
+                archivo_partida = Juego_Guardado(ruta_guardado, unTablero, 'NombreUsuario', jugador, bolsa_fichas, puntaje, puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
                 archivo_partida.crear_guardado()
                 jugar = False
         interfaz.actualizarTimer()
