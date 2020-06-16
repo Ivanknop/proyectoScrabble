@@ -60,7 +60,7 @@ while jugar:
             palabra = ''
             click_validar = False
             palabra += list(atril_jugador.get_ficha(int(event.split()[1])).keys())[0]
-            interfaz.actualizarPalabra(palabra)
+            interfaz.actualizarTexto(palabra)
             interfaz.inhabilitarElemento(event)
             interfaz.inhabilitarElemento('guardar')
             interfaz.inhabilitarElemento('cambiar')
@@ -75,11 +75,11 @@ while jugar:
                     fichas_seleccionadas.append(int(event.split(" ")[1]))
                     interfaz.inhabilitarElemento(event)
                     palabra += list(atril_jugador.get_ficha(int(event.split()[1])).keys())[0]
-                    interfaz.actualizarPalabra(palabra)
+                    interfaz.actualizarTexto(palabra)
                 interfaz.actualizarTimer()
             if (click_validar):
                 if(cp.check_jugador(palabra)):
-                    interfaz.actualizarPalabra('SELECCIONE DÓNDE INSERTAR', tamaño=12, color='green', fondo='white')
+                    interfaz.actualizarTexto('SELECCIONE DÓNDE INSERTAR', tamaño=12, color='green', fondo='white')
                     elegir_posicion = True
                     cambio_posicion = False
                     while elegir_posicion:
@@ -105,7 +105,7 @@ while jugar:
                                         lista_insercion.append(atril_jugador.get_ficha(f))
                                     puntaje_palabra = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
                                     if puntaje_palabra == -1:
-                                        interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white', tamaño=12)
+                                        interfaz.actualizarTexto('NO HAY ESPACIO', color='red', fondo='white', tamaño=12)
                                     else:
                                         fichas_seleccionadas.sort(reverse=True)
                                         for f in fichas_seleccionadas:
@@ -126,7 +126,7 @@ while jugar:
                                 interfaz.actualizarTimer()
                         interfaz.actualizarTimer()
                 else:
-                    interfaz.actualizarPalabra('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
+                    interfaz.actualizarTexto('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
                     interfaz.actualizarAtril(atril_jugador)
                 if (event != None):
                     interfaz.habilitarElemento('guardar')
@@ -163,14 +163,15 @@ while jugar:
             atril_pc.llenar_atril(bolsa_fichas)
             interfaz.actualizarTablero(unTablero)
             interfaz.actualizarPuntajePC(puntaje_pc)
-            interfaz.actualizarPalabra(random.choice(['PC: ¡A ver cómo contrarrestas eso!', 'PC: ¿Te quedaste sin ideas?', 'PC: Podes hacerlo mejor...',
+            interfaz.actualizarTexto(random.choice(['PC: ¡A ver cómo contrarrestas eso!', 'PC: ¿Te quedaste sin ideas?', 'PC: Podes hacerlo mejor...',
                                                         'PC: ¡Tu turno!', 'PC: He tenido retos más difíciles.', 'PC: El tiempo se acaba, amiguito.', 'PC: Jamás me han derrotado.',
                                                         'PC: Hoy estas con poca imaginación.', 'PC: Quizás deberías volver al buscaminas.', 'PC: Mis núcleos son más rápidos que tu cerebro.',
                                                         'PC: 100101110, que en binario es "perdedor"', 'PC: El código fuente no está de tu lado :(', 'PC: ¿Mala? ¿Yo?',
-                                                        f'PC: Tu turno, {nombre_usuario}', 'PC: *bosteza*' ]), tamaño=12, color='#EBDEB6', fondo='#A9084F')
+                                                        f'PC: Tu turno, {nombre_usuario}', 'PC: *bosteza*']), tamaño=12, color='#EBDEB6', fondo=random.choice(['#D10E49', '#12870D', '#80870D']), pc=True)
         else:
             if len(bolsa_fichas) == 0:
-                interfaz.actualizarPalabra('PC: La bolsa de fichas se vació :(', tamaño=12, color='#EBDEB6', fondo='#A9084F')
+                interfaz.textoEstandar(pc=True)
+                interfaz.actualizarTexto('PC: La bolsa de fichas se vació :(', tamaño=14, color='#EBDEB6', fondo='#A9084F')
                 cant_cambiar = 0
                 interfaz.habilitarFinalizacion()
         turno_jugador = True

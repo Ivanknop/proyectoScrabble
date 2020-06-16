@@ -48,11 +48,11 @@ class Dibujar():
                             [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
-                            [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='palabra')],
+                            [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='textoJugador')],
                             fichas,
                             [sg.Button('Validar', font=('Arial', 12), key='validar'), sg.Button('Cambiar fichas', font=('Arial', 12), key='cambiar')],
                             [sg.Text('_'*30)],
-                            [sg.Text('    ---FICHAS DEL OPONENTE---    ', background_color='black', font=('Arial', 14), text_color='White')],
+                            [sg.Text('          ---FICHAS DEL OPONENTE---       ', background_color='black', font=('Arial', 14), text_color='White', key='textoPC')],
                             fichas_oponente,
                             [sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
 
@@ -181,11 +181,14 @@ class Dibujar():
                 else:
                     self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{casilleros[f][c][1:]}.png', image_size=(29,31))
 
-    def actualizarPalabra(self, palabra, color=None, fondo=None, tamaño=14):
-        self._getInterfaz()['palabra'].Update(palabra, font=('Arial', tamaño), text_color=color, background_color=fondo)
+    def actualizarTexto(self, texto, color=None, fondo=None, tamaño=14, pc=False):
+        self._getInterfaz()['textoJugador' if not pc else 'textoPC'].Update(texto, font=('Arial', tamaño), text_color=color, background_color=fondo)
 
-    def textoEstandar(self):
-        self._getInterfaz()['palabra'].Update('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White')
+    def textoEstandar(self, pc=False):
+        if pc == False:
+            self._getInterfaz()['textoJugador'].Update('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White')
+        else:
+            self._getInterfaz()['textoPC'].Update('          ---FICHAS DEL OPONENTE---       ', background_color='black', font=('Arial', 14), text_color='White')
 
     def inhabilitarElemento(self, clave):
         self._getInterfaz()[clave].Update(disabled=True)
