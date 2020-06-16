@@ -43,14 +43,13 @@ else:
     puntaje = 0
     puntaje_pc = 0
     interfaz = Dibujar(unTablero, preferencias, atril_jugador)
-    interfaz.setTimer(5)
+    interfaz.setTimer(0.1)
 
 jugar = True
 while jugar:
     if (turno_jugador):
         event, value = interfaz.leer()
         if interfaz.terminoTimer():
-            jugar = False
             break
         if event == None:
             break
@@ -163,7 +162,7 @@ while jugar:
             atril_pc.llenar_atril(bolsa_fichas)
             interfaz.actualizarTablero(unTablero)
             interfaz.actualizarPuntajePC(puntaje_pc)
-            interfaz.actualizarTexto(random.choice(['PC: ¡A ver cómo contrarrestas eso!', 'PC: ¿Te quedaste sin ideas?', 'PC: Podes hacerlo mejor...',
+            interfaz.actualizarTexto(random.choice(['PC: ¡A ver cómo contrarrestas eso!', 'PC: ¿Te quedaste sin ideas?', 'PC: Podés hacerlo mejor...',
                                                         'PC: ¡Tu turno!', 'PC: He tenido retos más difíciles.', 'PC: El tiempo se acaba, amiguito.', 'PC: Jamás me han derrotado.',
                                                         'PC: Hoy estas con poca imaginación.', 'PC: Quizás deberías volver al buscaminas.', 'PC: Mis núcleos son más rápidos que tu cerebro.',
                                                         'PC: 100101110, que en binario es "perdedor"', 'PC: El código fuente no está de tu lado :(', 'PC: ¿Mala? ¿Yo?',
