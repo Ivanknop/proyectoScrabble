@@ -1,6 +1,6 @@
 class Jugador():
 
-    def __init__(self, nombre, puntaje, dificultad ='facil', avatar = None):
+    def __init__(self, nombre, puntaje=0, dificultad ='facil', avatar = None):
         self.__nombre = nombre
         self.__puntuacion = puntaje
         self.__dificultad = dificultad
@@ -18,7 +18,7 @@ class Jugador():
                     )
 
         return info
-    
+
     def getNombre(self):
         return self.__nombre
 
