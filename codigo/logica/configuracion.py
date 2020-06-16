@@ -52,7 +52,7 @@ def nivel_facil():
         'columnas':20,
         'especiales':{},
 
-        'timepo': 25, #minutos
+        'tiempo': 25, #minutos
         'cant_fichas': {'A':11, 'E':11, 'O':8, 'S':7, 'I':6,'U': 6, 'N': 5, 'L': 4, 'R': 4, 'T': 4,'C': 4, 'D': 4, 'G': 2, 'M': 3, 'B': 3,'P': 2, 'F': 2, 'H': 2, 'V': 2, 'Y': 1,'J': 2, 'K': 1, 'Ñ': 1, 'Q': 1, 'W': 1, 'X': 1, 'Z': 1 },
 
          #  dic el indice indica le puntaje y lo valores son las letras que itenen ese puntaje
@@ -81,7 +81,7 @@ def nivel_medio():
         'filas':15,
         'columnas':15,
         'especiales': {},
-        'timepo': 20, #minutos
+        'tiempo': 20, #minutos
         # el indice es la letra y e lvalor la cantidad de fichas de esa letra
 
         'cant_fichas' : {
@@ -118,7 +118,7 @@ def nivel_dificil():
         'filas': 10,
         'columnas': 10,
         'especiales': {},  # ver de armarl ode forma random
-        'timepo': 15,  # minutos
+        'tiempo': 15,  # minutos
         # el indice es la letra y e lvalor la cantidad de fichas de esa letra
 
         'cant_fichas': {
@@ -142,4 +142,3 @@ def nivel_dificil():
     }
     conf['especiales'] = especial(conf['filas'], conf['columnas'],conf['nivel'])
     return conf
-    
