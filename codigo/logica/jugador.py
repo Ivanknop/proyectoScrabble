@@ -1,6 +1,6 @@
 class Jugador():
 
-    def __init__(self, nombre, puntaje=0, dificultad ='facil', avatar = None):
+    def __init__(self, nombre, puntaje = 0, dificultad ='facil', avatar = None):
         self.__nombre = nombre
         self.__puntuacion = puntaje
         self.__dificultad = dificultad
@@ -8,7 +8,7 @@ class Jugador():
 
 
     def __str__(self):
-        return 'Jugador: {} - Puntuación:  {}'.format(self.nombre, self.puntuacion)
+        return 'Jugador: {} - Puntuación:  {}'.format(self.n__ombre, self.__puntuacion)
 
     def infoJugador(self):
         info = ( self.__nombre ,
