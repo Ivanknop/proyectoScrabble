@@ -10,36 +10,39 @@ import os.path
 import time
 import random
 
+nombre_usuario = 'Enzo'
 ruta_guardado = os.path.join('guardados', '')
 configuracion = nivel_medio()
 preferencias = Preferencias(configuracion['filas'],configuracion['columnas'],configuracion['especiales'], configuracion['nivel'])
 unTablero = Tablero(preferencias)
 bolsa_fichas = crear_bolsa(configuracion['cant_fichas'],configuracion['puntaje_ficha'])
-jugador = Atril (bolsa_fichas, 7)
+
 
 archivo_partida = Juego_Guardado(ruta_guardado)
 if (archivo_partida.cargar_guardado()):
     puntaje = archivo_partida.getPuntaje()
     unTablero = archivo_partida.getTablero()
-    jugador = archivo_partida.getAtril()
+    atril_jugador = archivo_partida.getAtril()
+    atril_pc = archivo_partida.getAtrilPC()
     bolsa_fichas = archivo_partida.getBolsaFichas()
     preferencias = archivo_partida.getPreferencias()
     turno_jugador = True
     cant_cambiar = archivo_partida.getCantCambiar()
-    interfaz = Dibujar(unTablero, preferencias, jugador)
+    interfaz = Dibujar(unTablero, preferencias, atril_jugador)
     puntaje_pc = archivo_partida.getPuntajePC()
     if (cant_cambiar == 0):
-        interfaz.inhabilitarElemento('cambiar')
+        interfaz.habilitarFinalizacion()
     interfaz.setTimer(archivo_partida.getTiempoRestante() / 60)
     interfaz.actualizarPuntajePC(puntaje_pc)
     interfaz.actualizarPuntaje(puntaje)
 else:
+    atril_jugador = Atril (bolsa_fichas, 7)
+    atril_pc = Atril(bolsa_fichas, 7)
     turno_jugador = random.choice([True, False])
     cant_cambiar = 3
     puntaje = 0
     puntaje_pc = 0
-    atril_pc = Atril(bolsa_fichas, 7)
-    interfaz = Dibujar(unTablero, preferencias, jugador)
+    interfaz = Dibujar(unTablero, preferencias, atril_jugador)
     interfaz.setTimer(5)
 
 jugar = True
@@ -56,7 +59,7 @@ while jugar:
             fichas_seleccionadas.append(int(event.split(" ")[1]))
             palabra = ''
             click_validar = False
-            palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
+            palabra += list(atril_jugador.get_ficha(int(event.split()[1])).keys())[0]
             interfaz.actualizarPalabra(palabra)
             interfaz.inhabilitarElemento(event)
             interfaz.inhabilitarElemento('guardar')
@@ -71,7 +74,7 @@ while jugar:
                 if ('ficha' in event):
                     fichas_seleccionadas.append(int(event.split(" ")[1]))
                     interfaz.inhabilitarElemento(event)
-                    palabra += list(jugador.get_ficha(int(event.split()[1])).keys())[0]
+                    palabra += list(atril_jugador.get_ficha(int(event.split()[1])).keys())[0]
                     interfaz.actualizarPalabra(palabra)
                 interfaz.actualizarTimer()
             if (click_validar):
@@ -99,20 +102,20 @@ while jugar:
                                 if (event == f'tablero {coord_derecha}') or (event == f'tablero {coord_inferior}'):
                                     lista_insercion = []
                                     for f in fichas_seleccionadas:
-                                        lista_insercion.append(jugador.get_ficha(f))
+                                        lista_insercion.append(atril_jugador.get_ficha(f))
                                     puntaje_palabra = unTablero.insertarPalabra(lista_insercion, (int(fila),int(columna)), 'h' if event == f'tablero {coord_derecha}' else 'v')
                                     if puntaje_palabra == -1:
                                         interfaz.actualizarPalabra('NO HAY ESPACIO', color='red', fondo='white', tamaño=12)
                                     else:
                                         fichas_seleccionadas.sort(reverse=True)
                                         for f in fichas_seleccionadas:
-                                            jugador.usar_ficha(f)
-                                        jugador.llenar_atril(bolsa_fichas)
+                                            atril_jugador.usar_ficha(f)
+                                        atril_jugador.llenar_atril(bolsa_fichas)
                                         puntaje += puntaje_palabra
                                         interfaz.actualizarPuntaje(puntaje)
                                         interfaz.textoEstandar()
                                         turno_jugador = False
-                                    interfaz.actualizarAtril(jugador)
+                                    interfaz.actualizarAtril(atril_jugador)
                                     interfaz.actualizarTablero(unTablero)
                                     elegir_posicion = False
                                     break
@@ -124,24 +127,26 @@ while jugar:
                         interfaz.actualizarTimer()
                 else:
                     interfaz.actualizarPalabra('PALABRA NO VÁLIDA ¡PRUEBA DE NUEVO!', tamaño=10, color='red', fondo='white')
-                    interfaz.actualizarAtril(jugador)
+                    interfaz.actualizarAtril(atril_jugador)
                 if (event != None):
                     interfaz.habilitarElemento('guardar')
-                    if (cant_cambiar > 0):
-                        interfaz.habilitarElemento('cambiar')
-        if (event == 'cambiar') and (cant_cambiar > 0):
-            cant_cambiar = cant_cambiar - 1
-            jugador.cambiar_fichas(bolsa_fichas)
-            interfaz.actualizarAtril(jugador)
-            if (cant_cambiar == 0):
-                interfaz.inhabilitarElemento('cambiar')
-            turno_jugador = False
+                    interfaz.habilitarElemento('cambiar')
+        if (event == 'cambiar'):
+            if (cant_cambiar > 0):
+                cant_cambiar = cant_cambiar - 1
+                atril_jugador.cambiar_fichas(bolsa_fichas)
+                interfaz.actualizarAtril(atril_jugador)
+                if (cant_cambiar == 0):
+                    interfaz.habilitarFinalizacion()
+                turno_jugador = False
+            else:
+                jugar = False
         if event == 'guardar':
             instante = time.time()
             eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
             interfaz.paralizarTimer(instante)
             if eleccion == 'OK':
-                archivo_partida = Juego_Guardado(ruta_guardado, unTablero, 'NombreUsuario', jugador, bolsa_fichas, puntaje, puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
+                archivo_partida = Juego_Guardado(ruta_guardado, unTablero, 'NombreUsuario', atril_jugador, atril_pc, bolsa_fichas, puntaje, puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
                 archivo_partida.crear_guardado()
                 jugar = False
         interfaz.actualizarTimer()
@@ -158,4 +163,14 @@ while jugar:
             atril_pc.llenar_atril(bolsa_fichas)
             interfaz.actualizarTablero(unTablero)
             interfaz.actualizarPuntajePC(puntaje_pc)
+            interfaz.actualizarPalabra(random.choice(['PC: ¡A ver cómo contrarrestas eso!', 'PC: ¿Te quedaste sin ideas?', 'PC: Podes hacerlo mejor...',
+                                                        'PC: ¡Tu turno!', 'PC: He tenido retos más difíciles.', 'PC: El tiempo se acaba, amiguito.', 'PC: Jamás me han derrotado.',
+                                                        'PC: Hoy estas con poca imaginación.', 'PC: Quizás deberías volver al buscaminas.', 'PC: Mis núcleos son más rápidos que tu cerebro.',
+                                                        'PC: 100101110, que en binario es "perdedor"', 'PC: El código fuente no está de tu lado :(', 'PC: ¿Mala? ¿Yo?',
+                                                        f'PC: Tu turno, {nombre_usuario}', 'PC: *bosteza*' ]), tamaño=12, color='#EBDEB6', fondo='#A9084F')
+        else:
+            if len(bolsa_fichas) == 0:
+                interfaz.actualizarPalabra('PC: La bolsa de fichas se vació :(', tamaño=12, color='#EBDEB6', fondo='#A9084F')
+                cant_cambiar = 0
+                interfaz.habilitarFinalizacion()
         turno_jugador = True

@@ -48,7 +48,7 @@ class Dibujar():
                             [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
-                            [sg.Text('              ---TUS FICHAS---             ', background_color='black', font=('Arial', 14), text_color='White', key='palabra')],
+                            [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='palabra')],
                             fichas,
                             [sg.Button('Validar', font=('Arial', 12), key='validar'), sg.Button('Cambiar fichas', font=('Arial', 12), key='cambiar')],
                             [sg.Text('_'*30)],
@@ -96,6 +96,7 @@ class Dibujar():
         return instante
 
     def getTiempoRestante(self):
+        '''Devuelve el tiempo que falta para que termine la partida'''
         return self._getTiempoFin() - time.time()
 
     def leer(self):
@@ -131,6 +132,10 @@ class Dibujar():
         for f in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(f).keys())[0]
             self._getInterfaz()[f'ficha {f}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {letra}.png', disabled=False, image_size=self._getFichaTamano())
+        if (atril.get_cant_fichas() < atril.getCantMaxima()):
+            for f in range(atril.get_cant_fichas(), atril.getCantMaxima()):
+                self.borrarElemento(f'ficha {f}')
+
 
 
     def actualizarPuntaje(self, nuevo_puntaje):
@@ -180,13 +185,19 @@ class Dibujar():
         self._getInterfaz()['palabra'].Update(palabra, font=('Arial', tamaño), text_color=color, background_color=fondo)
 
     def textoEstandar(self):
-        self._getInterfaz()['palabra'].Update('              ---TUS FICHAS---             ', background_color='black', font=('Arial', 14), text_color='White')
+        self._getInterfaz()['palabra'].Update('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White')
 
     def inhabilitarElemento(self, clave):
         self._getInterfaz()[clave].Update(disabled=True)
 
     def habilitarElemento(self, clave):
         self._getInterfaz()[clave].Update(disabled=False)
+
+    def borrarElemento(self, clave):
+        self._getInterfaz()[clave].Update(visible=False)
+
+    def habilitarFinalizacion(self):
+        self._getInterfaz()['cambiar'].Update('Finalizar juego')
 
     def popUp(self, cadena):
         sg.popup(cadena, keep_on_top=True)
