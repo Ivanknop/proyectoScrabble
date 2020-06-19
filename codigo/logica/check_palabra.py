@@ -134,7 +134,7 @@ def check_compu(atril_pc, tablero):
 
 
 
-    #Iterar "palabras" por check_palabra. Si es válida, guardar en un diccionario
+    #Iterar "palabras" por check_jugador. Si es válida, guardar en un diccionario
     #la palabra y la coordenada (si hubiese espacio) en la que obtendría mayor
     #puntaje. Luego, quedarse con la palabra que haya arrojado mayor puntaje.
     #Observar que una palabra de 2 letras puede dar mayor puntaje si, por ejemplo,

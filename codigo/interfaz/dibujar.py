@@ -8,7 +8,7 @@ class Dibujar():
     def __init__ (self, tablero, preferencias, atril):
         self._tiempo_inicio = 0
         self._tiempo_fin = 0
-        self._ficha_tamano = (35,37)
+        self._ficha_tamano = (39,41)
         #Prepara y agrega a la columna izquierda de la interfaz todos los casilleros del tablero
         columna_izquierda = []
         #Filas

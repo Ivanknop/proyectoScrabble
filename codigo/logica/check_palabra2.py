@@ -88,9 +88,8 @@ def check_jugador(palabra, dificultad ='facil'):
         #en cuanto encunetre una opcion que de 'True' dejara de comprobar e insertara esa
         while not ok and cont < len(posibles):
             pal = ''
-
-            pal = pes.parse(posibles[cont]).split('/')
             if es_palabra(posibles[cont]) and dificultad == 'facil':
+                pal = pes.parse(posibles[cont]).split('/')
 
                 if pal[1] in TIPO['adj']:
                     ok =True
@@ -101,6 +100,7 @@ def check_jugador(palabra, dificultad ='facil'):
                 else:
                     ok= False
             elif es_palabra(posibles[cont]) and (dificultad == 'medio' or  dificultad == 'dificil'):
+                pal = pes.parse(posibles[cont]).split('/')
                 if pal[1] in TIPO['adj']:
                     ok =True
                 elif pal[1] in TIPO['verb']:
@@ -116,7 +116,7 @@ def check_jugador(palabra, dificultad ='facil'):
         return False
     return ok
 
-def check_compu(atril_pc, tablero):
+def check_compu(atril_pc, tablero, dificultad):
     fichas_pc = atril_pc.ver_atril()
     letras = ''
     for ficha in fichas_pc:
@@ -126,7 +126,7 @@ def check_compu(atril_pc, tablero):
         palabras.update(map(''.join, it.permutations(letras, i)))
     posibilidades = {}
     for pal in palabras:
-        if check_jugador(pal),tablero.getNivel():
+        if check_jugador(pal, dificultad):
             fichas_pal = []
             for letra in pal:
                 for ficha in fichas_pc:

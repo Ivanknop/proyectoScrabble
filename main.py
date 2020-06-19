@@ -4,7 +4,7 @@ from codigo.logica.preferencias import Preferencias
 from codigo.logica.atril import Atril
 from codigo.logica.bolsa_fichas import *
 from codigo.interfaz.dibujar import Dibujar
-import codigo.logica.check_palabra as cp
+import codigo.logica.check_palabra2 as cp
 from codigo.logica.guardar_partida import Juego_Guardado
 import os.path
 import time
@@ -48,14 +48,13 @@ if (archivo_partida.cargar_guardado()):
     #Solicita el tiempo que faltaba para finalizar la partida, lo convierte a
     #segundos y lo envía al timer
     interfaz.setTimer(archivo_partida.getTiempoRestante() / 60)
-    #Actualiza los puntajes del jugador y la PC a los que estaban en el archivo
     interfaz.actualizarPuntajePC(puntaje_pc)
     interfaz.actualizarPuntaje(puntaje)
 else:
     #Si no había ninguna partida para cargar, crea nuevos atriles
     atril_jugador = Atril (bolsa_fichas, 7)
     atril_pc = Atril(bolsa_fichas, 7)
-    #Quién inicia el primer turno se decide al azar
+    #El primer turno se decide al azar
     turno_jugador = random.choice([True, False])
     #Asigna la cantidad de veces que se pueden cambiar las fichas
     cant_cambiar = 3
@@ -124,7 +123,7 @@ while jugar:
             #Si clickeó validar (no se terminó el tiempo ni se cerró la ventana)...
             if (click_validar):
                 #Valida la palabra y, si existe, permite que se decida la posición en el tablero
-                if(cp.check_jugador(palabra)):
+                if(cp.check_jugador(palabra, preferencias.getNivel())):
                     interfaz.actualizarTexto('SELECCIONE DÓNDE INSERTAR', tamaño=12, color='green', fondo='white')
 
                     #-----EVENTO: Clickear en el tablero para elegir la posición-----
@@ -247,7 +246,7 @@ while jugar:
             break
 
         #Busca una palabra y un lugar en el tablero
-        mejor_opcion = cp.check_compu(atril_pc, unTablero)
+        mejor_opcion = cp.check_compu(atril_pc, unTablero, preferencias.getNivel())
 
         #Si encontró al menos una opcíón, la inserta y actualiza la información
         if len(mejor_opcion) != 0:
