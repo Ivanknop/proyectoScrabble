@@ -5,7 +5,16 @@ import os.path
 class Dibujar():
     '''Recibe objetos de tipo atril, tablero y preferencias e inicializa
     los distintos espacios de la GUI'''
+
     def __init__ (self, tablero, preferencias, atril):
+
+        # algunos valores por defecto para construir la interfaz del tablero
+        # --------------------------
+        self.tamcas = (37, 39)
+        self.padin = (0, 0)
+        self.botoncolor = ('white','#ece6eb')
+
+        # --------------------------
         self._tiempo_inicio = 0
         self._tiempo_fin = 0
         self._ficha_tamano = (39,41)
@@ -21,12 +30,12 @@ class Dibujar():
             insercion = []
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=(0,0), key=f'tablero {f},{c}', image_size=(29,31), enable_events=True))
+                    insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self.padin, key=f'tablero {f},{c}', image_size=self.tamcas,button_color=self.botoncolor, enable_events=True))
                 else:
                     if (dato==''):
-                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}azul.png', pad=(0,0), key=f'tablero {f},{c}', image_size=(29,31), enable_events=True))
+                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}azul.png', pad=self.padin, key=f'tablero {f},{c}', image_size=self.tamcas, button_color=self.botoncolor,enable_events=True))
                     else:
-                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}{dato[1:]}.png', pad=(0,0), key=f'tablero {f},{c}', image_size=(29,31), enable_events=True))
+                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}{dato[1:]}.png', pad=self.padin, key=f'tablero {f},{c}', image_size=self.tamcas,button_color=self.botoncolor ,enable_events=True))
                 c += 1
             f += 1
             c = 0
@@ -57,7 +66,7 @@ class Dibujar():
                             [sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
 
         #Crea la ventana y la muestra
-        diseño = [[sg.Column(columna_izquierda), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
+        diseño = [[sg.Column(columna_izquierda,background_color='#ece6eb'), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
         self._interfaz = sg.Window('ScrabbleAR', diseño)
         self._interfaz.Finalize()
 
@@ -118,12 +127,12 @@ class Dibujar():
         for fila in tablero.getCasilleros():
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=(29,31))
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self.tamcas)
                 else:
                     if (dato == ''):
-                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png', image_size=(29,31))
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png' , image_size=self.tamcas)
                     else:
-                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{dato[1:]}.png', image_size=(29,31))
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{dato[1:]}.png' , image_size=self.tamcas)
                 c += 1
             c = 0
             f += 1
