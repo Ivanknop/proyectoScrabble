@@ -133,10 +133,14 @@ def check_compu(atril_pc, tablero, dificultad):
                     if list(ficha.keys())[0] == letra:
                         fichas_pal.append(ficha)
                         break
-            busqueda = tablero.buscarEspacio(fichas_pal)
+            busqueda = tablero.buscarEspacio(fichas_pal, dificultad)
             if busqueda['coordenada'] != -1:
                 busqueda['fichas'] = fichas_pal
                 posibilidades[pal] = busqueda
+                #En el modo "facil" y "medio", retorna la primer palabra que pueda
+                #validar y encontrarle un espacio
+                if (dificultad == 'facil') or (dificultad == 'medio'):
+                    return posibilidades[pal]
     for clave, valor in posibilidades.items():
         print(clave, ':', valor['interes'])
     print('')

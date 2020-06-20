@@ -128,8 +128,8 @@ class Tablero ():
                         print(dato[0:2].upper(), end='  ')
             print()
 
-    def buscarEspacio(self, fichas):
-        '''Recibe una lista de fichas y localiza una coordenada en la que cabría
+    def buscarEspacio(self, fichas, dificultad):
+        '''Recibe una lista de fichas y localiza una coordenada en la que quepa
         la palabra. Si existiese más de un espacio disponible, evalúa cada camino
         y selecciona el que aporte el máximo interés (mayor puntaje).
         Retorna un diccionario que contiene la coordenada y el sentido en el que
@@ -137,50 +137,67 @@ class Tablero ():
         Si no se encontró ningún espacio, devuelve "-1" como coordenada.'''
 
         tablero = self.getCasilleros()
-        #Reduce el tamaño del tablero para evitar coordenadas cercanas al límite
-        #en las que no cabría la palabra
         longitud_palabra = len(fichas)
-        cant_columnas = len(tablero[0]) - longitud_palabra
-        cant_filas = len(tablero) - longitud_palabra
+        cant_columnas = len(tablero[0])
+        cant_filas = len(tablero)
         puntaje_bruto = sum([list(punto.values())[0] for punto in fichas])
         espacio_optimo = {'coordenada': -1, 'interes': -1, 'sentido': ''}
 
-        for f in range(0, cant_filas+1):
-            for c in range (0, cant_columnas+1):
+        for f in range(0, cant_filas):
+            for c in range (0, cant_columnas):
                 fila = f
                 for sentido in ['h', 'v']:
                     camino = []
                     columna = c
                     longitud_palabra = len(fichas)
-                    while (longitud_palabra != 0) and not (self.esFicha(fila, columna)):
-                        if (tablero[fila][columna] != ''):
-                            camino.append(tablero[fila][columna])
-                        longitud_palabra = longitud_palabra - 1
-                        if (sentido == 'h'):
-                            columna = columna + 1
+                    encontro_obstaculo = False
+                    #Mientras no se haya recorrido la longitud de la palabra...
+                    while (longitud_palabra != 0) and not (encontro_obstaculo):
+                        #Si en la ubicación actual hay una ficha, se detiene la búsqueda
+                        if (self.esFicha(fila, columna)):
+                            encontro_obstaculo = True
                         else:
-                            fila = fila + 1
-                        if (longitud_palabra == 0):
-                            puntaje_final = self._calcularPuntaje(puntaje_bruto, camino)
-                            if (puntaje_final > espacio_optimo['interes']):
-                                espacio_optimo['interes'] = puntaje_final
-                                espacio_optimo['coordenada'] = (f, c)
-                                espacio_optimo['sentido'] = sentido
+                            #Si no, reduce en 1 la cantidad de letras restantes
+                            longitud_palabra = longitud_palabra - 1
+                            #Si se está parado en un casillero especial, agrega su efecto a una lista
+                            if (tablero[fila][columna] != ''):
+                                camino.append(tablero[fila][columna])
+                            #Indica en qué sentido debe continuar el recorrido
+                            if (sentido == 'h'):
+                                columna = columna + 1
+                                #Al alcanzar el límite del tablero, la búsqueda finaliza
+                                if (columna == cant_columnas):
+                                    encontro_obstaculo = True
+                            else:
+                                fila = fila + 1
+                                if (fila == cant_filas):
+                                    encontro_obstaculo = True               
+                    if (longitud_palabra == 0):
+                        puntaje_final = self._calcularPuntaje(puntaje_bruto, camino)
+                        if (puntaje_final > espacio_optimo['interes']):
+                            espacio_optimo['interes'] = puntaje_final
+                            espacio_optimo['coordenada'] = (f, c)
+                            espacio_optimo['sentido'] = sentido
+                            if (dificultad == 'facil'):
+                                return espacio_optimo
         return espacio_optimo
 
-# confi = nivel_dificil()
-#
+# confi = nivel_medio()
+
 # pref = Preferencias(confi['filas'],confi['columnas'],confi['especiales'], confi['nivel'])
-#
+
 # unTablero = Tablero(pref)
-#
+
+
 # lista_fichas = [{'h': 4}, {'o': 5}, {'l': 9}, {'a': 3}]
 # nuevas_fichas = [{'a': 4}, {'g': 5}]
 # unTablero.imprimirCasilleros()
 # puntaje1 = unTablero.insertarPalabra(lista_fichas, (2,4), "v")
 # puntaje2 = unTablero.insertarPalabra(nuevas_fichas, (2,1), "h")
-# print('_________2 inserciones_________')
-# unTablero.imprimirCasilleros()
 # print(puntaje1)
 # print(puntaje2)
-# print(unTablero.buscarEspacio(lista_fichas))
+# mejor_espacio = unTablero.buscarEspacio(lista_fichas, pref.getNivel())
+# if (mejor_espacio['coordenada'] != -1):
+#     unTablero.insertarPalabra(lista_fichas, mejor_espacio['coordenada'], mejor_espacio['sentido'])
+# print('_________Nueva inserción_________')
+# unTablero.imprimirCasilleros()

@@ -11,7 +11,7 @@ def crear_bolsa(cant, puntos):
     for l in cant:
 
         ficha = {}
-        puntae = 0
+        puntaje = 0
         ok = False
         k = 1
         while not ok:

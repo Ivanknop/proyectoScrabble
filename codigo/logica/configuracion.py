@@ -131,8 +131,7 @@ def nivel_dificil():
 
         #  dic el indice indica le puntaje y lo valores son las letras que itenen ese puntaje
         'puntaje_ficha': {
-            1: ['A', 'E', 'O', 'S', 'I', 'U', 'N', 'L', 'R', 'T'],
-            1: ['C', 'D', 'G'],
+            1: ['A', 'E', 'O', 'S', 'I', 'U', 'N', 'L', 'R', 'T', 'C', 'D', 'G'],
             3: ['M', 'B', 'P'],
             4: ['F', 'H', 'V', 'Y'],
             6: ['J'],

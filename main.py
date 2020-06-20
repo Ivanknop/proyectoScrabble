@@ -261,7 +261,7 @@ while jugar:
                                                         'PC: ¡Tu turno!', 'PC: He tenido retos más difíciles.', 'PC: El tiempo se acaba, amiguito.', 'PC: Jamás me han derrotado.',
                                                         'PC: Hoy estas con poca imaginación.', 'PC: Quizás deberías volver al buscaminas.', 'PC: Mis núcleos son más rápidos que tu cerebro.',
                                                         'PC: 100101110, que en binario es "perdedor"', 'PC: El código fuente no está de tu lado :(', 'PC: ¿Mala? ¿Yo?',
-                                                        f'PC: Tu turno, {nombre_usuario}', 'PC: *bosteza*']), tamaño=12, color='#EBDEB6', fondo=random.choice(['#D10E49', '#12870D', '#80870D']), pc=True)
+                                                        f'PC: Tu turno, {nombre_usuario}', 'PC: *bosteza*']), tamaño=11, color='#EBDEB6', fondo=random.choice(['#D10E49', '#12870D', '#80870D']), pc=True)
             #Si la bolsa de fichas se vació, advierte al jugador
             if len(bolsa_fichas) == 0:
                 interfaz.textoEstandar(pc=True)
