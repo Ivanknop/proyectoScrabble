@@ -7,7 +7,7 @@ class Dibujar():
     los distintos espacios de la GUI'''
 
     def __init__ (self, tablero, preferencias, atril):
-
+        self.tema_tablero()
         # algunos valores por defecto para construir la interfaz del tablero
         # --------------------------
         self.tamcas = (37, 39)
@@ -26,6 +26,8 @@ class Dibujar():
         c = 0
         self._directorio_media = os.path.join('media', '')
         self._directorio_fichas = os.path.join('media', 'Fichas y espacios', '')
+        self._directorio_media_ii = os.path.join('media', 'media_ii','')
+
         for fila in tablero.getCasilleros():
             insercion = []
             for dato in fila:
@@ -49,12 +51,16 @@ class Dibujar():
         for i in range(0, atril.get_cant_fichas()):
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
-        columna_derecha = [[sg.Image(f'{self._directorio_media}scrabbleArLogo.png')],
+        top = [sg.Button(image_filename=f'{self._directorio_media}pausa.png',pad=self.padin,border_width=0,key='_pausar_'),
+                sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
+                sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white',
+                        key='timer', background_color='black'),
+               ]
+        columna_derecha = [
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
                             [sg.Text('Puntuación jugador: 0    ', font=('Arial', 14), key='puntaje')],
                             [sg.Text('Puntuación PC: 0    ', font=('Arial', 14), key='puntaje_pc')],
-                            [sg.Text('Tiempo transcurrido:', font=('Arial', 14))],
-                            [sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white', key='timer', background_color='black')],
+
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
                             [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='textoJugador')],
@@ -66,9 +72,24 @@ class Dibujar():
                             [sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
 
         #Crea la ventana y la muestra
-        diseño = [[sg.Column(columna_izquierda,background_color='#ece6eb'), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
+        diseño = [top,[sg.Column(columna_izquierda,background_color='#ece6eb'), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
         self._interfaz = sg.Window('ScrabbleAR', diseño)
         self._interfaz.Finalize()
+
+
+#definiremos un tema para la interfaz
+    def tema_tablero(self):
+        sg.LOOK_AND_FEEL_TABLE['Tablero'] = {'BACKGROUND': '#4f280a',  ##133d51',
+                                              'TEXT': '#fff4c9',
+                                              'INPUT': '#c7e78b',
+                                              'TEXT_INPUT': '#000000',
+                                              'SCROLL': '#c7e78b',
+                                              'BUTTON': ('black', '#4f280a'),
+                                              'PROGRESS': ('#01826B', '#D0D0D0'),
+                                              'BORDER': 1, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0,
+                                              }
+        
+        sg.theme('Tablero')
 
     def setTimer(self, minutos):
         '''Setea la cantidad de tiempo disponible para jugar, recibida en el
