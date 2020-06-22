@@ -10,10 +10,9 @@ class Dibujar():
         self.tema_tablero()
         # algunos valores por defecto para construir la interfaz del tablero
         # --------------------------
-        self.tamcas = (37, 39)
-        self.padin = (0, 0)
-        self.botoncolor = ('white','#ece6eb')
-
+        self._tamcas = (37, 39)
+        self._padin = (0, 0)
+        self._botoncolor = ('white','#ece6eb')
         # --------------------------
         self._tiempo_inicio = 0
         self._tiempo_fin = 0
@@ -32,12 +31,12 @@ class Dibujar():
             insercion = []
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self.padin, key=f'tablero {f},{c}', image_size=self.tamcas,button_color=self.botoncolor, enable_events=True))
+                    insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas,button_color=self._botoncolor, enable_events=True))
                 else:
                     if (dato==''):
-                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}azul.png', pad=self.padin, key=f'tablero {f},{c}', image_size=self.tamcas, button_color=self.botoncolor,enable_events=True))
+                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}azul.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas, button_color=self._botoncolor,enable_events=True))
                     else:
-                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}{dato[1:]}.png', pad=self.padin, key=f'tablero {f},{c}', image_size=self.tamcas,button_color=self.botoncolor ,enable_events=True))
+                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}{dato[1:]}.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas,button_color=self._botoncolor ,enable_events=True))
                 c += 1
             f += 1
             c = 0
@@ -51,7 +50,7 @@ class Dibujar():
         for i in range(0, atril.get_cant_fichas()):
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
-        top = [sg.Button(image_filename=f'{self._directorio_media}pausa.png',pad=self.padin,border_width=0,key='_pausar_'),
+        top = [sg.Button(image_filename=f'{self._directorio_media}pausa.png',pad=self._padin,border_width=0,key='_pausar_'),
                 sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
                 sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),
@@ -88,7 +87,7 @@ class Dibujar():
                                               'PROGRESS': ('#01826B', '#D0D0D0'),
                                               'BORDER': 1, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0,
                                               }
-        
+
         sg.theme('Tablero')
 
     def setTimer(self, minutos):
@@ -148,12 +147,12 @@ class Dibujar():
         for fila in tablero.getCasilleros():
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self.tamcas)
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self._getCasilleroTamano())
                 else:
                     if (dato == ''):
-                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png' , image_size=self.tamcas)
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png' , image_size=self._getCasilleroTamano())
                     else:
-                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{dato[1:]}.png' , image_size=self.tamcas)
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{dato[1:]}.png' , image_size=self._getCasilleroTamano())
                 c += 1
             c = 0
             f += 1
@@ -183,13 +182,13 @@ class Dibujar():
         "sentido" fuera del límite.'''
         f = int(coordenada.split(",")[0])
         c = int(coordenada.split(",")[1])
-        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}orientacion.png', image_size=(29,31))
+        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}orientacion.png', image_size=self._getCasilleroTamano())
         c_contiguo = c + 1
         if (c_contiguo < pref.getColumnas()):
-            self._getInterfaz()[f'tablero {f},{c_contiguo}'].Update(image_filename=f'{self._getDirectorioFicha()}orientacionDerecha.png', image_size=(29,31))
+            self._getInterfaz()[f'tablero {f},{c_contiguo}'].Update(image_filename=f'{self._getDirectorioFicha()}orientacionDerecha.png', image_size=self._getCasilleroTamano())
         f_inferior = f + 1
         if (f_inferior < pref.getFilas()):
-            self._getInterfaz()[f'tablero {f_inferior},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}orientacionAbajo.png', image_size=(29,31))
+            self._getInterfaz()[f'tablero {f_inferior},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}orientacionAbajo.png', image_size=self._getCasilleroTamano())
 
     def reestablecerOrientacion(self, coordenada, tablero, preferencias):
         '''Desvanece los botones de selección de orientación en la coordenada
@@ -205,11 +204,11 @@ class Dibujar():
             c = coords['c']
             if (f < preferencias.getFilas()) and (c < preferencias.getColumnas()):
                 if (tablero.esFicha(f=f, c=c)):
-                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(casilleros[f][c].keys())[0]}.png', image_size=(29,31))
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(casilleros[f][c].keys())[0]}.png', image_size=self._getCasilleroTamano())
                 elif (casilleros[f][c] == ''):
-                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png', image_size=(29,31))
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png', image_size=self._getCasilleroTamano())
                 else:
-                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{casilleros[f][c][1:]}.png', image_size=(29,31))
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{casilleros[f][c][1:]}.png', image_size=self._getCasilleroTamano())
 
     def actualizarTexto(self, texto, color=None, fondo=None, tamaño=14, pc=False):
         self._getInterfaz()['textoJugador' if not pc else 'textoPC'].Update(texto, font=('Arial', tamaño), text_color=color, background_color=fondo)
@@ -242,6 +241,8 @@ class Dibujar():
         return self._directorio_fichas
     def _getDirectorioMedia(self):
         return self._directorio_media
+    def _getCasilleroTamano(self):
+        return self._tamcas
     def _getFichaTamano(self):
         return self._ficha_tamano
     def _getInterfaz(self):
