@@ -24,8 +24,11 @@ class Atril():
         return self._lista_Fichas[pos]
 
     def cambiar_fichas (self,bolsa_fichas):
+        for i in range(self.cant_fichas):
+            bolsa_fichas.append(self_lista_fichas[i]
         self._cant_Fichas = 0
         self._lista_Fichas = []
+        random.shuffle(bolsa_fichas)                        
         while bolsa_fichas and self._cant_Fichas < self._cant_maxima:
             self._lista_Fichas.append(bolsa_fichas[0])
             bolsa_fichas.remove(bolsa_fichas[0])
