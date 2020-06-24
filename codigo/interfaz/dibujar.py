@@ -3,13 +3,15 @@ import time
 import os.path
 
 class Dibujar():
-    '''Recibe objetos de tipo atril, tablero y preferencias e inicializa
+    '''Recibe objetos de tipo atril, tablero , preferencias y Jugador e inicializa
     los distintos espacios de la GUI'''
 
     def __init__ (self, tablero, preferencias, atril,jugador):
         self.tema_tablero()
 
         # La Info del Jugador, que se obtuvo en la interfaz inicial
+        #es una tupla
+        # en la posicion 0 esta el nombre, en 1 los puntos, en 2 la dificultad que eligio, en 3 la ruta al avatar
         #-----------------------------------------
         self.jugador = jugador
         # -----------------------------------------
@@ -31,6 +33,7 @@ class Dibujar():
         self._directorio_media = os.path.join('media', '')
         self._directorio_fichas = os.path.join('media', 'Fichas y espacios', '')
         self._directorio_media_ii = os.path.join('media', 'media_ii','')
+        self._directorio_avatars =  os.path.join('media', 'media_ii','avatars','')
 
         for fila in tablero.getCasilleros():
             insercion = []
@@ -60,10 +63,25 @@ class Dibujar():
                 sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),
                ]
+        #------------------------------------------
+        #  Contenedores para los avatares,el nombre y el puntaje
+
+        avatarJ = [[sg.Image(filename=self.jugador[3], size=(200, 200), background_color='red', key='avatar_j')],
+                  [sg.Text(text=self.jugador[0], border_width=2, justification='center', font=('Arial', 20))],
+                  [sg.Text(text=self.jugador[1], border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
+        
+        #implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente
+        
+        avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='red', key='avatar_pc')],
+                  [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
+                  [sg.Text(text='0', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')], ]
+        #------------------------------------------
+
         columna_derecha = [
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
-                            [sg.Text('Puntuación jugador: 0    ', font=('Arial', 14), key='puntaje')],
-                            [sg.Text('Puntuación PC: 0    ', font=('Arial', 14), key='puntaje_pc')],
+                            [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
+                           # [sg.Text('Puntuación jugador: 0    ', font=('Arial', 14))],
+                           # [sg.Text('Puntuación PC: 0    ', font=('Arial', 14), key='puntaje_pc')],
 
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
