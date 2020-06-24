@@ -6,8 +6,13 @@ class Dibujar():
     '''Recibe objetos de tipo atril, tablero y preferencias e inicializa
     los distintos espacios de la GUI'''
 
-    def __init__ (self, tablero, preferencias, atril):
+    def __init__ (self, tablero, preferencias, atril,jugador):
         self.tema_tablero()
+
+        # La Info del Jugador, que se obtuvo en la interfaz inicial
+        #-----------------------------------------
+        self.jugador = jugador
+        # -----------------------------------------
         # algunos valores por defecto para construir la interfaz del tablero
         # --------------------------
         self._tamcas = (37, 39)
