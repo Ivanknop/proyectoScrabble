@@ -87,11 +87,13 @@ class Dibujar():
                             [sg.Text('_'*30)],
                             [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='textoJugador')],
                             fichas,
-                            [sg.Button('Validar', font=('Arial', 12), key='validar'), sg.Button('Cambiar fichas', font=('Arial', 12), key='cambiar')],
                             [sg.Text('_'*30)],
                             [sg.Text('          ---FICHAS DEL OPONENTE---       ', background_color='black', font=('Arial', 14), text_color='White', key='textoPC')],
                             fichas_oponente,
-                            [sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
+                            [sg.Button(image_filename=f'{self._directorio_media}validar.png' , border_width=0,font=('Arial', 12), key='validar'),
+                             sg.Button(image_filename=f'{self._directorio_media}bolsallenaP.png' , border_width=0,font=('Arial', 12), key='cambiar'),
+
+                            sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
 
         #Crea la ventana y la muestra
         diseño = [top,[sg.Column(columna_izquierda,background_color='#ece6eb'), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
@@ -106,7 +108,7 @@ class Dibujar():
                                               'INPUT': '#c7e78b',
                                               'TEXT_INPUT': '#000000',
                                               'SCROLL': '#c7e78b',
-                                              'BUTTON': ('black', '#4f280a'),
+                                              'BUTTON': ('black', '#f75404'),#4f280a
                                               'PROGRESS': ('#01826B', '#D0D0D0'),
                                               'BORDER': 1, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0,
                                               }
