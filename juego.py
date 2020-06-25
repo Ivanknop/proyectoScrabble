@@ -25,6 +25,7 @@ def determinar_dificultad(jugador):
 
 def lazo_principal(jugador):
     configuracion = determinar_dificultad(jugador)
+    puntaje = jugador.getPuntaje()
 
     #Instancia la información en diferentes objetos
     preferencias = Preferencias(configuracion['filas'],configuracion['columnas'],configuracion['especiales'], configuracion['nivel'])
@@ -247,7 +248,8 @@ def lazo_principal(jugador):
                 eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
                 interfaz.paralizarTimer(instante)
                 if eleccion == 'OK':
-                    archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, puntaje, puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
+                    jugador.setPuntaje(puntaje)
+                    archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
                     archivo_partida.crear_guardado()
                     jugar = False
             interfaz.actualizarTimer()
@@ -291,6 +293,3 @@ def lazo_principal(jugador):
                     cant_cambiar = 0
                     interfaz.habilitarFinalizacion()
             turno_jugador = True
-
-if __name__ == '__main__':
-    lazo_principal()

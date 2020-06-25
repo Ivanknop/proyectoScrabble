@@ -68,14 +68,11 @@ class Dibujar():
         #(Implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente)     
         avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='red', key='avatar_pc')],
                   [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
-                  [sg.Text(text='0', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')], ]
+                  [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')], ]
         #------------------------------------------
         columna_derecha = [
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
-                           # [sg.Text('Puntuación jugador: 0    ', font=('Arial', 14))],
-                           # [sg.Text('Puntuación PC: 0    ', font=('Arial', 14), key='puntaje_pc')],
-
                             [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
                             [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='textoJugador')],
@@ -182,10 +179,10 @@ class Dibujar():
                 self.borrarElemento(f'ficha {f}')
 
     def actualizarPuntaje(self, nuevo_puntaje):
-        self._getInterfaz()['puntaje'].Update(f'Puntuación jugador: {nuevo_puntaje}', font=('Arial', 14))
+        self._getInterfaz()['puntaje'].Update(f'{nuevo_puntaje}', font=('Arial', 14))
 
     def actualizarPuntajePC(self, nuevo_puntaje):
-        self._getInterfaz()['puntaje_pc'].Update(f'Puntuación PC: {nuevo_puntaje}', font=('Arial', 14))
+        self._getInterfaz()['puntaje_pc'].Update(f'{nuevo_puntaje}', font=('Arial', 14))
 
     def seleccionarOrientacion(self, coordenada, pref):
         '''Una vez validada la palabra, permite mostrar los botones para

@@ -15,12 +15,21 @@ class Jugador():
 
     def getNombre(self):
         return self.__nombre
+    
+    def setNombre(self, nombre):
+        self.__nombre = nombre
 
     def getPuntaje(self):
         return self.__puntuacion
 
+    def setPuntaje(self, puntaje):
+        self.__puntuacion = puntaje
+
     def getDificultad(self):
         return self.__dificultad
+
+    def setDificultad(self, dificultad):
+        self.__dificultad = dificultad
 
     def getAvatar(self):
         return self.__avatar
