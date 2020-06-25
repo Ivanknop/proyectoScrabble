@@ -251,7 +251,17 @@ def lazo_principal(jugador):
                     archivo_partida.crear_guardado()
                     jugar = False
             interfaz.actualizarTimer()
-
+            if (event == 'pausar'):
+                instante = time.time()
+                while True:
+                    event, value = interfaz.leer()
+                    instante = interfaz.paralizarTimer(instante)
+                    if (event == 'pausar'):
+                        break
+                    if (event == None):
+                        jugar = False
+                        break
+                    interfaz.actualizarTimer()
         #Turno de la PC
         else:
             if (interfaz.terminoTimer()):

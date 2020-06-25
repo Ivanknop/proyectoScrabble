@@ -149,6 +149,7 @@ def lazo_principal():
                 sg.popup_ok('Debe ingresar un Apodo')
         elif event in ('<<<', '>>>'):
             avatarSelec = avatar.controles(event, ventana.FindElement('avatarVisor'))
+    ventana.Close()
     return jugador
 
 if __name__ == '__main__':

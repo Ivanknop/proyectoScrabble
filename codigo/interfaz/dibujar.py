@@ -11,7 +11,7 @@ class Dibujar():
         #-----------------------------------------
         self._jugador = jugador
         # -----------------------------------------
-        # algunos valores por defecto para construir la interfaz del tablero
+        #Algunos valores por defecto para construir la interfaz del tablero
         # --------------------------
         self._tamcas = (37, 39)
         self._padin = (0, 0)
@@ -54,25 +54,22 @@ class Dibujar():
         for i in range(0, atril.get_cant_fichas()):
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
-        top = [sg.Button(image_filename=f'{self._directorio_media}pausa.png',pad=self._padin,border_width=0,key='_pausar_'),
+        top = [sg.Button(image_filename=f'{self._directorio_media}pausa.png',pad=self._padin,border_width=0,key='pausar'),
                 sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
                 sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),
                ]
         #------------------------------------------
-        #  Contenedores para los avatares,el nombre y el puntaje
-
+        #Contenedores para los avatares,el nombre y el puntaje
         avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='red', key='avatar_j')],
                   [sg.Text(text=self._jugador.getNombre(), border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text=self._jugador.getPuntaje(), border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
         
-        #implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente
-        
+        #(Implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente)     
         avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='red', key='avatar_pc')],
                   [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text='0', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')], ]
         #------------------------------------------
-
         columna_derecha = [
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
@@ -90,12 +87,10 @@ class Dibujar():
                              sg.Button(image_filename=f'{self._directorio_media}bolsallenaP.png' , border_width=0,font=('Arial', 12), key='cambiar'),
 
                             sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
-
         #Crea la ventana y la muestra
         diseño = [top,[sg.Column(columna_izquierda,background_color='#ece6eb'), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
         self._interfaz = sg.Window('ScrabbleAR', diseño)
         self._interfaz.Finalize()
-
 
     #Define un tema para la interfaz
     def tema_tablero(self):
