@@ -23,9 +23,9 @@ class Atril():
     def get_ficha(self, pos):
         return self._lista_Fichas[pos]
 
-    def cambiar_fichas (self,bolsa_fichas):
-        for i in range(self.cant_fichas):
-            bolsa_fichas.append(self_lista_fichas[i])
+    def cambiar_fichas (self, bolsa_fichas):
+        for i in range(self._cant_Fichas):
+            bolsa_fichas.append(self._lista_Fichas[i])
         self._cant_Fichas = 0
         self._lista_Fichas = []
         random.shuffle(bolsa_fichas)                        

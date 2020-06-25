@@ -3,17 +3,13 @@ import time
 import os.path
 
 class Dibujar():
-    '''Recibe objetos de tipo atril, tablero , preferencias y Jugador e inicializa
+    '''Recibe objetos de tipo atril, tablero , preferencias y jugador e inicializa
     los distintos espacios de la GUI'''
 
-    def __init__ (self, tablero, preferencias, atril,jugador):
+    def __init__ (self, tablero, preferencias, atril, jugador):
         self.tema_tablero()
-
-        # La Info del Jugador, que se obtuvo en la interfaz inicial
-        #es una tupla
-        # en la posicion 0 esta el nombre, en 1 los puntos, en 2 la dificultad que eligio, en 3 la ruta al avatar
         #-----------------------------------------
-        self.jugador = jugador
+        self._jugador = jugador
         # -----------------------------------------
         # algunos valores por defecto para construir la interfaz del tablero
         # --------------------------
@@ -66,9 +62,9 @@ class Dibujar():
         #------------------------------------------
         #  Contenedores para los avatares,el nombre y el puntaje
 
-        avatarJ = [[sg.Image(filename=self.jugador[3], size=(200, 200), background_color='red', key='avatar_j')],
-                  [sg.Text(text=self.jugador[0], border_width=2, justification='center', font=('Arial', 20))],
-                  [sg.Text(text=self.jugador[1], border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
+        avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='red', key='avatar_j')],
+                  [sg.Text(text=self._jugador.getNombre(), border_width=2, justification='center', font=('Arial', 20))],
+                  [sg.Text(text=self._jugador.getPuntaje(), border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
         
         #implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente
         
@@ -101,7 +97,7 @@ class Dibujar():
         self._interfaz.Finalize()
 
 
-#definiremos un tema para la interfaz
+    #Define un tema para la interfaz
     def tema_tablero(self):
         sg.LOOK_AND_FEEL_TABLE['Tablero'] = {'BACKGROUND': '#4f280a',  ##133d51',
                                               'TEXT': '#fff4c9',
@@ -189,8 +185,6 @@ class Dibujar():
         if (atril.get_cant_fichas() < atril.getCantMaxima()):
             for f in range(atril.get_cant_fichas(), atril.getCantMaxima()):
                 self.borrarElemento(f'ficha {f}')
-
-
 
     def actualizarPuntaje(self, nuevo_puntaje):
         self._getInterfaz()['puntaje'].Update(f'Puntuación jugador: {nuevo_puntaje}', font=('Arial', 14))

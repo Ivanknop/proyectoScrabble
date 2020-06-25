@@ -11,21 +11,15 @@ class Jugador():
         return 'Jugador: {} - Puntuación:  {}'.format(self.__nombre, self.__puntuacion)
 
     def infoJugador(self):
-        info = ( self.__nombre ,
-                self.__puntuacion ,
-                self.__dificultad ,
-                self.__avatar ,
-                    )
-
-        return info
+        return f"Nombre: {self.__nombre}\nPuntuación: {self.__puntuacion}\nDificultad: {self.__dificultad}"
 
     def getNombre(self):
         return self.__nombre
 
-    def getPuntos(self):
+    def getPuntaje(self):
         return self.__puntuacion
 
-    def getdificultad(self):
+    def getDificultad(self):
         return self.__dificultad
 
     def getAvatar(self):

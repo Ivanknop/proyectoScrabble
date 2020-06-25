@@ -1,85 +1,75 @@
 import PySimpleGUI as sg
 import os
 
-directorio = os.path.join('..','Scrabble','media','media_ii','avatars', '')  #  sg.popup_get_folder('Image folder to open', default_path='')
-
 class Visor():
+    def __init__(self, directorio):
+        #Procesa varios datos a través del directorio de las imágenes
+        infoImg = self._ruta_imagenes(directorio)
+        self._directorio = directorio
+        #... como una lista con la ruta de cada imágen
+        self._imagenes = infoImg['imagenes']
+        #... y la cantidad total de avatares
+        self._cantImagenes = infoImg['cant_imagenes']
+        #El avatar por defecto será el primero de la lista de imagenes (índice 0)
+        self._i=0
 
-    def __init__(self,directorio):
-        infoImg = self.__ruta_imagenes(directorio)
-        self.__directorio = directorio
-        self.__imagenes = infoImg[0]
-        self.__cantImagenes =infoImg[1]
-        self.__i=0
-
-
-
-    def  __ruta_imagenes(self,directorio):
-
+    def  _ruta_imagenes(self, directorio):
+        #Si el directorio no existe, la advierte y cierra el programa
         if not directorio:
             sg.popup_cancel('Cancelling')
             raise SystemExit()
 
-
-        imgTipos = (".png", ".jpg", "jpeg", ".tiff", ".bmp")
-
-        # listo todos lso archivos del directorio
+        #Lista todos los archivos del directorio
         archivo = os.listdir(directorio)
 
-        # solo me quedo ocn las imagenes uqe alla en el directorio
+        #Obtiene las imagenes que haya en el directorio
+        imgTipos = (".png", ".jpg", "jpeg", ".tiff", ".bmp")
         imagenes = [f for f in archivo if os.path.isfile(
             os.path.join(directorio, f)) and f.lower().endswith(imgTipos)]
 
         cant_imagenes = len(imagenes)
+        #Si no encontró ninguna imágen, termina la ejecución del juego
         if cant_imagenes == 0:
             sg.popup('no hay avatares')
-
             raise SystemExit()
 
-        del archivo
+        return {'imagenes': imagenes, 'cant_imagenes': cant_imagenes}
 
-        return (imagenes,cant_imagenes)
-
-
-
-    def controles(self,event,visor):
+    def controles(self, event, visor):
         '''esta funcion e encarga de avanzar o retroceder en la lista de imagenes del directorio
         que luego eran visualizadas
         al mismo tiempo returna la ruta de la imagen que esta actualmente en le visor'''
-        #el indice self.__i se inicializa en 0 al instanciar el objeto
-
+        #El indice self._i se inicializa en 0 al instanciar el objeto
         if event == '>>>':
-            self.__i += 1
-            if self.__i >= self.__cantImagenes:
-                self.__i -= self.__cantImagenes
-            avatar = os.path.join(self.__directorio, self.__imagenes[self.__i])
+            self._i += 1
+            if self._i >= self._cantImagenes:
+                self._i -= self._cantImagenes
+            avatar = os.path.join(self._directorio, self._imagenes[self._i])
         elif event == '<<<':
-            self.__i-= 1
-            if self.__i < 0:
-                self.__i = self.__cantImagenes + self.__i
-            avatar =  os.path.join(self.__directorio, self.__imagenes[self.__i])
-
+            self._i-= 1
+            if self._i < 0:
+                self._i = self._cantImagenes + self._i
+            avatar =  os.path.join(self._directorio, self._imagenes[self._i])
         else:
-            avatar =  os.path.join(self.__directorio, self.__imagenes[self.__i])
-
+            avatar =  os.path.join(self._directorio, self._imagenes[self._i])
         visor.Update(filename=avatar)
-
         return avatar
 
-
-
-
-    def galAvatar(self):
-
-
-        avatar = os.path.join(self.__directorio, self.__imagenes[0])
-
+    def getAvatarLayout(self):
+        #Retorna el layout del visor
+        avatar = os.path.join(self._directorio, self._imagenes[0])
         galeria = [[sg.Image(filename=avatar,key ='avatarVisor')],
                    [sg.Button('<<<', size=(8, 2)), sg.Button('>>>', size=(8, 2))],
             ]
-
-        #return [[sg.Column(galeria, visible=True,key='galeria')]]
         return galeria
+
+    def getAvatar(self):
+        #Devuelve la posición, en la lista de imagenes, del avatar seleccionado
+        #actualmente
+        return self._i
+
+    def getActualRuta(self):
+        return os.path.join(self._directorio, self._imagenes[self._i])
 
 
 

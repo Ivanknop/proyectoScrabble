@@ -1,29 +1,11 @@
 import PySimpleGUI as sg
 import os
-#luego acordate de poner bien esta ruta ucando lo sumes al proyecto
 import codigo.interfaz.visorAvatar as va
-from codigo.interfaz.visorAvatar import directorio
 from codigo.logica.jugador import Jugador
 
-ANCHO = 900  # solo de prueba
-ALTO = 700  # solo de prueba
-
-#asigno las rutas de las imagenes a usar
-#la idea es tener un modulo que cargue la iniciar le programa, todas las imagenes necesarias
-#para la aplaicacion. y usar excepciones por si no encunetra los archivos
-
-#-----------------------------------------------
-
-BML =  os.path.join('media','media_ii','botonlargo.png')
-BM = os.path.join('media','media_ii','botonMadera.png')
-LOGO = os.path.join('media','media_ii','logo.png')
-#-----------------------------------------------
-
-
-def nivel():
-    ''' esta función devolvera el nivel elegido por el usuario
-    se usa en el layout de nueva partida'''
-
+def nivel(ventana):
+    '''Esta función devolvera el nivel elegido por el usuario según el
+    el estado de los elementos "Radio", que se usan en el layout de nueva partida'''
     if ventana.FindElement('rFacil').Get() == True:
         n = "facil"
     elif ventana.FindElement('rMedio').Get() == True:
@@ -32,18 +14,10 @@ def nivel():
         n = 'dificil'
     return n
 
-def Jugar (avatar):
-
-    '''esta funcion crea una instancia del objeto jugador y lo retorna'''
-    if ventana.FindElement('apodo').Get() !=  '' :
-        jugador= Jugador(nombre=value['apodo'],dificultad= nivel(),avatar =avatar)
-
-    else:
-        sg.popup_ok('Debe ingresar un Apodo')
-        jugador = None
-
+def jugar (avatar, value, ventana):
+    '''Esta función crea una instancia del objeto jugador y lo retorna'''
+    jugador = Jugador(nombre=value['apodo'], dificultad=nivel(ventana), avatar=avatar)
     return jugador
-
 
 def mi_tema():
     sg.LOOK_AND_FEEL_TABLE['scrabble'] = {'BACKGROUND': '#4f280a', ##133d51',
@@ -58,133 +32,125 @@ def mi_tema():
     sg.theme('scrabble')
 
 
-def actualizar_columnas(*columna):
-    ''' esta función hara visible la columna que recibe com oparámetro
-    y invisible el resto de las columnas
-    esta función sirve para actualizar la interfaz principal segun la opción elegida'''
-    '''elif e.Visible == False or e.Key == columna:
-    print(e.Key, '  else')
-    ventana.FindElement(e.Key).update(visible=True)'''
+def actualizar_columnas(ventana, *columna):
+    '''Esta función hará visible la columna que recibe como parámetro
+    e invisible el resto de las columnas.
+    Sirve para actualizar la interfaz principal segun la opción elegida'''
+    #Busca en la lista de elementos hasta encontrar una columna
     for e in ventana.element_list():
         if e.Type == 'column':
-
+            #Si la columna está invisible y tiene la key que busco, la hace visible
             if e.Visible == False and e.Key in columna:
-
                 ventana.FindElement(e.Key).update(visible=True)
-
             elif e.Key in columna:
                 ventana.FindElement(e.Key).update(visible=True)
-
-
+            #Si no, la oculta
             else:
                 ventana.FindElement(e.Key).update(visible=False)
 
 
 def cargando():
     layout=[
-        [sg.popup_animated(image_source='blue_blocks.gif', message="cargando...", alpha_channel=1,time_between_frames=2,no_titlebar=True)],
+        [sg.popup_animated(image_source='blue_blocks.gif', message="Cargando...", alpha_channel=1,time_between_frames=2,no_titlebar=True)],
     ]
     return layout
 
 
-def nueva_partida():
-    global avatar
-
+def nueva_partida(avatar):
     layout = [
         [sg.Text('Apodo:', font=('Italic 24'),key='jugador')],
-
         [sg.InputText('',size=(20,20),font=('Italic 24'),background_color='blue',key='apodo')],
         [sg.Frame(
-                  layout= [[sg.Radio('facil', "dificultad",font=('Italic 24'), default=True, size=(10,3), key='rFacil')],
+                  layout= [[sg.Radio('Fácil', "dificultad",font=('Italic 24'), default=True, size=(10,3), key='rFacil')],
                           [sg.Radio('Medio', "dificultad",font=('Italic 24'), default=False, size=(10,3), key='rMedio')],
-                          [sg.Radio('Dificil', "dificultad",font=('Italic 24'), default=False, size=(10,3), key='rDificil')],],
+                          [sg.Radio('Difícil', "dificultad",font=('Italic 24'), default=False, size=(10,3), key='rDificil')],],
 
                   title='Dificultad' ,title_color='black', relief=sg.RELIEF_SUNKEN,font=('Italic 24'),
                         element_justification='center',key='contenedor'),
-
-         sg.Column(avatar.galAvatar(), visible=False,key='colAvatar')],
-
-
-        [sg.Button('Jugar', size=(10, 2), key='_jugar_'),sg.Button('cancelar', size=(10, 2), key='_cancelar_')],
+         sg.Column(avatar.getAvatarLayout(), visible=False,key='colAvatar')],
+        [sg.Button('Jugar', size=(10, 2), key='confirmar'),sg.Button('cancelar', size=(10, 2), key='cancelar')],
     ]
     return layout
 
 
-def jugar_interfaz():
+def jugar_interfaz(img_boton_largo):
     layout = [
-        [sg.Button('Nueva Partida',image_filename=BML,  border_width=0,font=('Italic 24'),size = (20,3), key='_nueva_')],
-        [sg.Button('Cargar Partida',image_filename=BML,  border_width=0,font=('Italic 24'), size=(20,3), key='_cargar_')],
-        [sg.Button('Volver',image_filename=BML,  border_width=0,font=('Italic 24'), size=(20,3), key='_volver_')],
+        [sg.Button('Nueva Partida',image_filename=img_boton_largo,  border_width=0,font=('Italic 24'),size = (20,3), key='nueva')],
+        [sg.Button('Cargar Partida',image_filename=img_boton_largo,  border_width=0,font=('Italic 24'), size=(20,3), key='_cargar_')],
+        [sg.Button('Volver',image_filename=img_boton_largo,  border_width=0,font=('Italic 24'), size=(20,3), key='volver')],
     ]
     return layout
 
-def inicio():
-    layout = [[sg.Button(image_filename=BM, border_width=0,button_text='Ayuda', size=(200, 200), font=('Impact', 40), key='ayuda'),
-               sg.Button(image_filename=BM, border_width=0, button_text='Jugar', size=(200, 200), font=('Impact', 40),key='jugar'),
-               sg.Button(image_filename=BM,  border_width=0,button_text='Puntajes', size=(200, 200), font=('Impact', 30),key='puntajes')],
+def inicio(img_boton_madera):
+    layout = [[sg.Button(image_filename=img_boton_madera, border_width=0,button_text='Ayuda', size=(200, 200), font=('Impact', 40), key='ayuda'),
+               sg.Button(image_filename=img_boton_madera, border_width=0, button_text='Jugar', size=(200, 200), font=('Impact', 40),key='jugar'),
+               sg.Button(image_filename=img_boton_madera,  border_width=0,button_text='Puntajes', size=(200, 200), font=('Impact', 30),key='puntajes')],
               [sg.Exit('Salir', button_color=('black','#f75404'),size=(8, 2), key='salir')]]
     return layout
 
 
-def interfaz_principal (ALTO,ANCHO):
-
-    colInicial = inicio()
-    columnaCen2 = jugar_interfaz()
-    columnaNueva = nueva_partida()
+def interfaz_principal(img_logo, img_boton_largo, img_boton_madera, avatar):
+    colInicial = inicio(img_boton_madera)
+    columnaCen2 = jugar_interfaz(img_boton_largo)
+    columnaNueva = nueva_partida(avatar)
+    #Al ejecutarse, sólo será visible la columna inicial
     layout = [
-        [sg.Image(filename=LOGO)],
-        [sg.Column(colInicial,justification='cener',element_justification='center',key= 'colInicial'),
+        [sg.Image(filename=img_logo)],
+        [sg.Column(colInicial,justification='center',element_justification='center',key= 'colInicial'),
          sg.Column(columnaCen2,visible=False,justification='cener',element_justification='center',key='colJugar2'),
          sg.Column(columnaNueva, visible=False,justification='cener',element_justification='center', key='colPartida'),
         ],
-
-
     ]
 
     return layout
 
+def lazo_principal():
+    #Asigno las rutas de las imagenes a usar.
+    #La idea es tener un modulo que cargue al iniciar el programa todas las imagenes necesarias
+    #y usar excepciones si no encuentra los archivos
+    #-----------------------------------------------
+    directorio_avatares = os.path.join('..','Scrabble','media','media_ii','avatars', '')  #  sg.popup_get_folder('Image folder to open', default_path='')
+    img_boton_largo =  os.path.join('media','media_ii','botonlargo.png')
+    img_boton_madera = os.path.join('media','media_ii','botonMadera.png')
+    img_logo = os.path.join('media','media_ii','logo.png')
+    #-----------------------------------------------
 
-avatarSelec = None
-avatar=va.Visor(directorio)
-mi_tema()
-#layout = interfaz_principal(ALTO,ANCHO)
+    #Crea un jugador vacío. Si se cierra la ventana sin comenzar una partida, se retorna al final
+    jugador = Jugador('', -1, '')
+    avatar = va.Visor(directorio_avatares)
 
-ventana = sg.Window('ScrabbleAr',size = (ANCHO,ALTO),resizable=False).Layout(interfaz_principal(ALTO,ANCHO))
+    ANCHO = 900  # solo de prueba
+    ALTO = 700  # solo de prueba
+    mi_tema()
+    ventana = sg.Window('ScrabbleAr', interfaz_principal(img_logo, img_boton_largo, img_boton_madera, avatar), size = (ANCHO,ALTO),resizable=False)
+    ventana.Finalize()
+    while True:
 
-ventana.Finalize()
+        event, value = ventana.read()
 
+        if (event == None) or (event == 'salir'):
+            break
+        elif event == 'jugar':
+            actualizar_columnas(ventana, 'colJugar2')
+        elif event == 'volver':
+            actualizar_columnas(ventana, 'colInicial')
+        elif event == 'nueva':
+            actualizar_columnas(ventana, 'colPartida','colAvatar')
+        elif event == 'cancelar':
+            actualizar_columnas(ventana, 'colJugar2')
+        elif event == 'confirmar':  
+            if ventana.FindElement('apodo').Get() !=  '':
+                avatarSelec = avatar.getActualRuta()
+                jugador = jugar(avatarSelec, value, ventana)
+                decision = sg.popup_yes_no(f'¿Confirmar los datos?\nNombre: {jugador.getNombre()}\nDificultad: {jugador.getDificultad()}')
+                if decision == 'Yes':
+                    break
+            else:
+                sg.popup_ok('Debe ingresar un Apodo')
+        elif event in ('<<<', '>>>'):
+            avatarSelec = avatar.controles(event, ventana.FindElement('avatarVisor'))
+    return jugador
 
-ventana.FindElement('colInicial').update(visible=True)
-
-while True:
-
-    event, value = ventana.read()
-    print(value)
-
-    if event == 'salir':
-        break
-    elif event == 'jugar':
-
-        actualizar_columnas('colJugar2')
-
-    elif event == '_volver_':
-
-        actualizar_columnas('colInicial')
-
-    elif event == '_nueva_':
-        actualizar_columnas('colPartida','colAvatar')
-    elif event == '_cancelar_':
-        actualizar_columnas('colJugar2')
-    elif event == '_jugar_':
-        jugador=Jugar(avatarSelec)
-        if ventana.FindElement('apodo').Get()  :
-            a = jugador.infoJugador()
-            sg.popup_yes_no(a)
-            print(a)
-    elif event in ('<<<', '>>>'):
-
-        avatarSelec=avatar.controles(event, ventana.FindElement('avatarVisor'))
-
-
-
+if __name__ == '__main__':
+    lazo_principal()
 

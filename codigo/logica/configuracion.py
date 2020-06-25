@@ -48,8 +48,8 @@ def especial(fila, col,nivel):
 def nivel_facil():
     conf = {
         'nivel':'facil',
-        'filas':20,
-        'columnas':20,
+        'filas':15,
+        'columnas':15,
         'especiales':{},
 
         'tiempo': 25, #minutos
