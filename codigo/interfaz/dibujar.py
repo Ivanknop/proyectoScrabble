@@ -61,18 +61,18 @@ class Dibujar():
 
         top = [sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
               sg.Column(temporizador),
-               sg.Button(image_filename=f'{self._directorio_media}pausa.png', pad=self._padin, border_width=0,
+               sg.Button(image_filename=f'{self._directorio_media}pausa.png', button_color=('black','#4f280a'), pad=self._padin, border_width=0,
                           key='pausar'),
 
                ]
         #------------------------------------------
         #Contenedores para los avatares,el nombre y el puntaje
-        avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='red', key='avatar_j')],
+        avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='#4f280a', key='avatar_j')],
                   [sg.Text(text=self._jugador.getNombre(), border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text=self._jugador.getPuntaje(), border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
         
         #(Implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente)     
-        avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='red', key='avatar_pc')],
+        avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='#4f280a', key='avatar_pc')],
                   [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')], ]
         #------------------------------------------
@@ -245,7 +245,7 @@ class Dibujar():
         self._getInterfaz()[clave].Update(visible=False)
 
     def habilitarFinalizacion(self):
-        self._getInterfaz()['cambiar'].Update('Finalizar juego')
+        self._getInterfaz()['cambiar'].Update(image_filename=f'{self._directorio_media}bolsafichasvacia.png')
 
     def popUp(self, cadena):
         sg.popup(cadena, keep_on_top=True)
