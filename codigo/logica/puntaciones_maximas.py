@@ -46,28 +46,38 @@ class Puntuacion_Maxima():
         for j in self.puntajes:
             print(j)
     
+    def ver_puntaje(self,pos):
+        '''
+        Devuelve una posición particular a partir de una posición específica
+        '''
+        return self.puntajes[pos]
+    
     def _vaciar_puntajes (self): 
         '''
             Es un método que solo se invoca desde la propia clase.
             Vacía la lista de puntuaciones
         '''
         self.puntajes = []
+        for p in range (10):
+            self.puntajes.append(Jugador('Vacío',0))
+        self.guardar()
+        
 
     def inicializar_puntuacion (self): 
         '''
         Reinicializa las puntuaciones máximas
         '''        
         self._vaciar_puntajes()
-        self.puntajes.append(Jugador('Enzo',300))
-        self.puntajes.append(Jugador('Iván',300))
-        self.puntajes.append(Jugador('Diego',300))
-        self.puntajes.append(Jugador('Kakaroto',280))
-        self.puntajes.append(Jugador('Vegetta',250))
-        self.puntajes.append(Jugador('Quién',230))
-        self.puntajes.append(Jugador('Cómo',200))
-        self.puntajes.append(Jugador('Cuándo',150))
-        self.puntajes.append(Jugador('Qué',120))
-        self.puntajes.append(Jugador('Por qué',100))
+        self.agregar(Jugador('Enzo',300))
+        self.agregar(Jugador('Iván',300))
+        self.agregar(Jugador('Diego',300))
+        self.agregar(Jugador('Kakaroto',280))
+        self.agregar(Jugador('Vegetta',250))
+        self.agregar(Jugador('Quién',230))
+        self.agregar(Jugador('Cómo',200))
+        self.agregar(Jugador('Cuándo',150))
+        self.agregar(Jugador('Qué',120))
+        self.agregar(Jugador('Por qué',100))
         self.puntajes = self.puntajes[0:self.MAXIMOS]
         self.guardar()
 
@@ -81,11 +91,3 @@ class Puntuacion_Maxima():
             self.puntajes.append(jug)
         self.puntajes = self.puntajes[0:self.MAXIMOS]
         self.guardar()
-'''
-Prueba
-
-puntuaciones = Puntuacion_Maxima()
-#puntuaciones.borrar_puntuacion()
-puntuaciones.inicializar_puntuacion()
-puntuaciones.mostrar()
-'''
