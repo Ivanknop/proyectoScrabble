@@ -2,6 +2,11 @@ import PySimpleGUI as sg
 import os
 
 class Visor():
+    '''El objeto Visor es un widget implementado con el fin de generar un selector de AVATAR para el
+    juego. Pero es más que eso, este widget no está implementado en la libreria PySimpleGui.
+    Visor permite generar un widget del tipo galeria para visualizar imagenes con solohacer una instancia de este objeto
+    aun hay que retocarlo para que sea mpas generico. pero la idea es esa.
+    '''
     def __init__(self, directorio):
         #Procesa varios datos a través del directorio de las imágenes
         infoImg = self._ruta_imagenes(directorio)
@@ -16,7 +21,7 @@ class Visor():
     def  _ruta_imagenes(self, directorio):
         #Si el directorio no existe, la advierte y cierra el programa
         if not directorio:
-            sg.popup_cancel('Cancelling')
+            sg.popup_cancel('Cancelando')
             raise SystemExit()
 
         #Lista todos los archivos del directorio
@@ -59,7 +64,7 @@ class Visor():
         #Retorna el layout del visor
         avatar = os.path.join(self._directorio, self._imagenes[0])
         galeria = [[sg.Image(filename=avatar,key ='avatarVisor')],
-                   [sg.Button('<<<', size=(8, 2)), sg.Button('>>>', size=(8, 2))],
+                   [sg.Button('<<<', size=(8, 2), button_color=('black', '#f75404')), sg.Button('>>>', size=(8, 2), button_color=('black', '#f75404'))],
             ]
         return galeria
 
@@ -72,14 +77,16 @@ class Visor():
         return os.path.join(self._directorio, self._imagenes[self._i])
 
 
-
+# if __name__ == '__main__':
 #
-# v = Visor(directorio)
-# lay = [[sg.Column(v.galAvatar())],]
-# win=sg.Window('asd',layout=lay).Finalize()
 #
-# while True:
 #
-#     e , va = win.read()
-#     if e in ('<<<','>>>'):
-#          v.controles(e, win.FindElement('avatarVisor'))
+#     v = Visor(directorio)
+#     lay = [[sg.Column(v.galAvatar())],]
+#     win=sg.Window('asd',layout=lay).Finalize()
+#
+#     while True:
+#
+#         e , va = win.read()
+#         if e in ('<<<','>>>'):
+#              v.controles(e, win.FindElement('avatarVisor'))
