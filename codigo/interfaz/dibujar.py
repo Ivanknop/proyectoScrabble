@@ -54,10 +54,16 @@ class Dibujar():
         for i in range(0, atril.get_cant_fichas()):
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
-        top = [sg.Button(image_filename=f'{self._directorio_media}pausa.png',pad=self._padin,border_width=0,key='pausar'),
-                sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
-                sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white',
-                        key='timer', background_color='black'),
+
+        temporizador = [[sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white',
+                        key='timer', background_color='black'),],
+                        [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso'),]]
+
+        top = [sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
+              sg.Column(temporizador),
+               sg.Button(image_filename=f'{self._directorio_media}pausa.png', pad=self._padin, border_width=0,
+                          key='pausar'),
+
                ]
         #------------------------------------------
         #Contenedores para los avatares,el nombre y el puntaje
@@ -73,7 +79,6 @@ class Dibujar():
         columna_derecha = [
                             [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
-                            [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso')],
                             [sg.Text('_'*30)],
                             [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='textoJugador')],
                             fichas,
