@@ -109,7 +109,7 @@ def lazo_principal():
     #La idea es tener un modulo que cargue al iniciar el programa todas las imagenes necesarias
     #y usar excepciones si no encuentra los archivos
     #-----------------------------------------------
-    directorio_avatares = os.path.join('..','Scrabble','media','media_ii','avatars', '')  #  sg.popup_get_folder('Image folder to open', default_path='')
+    directorio_avatares = os.path.join('media','media_ii','avatars', '')  #  sg.popup_get_folder('Image folder to open', default_path='')
     img_boton_largo =  os.path.join('media','media_ii','botonlargo.png')
     img_boton_madera = os.path.join('media','media_ii','botonMadera.png')
     img_logo = os.path.join('media','media_ii','logo.png')
