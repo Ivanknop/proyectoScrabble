@@ -7,7 +7,7 @@ class Jugador():
         self.puntuacion = puntaje
     
     def __str__(self):
-        return 'Jugador: {} - Puntuación:  {}'.format(self.nombre, self.puntuacion)
+        return '{}   -   {}'.format(self.nombre, self.puntuacion)
 
 class Puntuacion_Maxima():
     puntajes = []
