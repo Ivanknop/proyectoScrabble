@@ -20,36 +20,38 @@ def crear_especial(esp,directorio):
     Recibe un casillero y el directorio donde debe estar almacenado.
     Avalúa si es así. En caso contrario, crea una imagen nueva
     '''
+    font = ImageFont.truetype("impact.ttf", 20) 
+    img = Image.new('RGBA', (29,31), (255,128,0,255)) 
+    dibujo = ImageDraw.Draw(img)
     if esp == 'sum':
-        font = ImageFont.truetype("impact.ttf", 20) 
-        img = Image.new('RGBA', (29,31), (255,128,0,255)) 
-        dibujo = ImageDraw.Draw(img)
         dibujo.text((10, 5), '+', 'white', font)
-        img.save(f'{directorio}sum.png')
-    if esp == 'rest':
-        font = ImageFont.truetype("impact.ttf", 20) 
-        img = Image.new('RGBA', (29,31), (255,128,0,255))
-        dibujo = ImageDraw.Draw(img)
+    elif esp == 'rest':
         dibujo.text((10, 5), '-', 'white', font)
-        img.save(f'{directorio}rest.png')
-    if esp == 'mult':
-        font = ImageFont.truetype("impact.ttf", 20) 
-        img = Image.new('RGBA', (29,31), (255,128,0,255)) 
-        dibujo = ImageDraw.Draw(img)
-        dibujo.text((10, 5), '*', 'white', font)
-        img.save(f'{directorio}mult.png')
-    if esp == 'div':
-        font = ImageFont.truetype("impact.ttf", 20) 
-        img = Image.new('RGBA', (29,31), (255,128,0,255)) 
-        dibujo = ImageDraw.Draw(img)
+    elif esp == 'mult':
+        dibujo.text((10, 5), '*2', 'white', font)
+    elif esp == 'div':
         dibujo.text((10, 5), '/', 'white', font)
-        img.save(f'{directorio}div.png')
-    if esp == '0':
-        font = ImageFont.truetype("impact.ttf", 20) 
-        img = Image.new('RGBA', (29,31), (255,255,255,0)) 
+    elif esp == '0':
+        img = Image.new('RGBA', (29,31), (255,255,255,0))
+        dibujo = ImageDraw.Draw(img) 
+        dibujo.text((10, 5), '0', 'black', font)
+    elif esp == 'orientacionAbajo':
+        img = Image.new('RGBA', (29,31), (125,125,125,0)) 
         dibujo = ImageDraw.Draw(img)
-        dibujo.text((10, 5), '0', 'white', font)
-        img.save(f'{directorio}0.png')    
+        dibujo.text((10, 5), '=>', 'black', font)
+        img = img.rotate (270)
+    elif esp == 'orientacionDerecha':
+        img = Image.new('RGBA', (29,31), (255,0,255,0)) 
+        dibujo = ImageDraw.Draw(img)
+        dibujo.text((10, 5), '=>', 'black', font)
+    elif esp == 'orientacion' or 'unaFichaOponente': 
+        try:
+            img = Image.open(f'{directorio}{esp}.png')
+        except:
+            img = Image.new('RGBA',(29,31),(100,100,100,255))
+            dibujo.line((0, 0) + img.size, fill=(255,0,0,255),width=3)
+            dibujo.line((0, img.size[1], img.size[0], 0), fill=(255,0,0,255),width=3)
+    img.save(f'{directorio}{esp}.png')
     return img
 
 def crear_avatar(av,directorio):
@@ -65,6 +67,7 @@ def crear_avatar(av,directorio):
         dibujo.line((0, 0) + img.size, fill=(255,0,0,255),width=3)
         dibujo.line((0, img.size[1], img.size[0], 0), fill=(255,0,0,255),width=3)
         img.save(f'{directorio}avatarError.png')
+     return imag
     
 def crear_varios (imagen,directorio):
     '''
@@ -93,7 +96,7 @@ def check_fichas ():
     return errores
 
 def check_especiales ():
-    especiales = ['sum','rest','0','div','mult']
+    especiales = ['sum','rest','0','div','mult','azul','orientacion','orientacionAbajo','orientacionDerecha','unaFichaOponente']
     directorio = os.path.join('media', 'Fichas y espacios', '')
     errores = 0
     for i in range(len(especiales)):    
