@@ -88,15 +88,15 @@ class Dibujar():
                             [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='textoJugador')],
                             fichas,
                             [sg.Text('_'*30)],
-                            [sg.Text('          ---FICHAS DEL OPONENTE---       ', background_color='black', font=('Arial', 14), text_color='White', key='textoPC')],
-                            fichas_oponente,
+                            [sg.Text('          -------- --- ---------       ', background_color='black', font=('Arial', 14), text_color='White', key='textoPC')],
+
                             [sg.Button(image_filename=f'{self._directorio_media}validar.png' , border_width=0,font=('Arial', 12), key='validar'),
                              sg.Button(image_filename=f'{self._directorio_media}bolsallenaP.png' , border_width=0,font=('Arial', 12), key='cambiar'),
 
                             sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
         #Crea la ventana y la muestra
-        diseño = [top,[sg.Column(columna_izquierda,background_color='#ece6eb'), sg.Column(columna_derecha, element_justification='center', pad=(10, None))]]
-        self._interfaz = sg.Window('ScrabbleAR', diseño)
+        diseño = [top,[sg.Column(columna_izquierda,background_color='#ece6eb',justification='left'), sg.Column(columna_derecha, element_justification='center',justification='right', pad=(10, None))]]
+        self._interfaz = sg.Window('ScrabbleAR', diseño, resizable=True)
         self._interfaz.Finalize()
 
     #Define un tema para la interfaz
