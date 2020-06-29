@@ -142,7 +142,7 @@ def lazo_principal():
             if ventana.FindElement('apodo').Get() !=  '':
                 avatarSelec = avatar.getActualRuta()
                 jugador = jugar(avatarSelec, value, ventana)
-                decision = sg.popup_yes_no(f'¿Confirmar los datos?\nNombre: {jugador.getNombre()}\nDificultad: {jugador.getDificultad()}')
+                decision = sg.popup_yes_no(f'¿Confirmar los datos?\nNombre: {jugador.getNombre()}\nDificultad: {jugador.getDificultad()}',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True)
                 if decision == 'Yes':
                     break
             else:
