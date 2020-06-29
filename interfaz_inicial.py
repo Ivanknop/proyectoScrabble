@@ -59,7 +59,7 @@ def cargando():
 def nueva_partida(avatar):
     layout = [
         [sg.Text('Apodo:', font=('Italic 24'),key='jugador')],
-        [sg.InputText('',size=(20,20),font=('Italic 24'),background_color='blue',key='apodo')],
+        [sg.InputText('',size=(20,20),font=('Italic 24'),background_color='#ece6eb',key='apodo')],
         [sg.Frame(
                   layout= [[sg.Radio('Fácil', "dificultad",font=('Italic 24'), default=True, size=(10,3), key='rFacil')],
                           [sg.Radio('Medio', "dificultad",font=('Italic 24'), default=False, size=(10,3), key='rMedio')],
