@@ -122,7 +122,7 @@ def lazo_principal():
     ANCHO = 900  # solo de prueba
     ALTO = 700  # solo de prueba
     mi_tema()
-    ventana = sg.Window('ScrabbleAr', interfaz_principal(img_logo, img_boton_largo, img_boton_madera, avatar), size = (ANCHO,ALTO),resizable=False)
+    ventana = sg.Window('ScrabbleAr', interfaz_principal(img_logo, img_boton_largo, img_boton_madera, avatar), size = (ANCHO,ALTO),resizable=True,element_justification='center')
     ventana.Finalize()
     while True:
 
