@@ -67,7 +67,19 @@ def crear_avatar(av,directorio):
         dibujo.line((0, 0) + img.size, fill=(255,0,0,255),width=3)
         dibujo.line((0, img.size[1], img.size[0], 0), fill=(255,0,0,255),width=3)
         img.save(f'{directorio}avatarError.png')
-     return imag
+     return img
+
+def crear_error ():
+    directorio = os.path.join('media', 'media_ii','')
+    try:
+        img = Image.open(f'{directorio}imagenError.png')
+    except:
+        img = Image.new('RGBA',(400,20),(79,40,10,255))
+        font = ImageFont.truetype("arial.ttf", 12) 
+        dibujo = ImageDraw.Draw(img)
+        dibujo.text((12, 5), 'ALERTA, ALGÚN ARCHIVO DE IMAGEN ESTA DAÑADO O FALTA', 'white', font,align='center')
+        img.save(f'{directorio}imagenError.png')
+    return img
     
 def crear_varios (imagen,directorio):
     '''
@@ -141,7 +153,8 @@ def loading():
             v['texto'].update('{}'.format(texto[i]))
             try:
                 if str(chequeos[i]) > '0':
-                    v['ok'].update('Cuidado, tienes imágenes dañadas')  
+                    v['ok'].update('Cuidado, tienes imágenes dañadas') 
+                    img2 = crear_error() 
                 else:
                     v['ok'].update('Correctas')
             except:
