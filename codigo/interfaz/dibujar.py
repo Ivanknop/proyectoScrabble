@@ -55,12 +55,17 @@ class Dibujar():
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
 
-        temporizador = [[sg.Text('00:00', size=(15, 1), font=('Impact', 26), justification='center', text_color='white',
+        temporizador = [[sg.Text('Jugado:', size=(10, 1), font=('Impact', 18), justification='center', text_color='white'),sg.Text('00:00', size=(10, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),],
-                        [sg.ProgressBar(max_value=0, orientation='horizontal', size=(30, 30), key='progreso'),]]
+                        [sg.Text('Restante:', size=(10, 1), font=('Impact', 18), justification='center', text_color='white'),sg.ProgressBar(max_value=0, orientation='horizontal', size=(20, 30), key='progreso'),]]
+
+        tiempo = [[sg.Frame(
+                  layout= temporizador,
+                  title='Tiempo de Juego' ,title_color='#ece6eb', relief=sg.RELIEF_SUNKEN,font=('Italic 18'),
+                        element_justification='center', key='contTiempo'),]]
 
         top = [sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
-              sg.Column(temporizador),
+              sg.Column(tiempo),
                sg.Button(image_filename=f'{self._directorio_media}pausa.png', button_color=('black','#4f280a'), pad=self._padin, border_width=0,
                           key='pausar'),
 
