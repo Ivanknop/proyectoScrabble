@@ -55,13 +55,13 @@ class Dibujar():
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
 
-        temporizador = [[sg.Text('Jugado:', size=(10, 1), font=('Impact', 18), justification='center', text_color='white'),sg.Text('00:00', size=(10, 1), font=('Impact', 26), justification='center', text_color='white',
+        temporizador = [[sg.Text('Jugado:', size=(10, 1), font=('Impact', 14), justification='center', text_color='white'),sg.Text('00:00', size=(10, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),],
-                        [sg.Text('Restante:', size=(10, 1), font=('Impact', 18), justification='center', text_color='white'),sg.ProgressBar(max_value=0, orientation='horizontal', size=(20, 30), key='progreso'),]]
+                        [sg.Text('Restante:', size=(10, 1), font=('Impact', 14), justification='center', text_color='white'),sg.ProgressBar(max_value=0, orientation='horizontal', size=(20, 30), key='progreso'),]]
 
         tiempo = [[sg.Frame(
                   layout= temporizador,
-                  title='Tiempo de Juego' ,title_color='#ece6eb', relief=sg.RELIEF_SUNKEN,font=('Italic 18'),
+                  title='Tiempo de Juego' ,title_color='#ece6eb', relief=sg.RELIEF_SUNKEN,font=('Italic 14'),
                         element_justification='center', key='contTiempo'),]]
 
         top = [sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
