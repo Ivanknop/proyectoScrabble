@@ -33,3 +33,5 @@ class Jugador():
 
     def getAvatar(self):
         return self.__avatar
+    def setAvatar(self, avatar):
+        self.__avatar = avatar

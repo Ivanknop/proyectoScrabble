@@ -8,7 +8,7 @@ class Juego_Guardado:
     Está construído para utilizar un botón para guardar y otro para cargar
     '''
     juego = []
-    def __init__(self, ruta_guardado, tablero=None, jugador_user=None, atril=None, atril_pc=None, b_fichas=None, puntaje=None, puntaje_pc=None, tiempo_restante=None, pref=None, cant_cambiar=None):
+    def __init__(self, ruta_guardado, tablero=None, jugador_user=None, atril=None, atril_pc=None, b_fichas=None, puntaje=None, puntaje_pc=None, tiempo_restante=None, pref=None, cant_cambiar=None, avatar=None):
         self.tablero = tablero
         self.jugador_user = jugador_user
         self.atril = atril
@@ -20,6 +20,7 @@ class Juego_Guardado:
         self.cant_cambiar = cant_cambiar
         self.puntaje_pc = puntaje_pc
         self.ruta_guardado = ruta_guardado
+        self.avatar = avatar
 
     def getTablero (self):
         return self.tablero
@@ -43,13 +44,15 @@ class Juego_Guardado:
         return self.ruta_guardado
     def getAtrilPC(self):
         return self.atril_pc
+    def getAvatar(self):
+        return self.avatar
 
     def crear_guardado(self):
         '''
         Cada vez que se lo invoca sobreescribe el archivo. Guarda una única partida
         '''
         fichero = open(f'{self.getRutaGuardado()}juego_guardado.pckl', 'wb')
-        self.juego = [self.tablero, self.jugador_user, self.atril, self.bolsa_fichas, self.puntaje, self.tiempo_restante, self.preferencias, self.cant_cambiar, self.puntaje_pc, self.atril_pc]
+        self.juego = [self.tablero, self.jugador_user, self.atril, self.bolsa_fichas, self.puntaje, self.tiempo_restante, self.preferencias, self.cant_cambiar, self.puntaje_pc, self.atril_pc, self.avatar]
         pickle.dump(self.juego, fichero)
         fichero.close()
 
@@ -68,6 +71,7 @@ class Juego_Guardado:
             self.cant_cambiar = self.juego[7]
             self.puntaje_pc = self.juego[8]
             self.atril_pc = self.juego[9]
+            self.avatar = self.juego[10]
             return True
         except:
             print ('No hay partidas guardadas')

@@ -24,6 +24,10 @@ def determinar_dificultad(jugador):
     return configuracion
 
 def lazo_principal(jugador):
+    '''Lazo que controla el flujo normal de la partida. Determina qué
+    sucede ante cada evento que ocurre en el juego.
+    :param jugador: Objeto que contiene los datos del jugador, lo 
+    utiliza al crear una nueva partida o cargar una anterior.'''
     configuracion = determinar_dificultad(jugador)
     puntaje = jugador.getPuntaje()
 
@@ -38,6 +42,7 @@ def lazo_principal(jugador):
     #Carga una partida. Es True si se cargó con éxito, False en caso contrario
     if (archivo_partida.cargar_guardado()):
         #Prepara la información extraída del archivo
+        jugador.setAvatar(archivo_partida.getAvatar())
         puntaje = archivo_partida.getPuntaje()
         unTablero = archivo_partida.getTablero()
         atril_jugador = archivo_partida.getAtril()
@@ -236,7 +241,9 @@ def lazo_principal(jugador):
                     #se convierte en "Finalizar juego"
                     if (cant_cambiar == 0):
                         interfaz.habilitarFinalizacion()
-                    turno_jugador = False
+                    #Si el nivel no es fácil, termina el turno del jugador
+                    if preferencias.getNivel() != 'facil':
+                        turno_jugador = False
                 else:
                     #Si se clickea "Finalizar juego", se termina la ronda
                     jugar = False
@@ -249,7 +256,7 @@ def lazo_principal(jugador):
                 interfaz.paralizarTimer(instante)
                 if eleccion == 'OK':
                     jugador.setPuntaje(puntaje)
-                    archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar)
+                    archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar())
                     archivo_partida.crear_guardado()
                     jugar = False
             interfaz.actualizarTimer()
@@ -285,11 +292,11 @@ def lazo_principal(jugador):
                                                             'PC: ¡Tu turno!', 'PC: He tenido retos más difíciles.', 'PC: El tiempo se acaba, amiguito.', 'PC: Jamás me han derrotado.',
                                                             'PC: Hoy estas con poca imaginación.', 'PC: Quizás deberías volver al buscaminas.', 'PC: Mis núcleos son más rápidos que tu cerebro.',
                                                             'PC: 100101110, que en binario es "perdedor"', 'PC: El código fuente no está de tu lado :(', 'PC: ¿Mala? ¿Yo?',
-                                                            f'PC: Tu turno, {jugador.getNombre()}', 'PC: *bosteza*']), tamaño=11, color='#EBDEB6', fondo=random.choice(['#D10E49', '#12870D', '#80870D']), pc=True)
+                                                            f'PC: Tu turno, {jugador.getNombre()}', 'PC: *bosteza*']), tamaño=12, color='#EBDEB6', fondo=random.choice(['#D10E49', '#12870D', '#80870D']), pc=True)
                 #Si la bolsa de fichas se vació, advierte al jugador
                 if len(bolsa_fichas) == 0:
                     interfaz.textoEstandar(pc=True)
-                    interfaz.actualizarTexto('PC: La bolsa de fichas se vació :(', tamaño=14, color='#EBDEB6', fondo='#A9084F')
+                    interfaz.actualizarTexto('PC: La bolsa de fichas se vació', tamaño=14, color='#EBDEB6', fondo='#A9084F')
                     cant_cambiar = 0
                     interfaz.habilitarFinalizacion()
             turno_jugador = True

@@ -3,34 +3,41 @@ import time
 import os.path
 
 class Dibujar():
-    '''Recibe objetos de tipo atril, tablero , preferencias y jugador e inicializa
-    los distintos espacios de la GUI'''
+    '''Clase que construye y actualiza una interfaz gráfica
+    de juego a partir de los datos de una partida determinada.'''
 
     def __init__ (self, tablero, preferencias, atril, jugador):
+        '''Inicializa y construye diferentes espacios de la GUI. Además,
+        está preparada para recibir un tablero o atril que ya contenía fichas,
+        o cualquier otra información que provenga de una sesión ya creada.
+        Al finalizar, muestra la ventana en pantalla.
+        :param tablero: Objeto que contiene la cantidad de filas y
+        columnas, los espacios con casilleros especiales y las fichas insertadas.
+        :param preferencias: Objeto que protege información relativa a la dificultad.
+        :param atril: Objeto con datos sobre las fichas del atril y la cantidad máxima
+        de espacios que posee.
+        :param jugador: Objeto que guarda el nombre del jugador, su puntaje y su avatar.'''
         self.tema_tablero()
-        #-----------------------------------------
         self._jugador = jugador
-        # -----------------------------------------
         #Algunos valores por defecto para construir la interfaz del tablero
-        # --------------------------
         self._tamcas = (37, 39)
         self._padin = (0, 0)
         self._botoncolor = ('white','#ece6eb')
-        # --------------------------
+        self._ficha_tamano = (39,41)
+        #Inicialización de los límites de tiempo
         self._tiempo_inicio = 0
         self._tiempo_fin = 0
-        self._ficha_tamano = (39,41)
+        #Directorios con las imágenes necesarias
+        self._directorio_media = os.path.join('media', '')
+        self._directorio_fichas = os.path.join('media', 'Fichas y espacios', '')
+        self._directorio_media_ii = os.path.join('media', 'media_ii','')
+        self._directorio_avatars =  os.path.join('media', 'media_ii','avatars','')
         #Prepara y agrega a la columna izquierda de la interfaz todos los casilleros del tablero
         columna_izquierda = []
         #Filas
         f = 0
         #Columnas
         c = 0
-        self._directorio_media = os.path.join('media', '')
-        self._directorio_fichas = os.path.join('media', 'Fichas y espacios', '')
-        self._directorio_media_ii = os.path.join('media', 'media_ii','')
-        self._directorio_avatars =  os.path.join('media', 'media_ii','avatars','')
-
         for fila in tablero.getCasilleros():
             insercion = []
             for dato in fila:
@@ -54,7 +61,6 @@ class Dibujar():
         for i in range(0, atril.get_cant_fichas()):
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
-
         temporizador = [[sg.Text('Jugado:', size=(10, 1), font=('Impact', 14), justification='center', text_color='white'),sg.Text('00:00', size=(10, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),],
                         [sg.Text('Restante:', size=(10, 1), font=('Impact', 14), justification='center', text_color='white'),sg.ProgressBar(max_value=0, orientation='horizontal', size=(20, 30), key='progreso'),]]
@@ -66,41 +72,35 @@ class Dibujar():
 
         top = [sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
               sg.Column(tiempo),
-               sg.Button(image_filename=f'{self._directorio_media}pausa.png', button_color=('black','#4f280a'), pad=self._padin, border_width=0,
-                          key='pausar'),
+               sg.Button(image_filename=f'{self._directorio_media}pausa.png',button_color=('black','#4f280a'), pad=self._padin, border_width=0,
+                          key='pausar')]
 
-               ]
-        #------------------------------------------
-        #Contenedores para los avatares,el nombre y el puntaje
+        #Contenedores para los avatares, el nombre y el puntaje
         avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='#4f280a', key='avatar_j')],
                   [sg.Text(text=self._jugador.getNombre(), border_width=2, justification='center', font=('Arial', 20))],
-                  [sg.Text(text=self._jugador.getPuntaje(), border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
+                  [sg.Text(text=f'  {self._jugador.getPuntaje()}  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
         
         #(Implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente)     
         avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='#4f280a', key='avatar_pc')],
                   [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
-                  [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')], ]
-        #------------------------------------------
-        columna_derecha = [
-                            [sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
+                  [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')]]
+
+        columna_derecha = [[sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
-                            [sg.Text('_'*30)],
-                            [sg.Text('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White', key='textoJugador')],
+                            [sg.Text(f'         ¡Comencemos, {jugador.getNombre()}!           ', background_color='black', font=('Nimbus Mono PS', 14), text_color='White', key='textoPC')],
+                            [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 14), background_color='Black', text_color='White', key='textoJugador')],
                             fichas,
                             [sg.Text('_'*30)],
-                            [sg.Text('          -------- --- ---------       ', background_color='black', font=('Arial', 14), text_color='White', key='textoPC')],
-
                             [sg.Button(image_filename=f'{self._directorio_media}validar.png' , border_width=0,font=('Arial', 12), key='validar'),
-                             sg.Button(image_filename=f'{self._directorio_media}bolsallenaP.png' , border_width=0,font=('Arial', 12), key='cambiar'),
-
+                            sg.Button(image_filename=f'{self._directorio_media}bolsallenaP.png' , border_width=0,font=('Arial', 12), key='cambiar'),
                             sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
         #Crea la ventana y la muestra
         diseño = [top,[sg.Column(columna_izquierda,background_color='#ece6eb',justification='left'), sg.Column(columna_derecha, element_justification='center',justification='right', pad=(10, None))]]
-        self._interfaz = sg.Window('ScrabbleAR', diseño, resizable=True)
+        self._interfaz = sg.Window('ScrabbleAR', diseño)
         self._interfaz.Finalize()
 
-    #Define un tema para la interfaz
     def tema_tablero(self):
+        '''Define un tema para la interfaz de PySimpleGUI y lo actualiza.'''
         sg.LOOK_AND_FEEL_TABLE['Tablero'] = {'BACKGROUND': '#4f280a',  ##133d51',
                                               'TEXT': '#fff4c9',
                                               'INPUT': '#c7e78b',
@@ -181,6 +181,7 @@ class Dibujar():
             f += 1
 
     def actualizarAtril(self, atril):
+        '''Actualiza el atril en la interfaz gráfica.'''
         for f in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(f).keys())[0]
             self._getInterfaz()[f'ficha {f}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {letra}.png', disabled=False, image_size=self._getFichaTamano())
@@ -232,30 +233,51 @@ class Dibujar():
                     self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{casilleros[f][c][1:]}.png', image_size=self._getCasilleroTamano())
 
     def actualizarTexto(self, texto, color=None, fondo=None, tamaño=14, pc=False):
+        '''Actualiza el elemento que muestra texto relativo a las interacciones del
+        jugador, o actualiza los diálogos de la PC si :param: pc=True.
+        :param texto: String. Nuevo texto que contendrá la caja de mensajes.
+        :param color: String. Color de texto.
+        :param fondo: String. Color de fondo del texto.
+        :param tamaño: Int. Tamaño de la fuente.
+        :param pc: Booleano.Si es True, actualiza la caja de diálogos de la PC.
+            Por defecto es False.'''
         self._getInterfaz()['textoJugador' if not pc else 'textoPC'].Update(texto, font=('Arial', tamaño), text_color=color, background_color=fondo)
 
     def textoEstandar(self, pc=False):
+        '''Actualiza con su texto por defecto el elemento que muestra información relativa
+        a las interacciones del jugador. Si :param: pc=True, muestra el díalogo de la PC que
+        indica que la bolsa de fichas se vació.'''
         if pc == False:
-            self._getInterfaz()['textoJugador'].Update('                    ---TUS FICHAS---                  ', background_color='black', font=('Arial', 14), text_color='White')
+            self._getInterfaz()['textoJugador'].Update('                ---TUS FICHAS---              ', font=('Arial', 14), background_color='black', text_color='White')
         else:
-            self._getInterfaz()['textoPC'].Update('          ---FICHAS DEL OPONENTE---       ', background_color='black', font=('Arial', 14), text_color='White')
+            self._getInterfaz()['textoPC'].Update('                  :(                  ', background_color='black', font=('Arial', 14), text_color='White')
 
     def inhabilitarElemento(self, clave):
+        '''Inhabilita un elemento de la interfaz.
+        :param clave: String con el nombre del elemento.'''
         self._getInterfaz()[clave].Update(disabled=True)
 
     def habilitarElemento(self, clave):
+        '''Habilita un elemento de la interfaz.
+        :param clave: String con el nombre del elemento.'''
         self._getInterfaz()[clave].Update(disabled=False)
 
     def borrarElemento(self, clave):
+        '''Vuelve invisible un elemento de la interfaz.'''
         self._getInterfaz()[clave].Update(visible=False)
 
     def habilitarFinalizacion(self):
+        '''Convierte el botón de cambiar fichas en un botón
+        para finalizar la partida.'''
         self._getInterfaz()['cambiar'].Update(image_filename=f'{self._directorio_media}bolsafichasvacia.png')
 
     def popUp(self, cadena):
+        '''Imprime una determinada cadena en una ventana simple.'''
         sg.popup(cadena, keep_on_top=True)
 
     def popUpOkCancel(self, cadena):
+        '''Ventana PopUp simple que imprime un string y
+        posee botones de OK y CANCEL.'''
         return sg.popup_ok_cancel(cadena, keep_on_top=True)
 
     def _getDirectorioFicha(self):
