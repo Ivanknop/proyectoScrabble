@@ -114,7 +114,6 @@ def lazo_principal(jugador, cargar_partida=True):
                 #el botón de guardado y el de cambiar
                 interfaz.actualizarTexto(palabra)
                 interfaz.inhabilitarElemento(event)
-                interfaz.inhabilitarElemento('guardar')
                 interfaz.inhabilitarElemento('cambiar')
 
                 #-----EVENTO: Clickear en otra ficha o en el botón "Validar"-----
@@ -232,7 +231,6 @@ def lazo_principal(jugador, cargar_partida=True):
                     #Antes de continuar esperando eventos y habilitar los botones,
                     #se comprueba que no se haya cerrado la ventana
                     if (event != None):
-                        interfaz.habilitarElemento('guardar')
                         interfaz.habilitarElemento('cambiar')
 
             #-----EVENTO: Botón para cambiar fichas-----
@@ -251,30 +249,26 @@ def lazo_principal(jugador, cargar_partida=True):
                 else:
                     #Si se clickea "Finalizar juego", se termina la ronda
                     jugar = False
-
-            #-----EVENTO: Guardar partida-----
-            if event == 'guardar':
-                #Paraliza el timer y muestra un pop de confirmación
-                instante = time.time()
-                eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
-                interfaz.paralizarTimer(instante)
-                if eleccion == 'OK':
-                    jugador.setPuntaje(puntaje)
-                    archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar())
-                    archivo_partida.crear_guardado()
-                    jugar = False
-            interfaz.actualizarTimer()
+                
+            #-----EVENTO: Pausar juego-----
             if (event == 'pausar'):
+                 #Paraliza el timer y muestra un pop de confirmación
                 instante = time.time()
-                while True:
-                    event, value = interfaz.leer()
-                    instante = interfaz.paralizarTimer(instante)
-                    if (event == 'pausar'):
-                        break
-                    if (event == None):
+                event = interfaz.ventanaPausa() 
+                instante = interfaz.paralizarTimer(instante)
+                if (event == 'abandonar'):
+                    jugar = False
+
+                #-----EVENTO: Guardar partida-----
+                if (event == 'guardar'):
+                    eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
+                    if eleccion == 'OK':
+                        jugador.setPuntaje(puntaje)
+                        archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar())
+                        archivo_partida.crear_guardado()
                         jugar = False
-                        break
-                    interfaz.actualizarTimer()
+            interfaz.actualizarTimer()
+
         #Turno de la PC
         else:
             if (interfaz.terminoTimer()):

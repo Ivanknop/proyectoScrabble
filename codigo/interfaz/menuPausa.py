@@ -18,16 +18,16 @@ def menu_pausa():
               ]
 
     ventana = sg.Window('pausa',layout=layout, background_color='#4f280a', no_titlebar=False,element_justification='center')
-
-
     while True:
         event, value= ventana.read()
 
-        if event ==  None:
+        if event == None:
             break
-
-
+        if (event == 'retomar') or (event == 'guardar') or (event == 'abandonar'):
+            break
     ventana.close()
+
+    return event
 
 if __name__ == '__main__':
     menu_pausa()

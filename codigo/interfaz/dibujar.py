@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
 import time
 import os.path
+from codigo.interfaz import menuPausa
 
 class Dibujar():
     '''Clase que construye y actualiza una interfaz gráfica
@@ -91,12 +92,11 @@ class Dibujar():
                             [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 14), background_color='Black', text_color='White', key='textoJugador')],
                             fichas,
                             [sg.Text('_'*30)],
-                            [sg.Button(image_filename=f'{self._directorio_media}validar.png' , border_width=0,font=('Arial', 12), key='validar'),
-                            sg.Button(image_filename=f'{self._directorio_media}bolsallenaP.png' , border_width=0,font=('Arial', 12), key='cambiar'),
-                            sg.Button('Guardar y salir', font=('Arial', 12), key='guardar')]]
+                            [sg.Button(image_filename=f'{self._directorio_media}validar.png', border_width=0, key='validar'),
+                            sg.Button(image_filename=f'{self._directorio_media}bolsallenaP.png', border_width=0, key='cambiar')]]
         #Crea la ventana y la muestra
         diseño = [top,[sg.Column(columna_izquierda,background_color='#ece6eb',justification='left'), sg.Column(columna_derecha, element_justification='center',justification='right', pad=(10, None))]]
-        self._interfaz = sg.Window('ScrabbleAR', diseño)
+        self._interfaz = sg.Window('ScrabbleAR', diseño, resizable=False)
         self._interfaz.Finalize()
 
     def tema_tablero(self):
@@ -279,6 +279,10 @@ class Dibujar():
         '''Ventana PopUp simple que imprime un string y
         posee botones de OK y CANCEL.'''
         return sg.popup_ok_cancel(cadena, keep_on_top=True)
+
+    def ventanaPausa(self):
+        event = menuPausa.menu_pausa()
+        return event
 
     def _getDirectorioFicha(self):
         return self._directorio_fichas
