@@ -109,6 +109,7 @@ def lazo_principal():
     #La idea es tener un modulo que cargue al iniciar el programa todas las imagenes necesarias
     #y usar excepciones si no encuentra los archivos
     #-----------------------------------------------
+    directorio_partidas = os.path.join('guardados', 'juego_guardado.pckl')
     directorio_avatares = os.path.join('media','media_ii','avatars', '')  #  sg.popup_get_folder('Image folder to open', default_path='')
     img_boton_largo =  os.path.join('media','media_ii','botonlargo.png')
     img_boton_madera = os.path.join('media','media_ii','botonMadera.png')
@@ -135,10 +136,13 @@ def lazo_principal():
         elif event == 'jugar':
             actualizar_columnas(ventana, 'colJugar2')
         elif event == 'cargar':
-            #Se asigna un nombre al jugador para que el main pueda validarlo
-            jugador.setNombre('Jugador guardado')
-            cargar_partida = True
-            break
+            if (os.path.isfile(directorio_partidas)):
+                 #Se asigna un nombre al jugador para que el main pueda validarlo
+                jugador.setNombre('Jugador guardado')
+                cargar_partida = True
+                break
+            else:
+                sg.popup('¡No hay ninguna partida guardada!')
         elif event == 'volver':
             actualizar_columnas(ventana, 'colInicial')
         elif event == 'nueva':
