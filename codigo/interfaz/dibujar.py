@@ -57,7 +57,7 @@ class Dibujar():
         fichas = []
         for i in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(i).keys())[0]
-            fichas.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {letra}.png', key=f'ficha {str(i)}', pad=(0, None), image_size=self._ficha_tamano))
+            fichas.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {letra}.png', key=f'ficha {str(i)}', pad=(0, None), image_size=self._ficha_tamano, button_color=('white','#4f280a')))
         fichas_oponente = []
         for i in range(0, atril.get_cant_fichas()):
             fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
@@ -278,7 +278,7 @@ class Dibujar():
     def popUpOkCancel(self, cadena):
         '''Ventana PopUp simple que imprime un string y
         posee botones de OK y CANCEL.'''
-        return sg.popup_ok_cancel(cadena, keep_on_top=True)
+        return sg.popup_ok_cancel(cadena, keep_on_top=True,background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True)
 
     def ventanaPausa(self):
         event = menuPausa.menu_pausa()
