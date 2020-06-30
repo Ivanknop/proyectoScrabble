@@ -1,4 +1,5 @@
 import pickle
+import os
 
 class Jugador():
 
@@ -10,13 +11,14 @@ class Jugador():
         return '{}   -   {}'.format(self.nombre, self.puntuacion)
 
 class Puntuacion_Maxima():
+    ruta_guardado = os.path.join("guardados", "puntuacion_maxima.pckl")
     puntajes = []
     MAXIMOS = 10    
     def __init__ (self):
         self.cargar()
     
     def guardar(self):
-        fichero = open('puntuacion_maxima.pckl', 'wb')
+        fichero = open(self.ruta_guardado, 'wb')
         pickle.dump(self.puntajes, fichero)
         fichero.close()
 
@@ -30,7 +32,7 @@ class Puntuacion_Maxima():
         self.guardar() 
 
     def cargar(self):
-        fichero = open('puntuacion_maxima.pckl', 'ab+')
+        fichero = open(self.ruta_guardado, 'ab+')
         fichero.seek(0)
         try:
             self.puntajes = pickle.load(fichero)

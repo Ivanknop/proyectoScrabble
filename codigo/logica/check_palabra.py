@@ -1,3 +1,9 @@
+'''ESTA VERSION DEL CODIGO ESTA BASADA EN LA ULTIMA MODIFICACION DE LA ENTREGA,
+EN LA CUAL SE ESTABLECIERON PAUTAS DISTINTAS POR PARTE DE LA CATEDRA PARA LAS DIFERENTE DIFICULTADES.
+SEGUIREMOS PEMRITIENDO PALABRAS CON ACENTOS YA QUE ESTABA SOLUCIONADO ESE PROBLEMA,
+PERO ESTA VEZ CHEQUEARÁ LA PALABRA (EN EL MODULO check_jugador()) TENIENDO ENCUENTA LA DIFICULTAD EN 
+LA QUE SE ESTE JUGANDO'''
+
 import pattern.es as pes
 from pattern.es import verbs, tag, spelling, lexicon
 import itertools as it
@@ -49,7 +55,7 @@ def clasificar(palabra):
 
 
 def es_palabra(palabra):
-
+    ''' este modulo evalua si la palabra recibida existe en los diccionarios de PATTERN.ES'''
     ok = True
     if palabra:
         if not palabra.lower() in verbs:
@@ -69,19 +75,20 @@ def es_palabra(palabra):
     return ok
 
 
-def check_jugador(palabra):
+def check_jugador(palabra, dificultad ='facil'):
     """ recibe una palabra y verifica que sea un verbo, adjetivo o sustantivo,
-    retorna True si es asi, o Fale en caso contrario"""
-    if len(palabra) >= 2:
+    retorna True si es asi, o Fale en caso contrario.
+    este modulo asignara por defecto la dificultad ne FACIL si no es indicada"""
 
+    if len(palabra) >= 2:
         global TIPO
         posibles = posibles_palabras(palabra)
         ok = False
         cont = 0
         #en cuanto encunetre una opcion que de 'True' dejara de comprobar e insertara esa
         while not ok and cont < len(posibles):
-            pal=''
-            if es_palabra(posibles[cont]):
+            pal = ''
+            if es_palabra(posibles[cont]) and dificultad == 'facil':
                 pal = pes.parse(posibles[cont]).split('/')
 
                 if pal[1] in TIPO['adj']:
@@ -92,8 +99,15 @@ def check_jugador(palabra):
                    ok= True
                 else:
                     ok= False
+            elif es_palabra(posibles[cont]) and (dificultad == 'medio' or  dificultad == 'dificil'):
+                pal = pes.parse(posibles[cont]).split('/')
+                if pal[1] in TIPO['adj']:
+                    ok =True
+                elif pal[1] in TIPO['verb']:
+                   ok= True
+                else:
+                    ok= False
             else:
-
                 ok = False
 
 #            print("se chequeo {} el contador es {} y ok esta en {}".format(pal,cont,ok))
@@ -102,7 +116,7 @@ def check_jugador(palabra):
         return False
     return ok
 
-def check_compu(atril_pc, tablero):
+def check_compu(atril_pc, tablero, dificultad):
     fichas_pc = atril_pc.ver_atril()
     letras = ''
     for ficha in fichas_pc:
@@ -112,17 +126,21 @@ def check_compu(atril_pc, tablero):
         palabras.update(map(''.join, it.permutations(letras, i)))
     posibilidades = {}
     for pal in palabras:
-        if check_jugador(pal):
+        if check_jugador(pal, dificultad):
             fichas_pal = []
             for letra in pal:
                 for ficha in fichas_pc:
                     if list(ficha.keys())[0] == letra:
                         fichas_pal.append(ficha)
                         break
-            busqueda = tablero.buscarEspacio(fichas_pal)
+            busqueda = tablero.buscarEspacio(fichas_pal, dificultad)
             if busqueda['coordenada'] != -1:
                 busqueda['fichas'] = fichas_pal
                 posibilidades[pal] = busqueda
+                #En el modo "facil" y "medio", retorna la primer palabra que pueda
+                #validar y encontrarle un espacio
+                if (dificultad == 'facil') or (dificultad == 'medio'):
+                    return posibilidades[pal]
     for clave, valor in posibilidades.items():
         print(clave, ':', valor['interes'])
     print('')
@@ -134,7 +152,7 @@ def check_compu(atril_pc, tablero):
 
 
 
-    #Iterar "palabras" por check_jugador. Si es válida, guardar en un diccionario
+    #Iterar "palabras" por check_palabra. Si es válida, guardar en un diccionario
     #la palabra y la coordenada (si hubiese espacio) en la que obtendría mayor
     #puntaje. Luego, quedarse con la palabra que haya arrojado mayor puntaje.
     #Observar que una palabra de 2 letras puede dar mayor puntaje si, por ejemplo,

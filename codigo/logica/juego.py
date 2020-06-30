@@ -4,7 +4,7 @@ from codigo.logica.preferencias import Preferencias
 from codigo.logica.atril import Atril
 from codigo.logica.bolsa_fichas import *
 from codigo.interfaz.dibujar import Dibujar
-import codigo.logica.check_palabra2 as cp
+import codigo.logica.check_palabra as cp
 from codigo.logica.guardar_partida import Juego_Guardado
 from codigo.logica.jugador import Jugador
 import os.path
