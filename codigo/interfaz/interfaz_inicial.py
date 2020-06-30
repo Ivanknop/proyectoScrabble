@@ -76,7 +76,7 @@ def nueva_partida(avatar):
 def jugar_interfaz(img_boton_largo):
     layout = [
         [sg.Button('Nueva Partida',image_filename=img_boton_largo,  border_width=0,font=('Italic 24'),size = (20,3), key='nueva')],
-        [sg.Button('Cargar Partida',image_filename=img_boton_largo,  border_width=0,font=('Italic 24'), size=(20,3), key='_cargar_')],
+        [sg.Button('Cargar Partida',image_filename=img_boton_largo,  border_width=0,font=('Italic 24'), size=(20,3), key='cargar')],
         [sg.Button('Volver',image_filename=img_boton_largo,  border_width=0,font=('Italic 24'), size=(20,3), key='volver')],
     ]
     return layout
@@ -119,6 +119,8 @@ def lazo_principal():
     jugador = Jugador('', -1, '')
     avatar = va.Visor(directorio_avatares)
 
+    cargar_partida = False
+
     ANCHO = 900  # solo de prueba
     ALTO = 700  # solo de prueba
     mi_tema()
@@ -132,6 +134,11 @@ def lazo_principal():
             break
         elif event == 'jugar':
             actualizar_columnas(ventana, 'colJugar2')
+        elif event == 'cargar':
+            #Se asigna un nombre al jugador para que el main pueda validarlo
+            jugador.setNombre('Jugador guardado')
+            cargar_partida = True
+            break
         elif event == 'volver':
             actualizar_columnas(ventana, 'colInicial')
         elif event == 'nueva':
@@ -150,7 +157,7 @@ def lazo_principal():
         elif event in ('<<<', '>>>'):
             avatarSelec = avatar.controles(event, ventana.FindElement('avatarVisor'))
     ventana.Close()
-    return jugador
+    return jugador, cargar_partida
 
 if __name__ == '__main__':
     lazo_principal()

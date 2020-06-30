@@ -23,50 +23,54 @@ def determinar_dificultad(jugador):
         configuracion = nivel_dificil()
     return configuracion
 
-def lazo_principal(jugador):
+def lazo_principal(jugador, cargar_partida=True):
     '''Lazo que controla el flujo normal de la partida. Determina qué
     sucede ante cada evento que ocurre en el juego.
     :param jugador: Objeto que contiene los datos del jugador, lo 
     utiliza al crear una nueva partida o cargar una anterior.'''
+
     configuracion = determinar_dificultad(jugador)
     puntaje = jugador.getPuntaje()
-
     #Instancia la información en diferentes objetos
     preferencias = Preferencias(configuracion['filas'],configuracion['columnas'],configuracion['especiales'], configuracion['nivel'])
     unTablero = Tablero(preferencias)
+
     #Crea un string con el directorio donde se almacenan las partidas. El formato
     #de la ruta depende del sistema operativo en el que se esté ejecutando
     ruta_guardado = os.path.join('guardados', '')
     #Crea el objeto que gestionará el guardado y cargado de la partida
     archivo_partida = Juego_Guardado(ruta_guardado)
-    #Carga una partida. Es True si se cargó con éxito, False en caso contrario
-    if (archivo_partida.cargar_guardado()):
-        #Prepara la información extraída del archivo
-        jugador.setAvatar(archivo_partida.getAvatar())
-        puntaje = archivo_partida.getPuntaje()
-        unTablero = archivo_partida.getTablero()
-        atril_jugador = archivo_partida.getAtril()
-        atril_pc = archivo_partida.getAtrilPC()
-        bolsa_fichas = archivo_partida.getBolsaFichas()
-        preferencias = archivo_partida.getPreferencias()
-        cant_cambiar = archivo_partida.getCantCambiar()
-        puntaje_pc = archivo_partida.getPuntajePC()
-        #La partida sólo se puede guardar en el turno del jugador. Al cargarla,
-        #continuará siendo su turno
-        turno_jugador = True
-        #Construye la interfaz
-        interfaz = Dibujar(unTablero, preferencias, atril_jugador, jugador)
-        #Si se habían agotado las oportunidades para cambiar las fichas...
-        if (cant_cambiar == 0):
-            #... el botón permite finalizar el juego
-            interfaz.habilitarFinalizacion()
-        #Solicita el tiempo que faltaba para finalizar la partida, lo convierte a
-        #segundos y lo envía al timer
-        interfaz.setTimer(archivo_partida.getTiempoRestante() / 60)
-        interfaz.actualizarPuntajePC(puntaje_pc)
-        interfaz.actualizarPuntaje(puntaje)
+    #Si se clickeó en "Cargar" en la interfaz principal...
+    if (cargar_partida):
+        #Carga una partida. Es True si se cargó con éxito, False en caso contrario
+        if (archivo_partida.cargar_guardado()):
+            #Prepara la información extraída del archivo
+            jugador.setAvatar(archivo_partida.getAvatar())
+            jugador.setNombre(archivo_partida.getJugadorUser())
+            puntaje = archivo_partida.getPuntaje()
+            unTablero = archivo_partida.getTablero()
+            atril_jugador = archivo_partida.getAtril()
+            atril_pc = archivo_partida.getAtrilPC()
+            bolsa_fichas = archivo_partida.getBolsaFichas()
+            preferencias = archivo_partida.getPreferencias()
+            cant_cambiar = archivo_partida.getCantCambiar()
+            puntaje_pc = archivo_partida.getPuntajePC()
+            #La partida sólo se puede guardar en el turno del jugador. Al cargarla,
+            #continuará siendo su turno
+            turno_jugador = True
+            #Construye la interfaz
+            interfaz = Dibujar(unTablero, preferencias, atril_jugador, jugador)
+            #Si se habían agotado las oportunidades para cambiar las fichas...
+            if (cant_cambiar == 0):
+                #... el botón permite finalizar el juego
+                interfaz.habilitarFinalizacion()
+            #Solicita el tiempo que faltaba para finalizar la partida, lo convierte a
+            #segundos y lo envía al timer
+            interfaz.setTimer(archivo_partida.getTiempoRestante() / 60)
+            interfaz.actualizarPuntajePC(puntaje_pc)
+            interfaz.actualizarPuntaje(puntaje)
     else:
-        #Si no había ninguna partida para cargar, crea una bolsa y nuevos atriles
+        #Si no se clickeó "Cargar" en la interfaz inicial, crea una bolsa y nuevos atriles
         bolsa_fichas = crear_bolsa(configuracion['cant_fichas'],configuracion['puntaje_ficha'])
         atril_jugador = Atril (bolsa_fichas, 7)
         atril_pc = Atril(bolsa_fichas, 7)
