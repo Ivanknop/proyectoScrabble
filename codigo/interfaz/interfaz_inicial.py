@@ -2,7 +2,7 @@ import PySimpleGUI as sg
 import os
 import codigo.interfaz.visorAvatar as va
 from codigo.logica.jugador import Jugador
-
+import codigo.interfaz.interfaz_puntaje as pun
 def nivel(ventana):
     '''Esta función devolvera el nivel elegido por el usuario según el
     el estado de los elementos "Radio", que se usan en el layout de nueva partida'''
@@ -160,6 +160,10 @@ def lazo_principal():
                 sg.popup_ok('Debe ingresar un Apodo',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
         elif event in ('<<<', '>>>'):
             avatarSelec = avatar.controles(event, ventana.FindElement('avatarVisor'))
+
+        elif event == 'puntajes':
+            pun.puntajes()
+
     ventana.Close()
     return jugador, cargar_partida
 
