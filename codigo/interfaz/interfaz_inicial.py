@@ -68,7 +68,7 @@ def nueva_partida(avatar):
                   title='Dificultad' ,title_color='black', relief=sg.RELIEF_SUNKEN,font=('Italic 24'),
                         element_justification='center',key='contenedor'),
          sg.Column(avatar.getAvatarLayout(), visible=False,key='colAvatar')],
-        [sg.Button('Jugar', size=(10, 2), key='confirmar'),sg.Button('cancelar', size=(10, 2), key='cancelar')],
+        [sg.Button('Jugar', size=(10, 2),button_color=('black','#afad71'),font=('Arial', 18),border_width=1, key='confirmar'),sg.Button('cancelar', size=(10, 2),font=('Arial', 18),border_width=1,button_color=('black','#afad71'), key='cancelar')],
     ]
     return layout
 
@@ -85,7 +85,7 @@ def inicio(img_boton_madera):
     layout = [[sg.Button(image_filename=img_boton_madera, border_width=0,button_text='Ayuda', size=(200, 200), font=('Impact', 40), key='ayuda'),
                sg.Button(image_filename=img_boton_madera, border_width=0, button_text='Jugar', size=(200, 200), font=('Impact', 40),key='jugar'),
                sg.Button(image_filename=img_boton_madera,  border_width=0,button_text='Puntajes', size=(200, 200), font=('Impact', 30),key='puntajes')],
-              [sg.Exit('Salir', button_color=('black','#f75404'),size=(8, 2), key='salir')]]
+              [sg.Button('Salir', button_color=('black','#f75404'),size=(10, 2),font=('Arial Black', 20),border_width=1, key='salir')]]
     return layout
 
 
