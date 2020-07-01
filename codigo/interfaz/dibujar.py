@@ -74,7 +74,11 @@ class Dibujar():
         top = [sg.Image(f'{self._directorio_media}scrabbleArLogo.png'),
               sg.Column(tiempo),
                sg.Button(image_filename=f'{self._directorio_media}pausa.png',button_color=('black','#4f280a'), pad=self._padin, border_width=0,
-                          key='pausar')]
+                          key='pausar'),
+               sg.Button(image_filename=f'{self._directorio_media_ii}AYUDA.png', button_color=('black', '#4f280a'),
+                         pad=self._padin, border_width=0, tooltip='Obetenga Ayuda ',
+                         key='ayuda')
+               ]
 
         #Contenedores para los avatares, el nombre y el puntaje
         avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='#4f280a', key='avatar_j')],
