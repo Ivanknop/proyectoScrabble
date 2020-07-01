@@ -17,7 +17,7 @@ def menu_pausa():
 
               ]
 
-    ventana = sg.Window('pausa',layout=layout, background_color='#4f280a', no_titlebar=False,element_justification='center')
+    ventana = sg.Window('pausa',layout=layout, background_color='#4f280a', no_titlebar=True,element_justification='center',force_toplevel=True, keep_on_top=True).Finalize()
     while True:
         event, value= ventana.read()
 
