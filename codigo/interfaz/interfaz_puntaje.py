@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 from codigo.logica.puntuaciones_maximas import *
 
-def actualizar_puntaje (puntaje):
+def actualizar_puntaje (puntaje,ventana):
     listado_puntos =''
     for p in range(len(puntaje.puntajes)): 
         listado_puntos = listado_puntos + str(puntaje.puntajes[p]) + '\n'
@@ -24,14 +24,14 @@ def puntajes():
 
     while True:
         puntuaciones = Puntuacion_Maxima()
-        actualizar_puntaje(puntuaciones)
+        actualizar_puntaje(puntuaciones,ventana)
         event, values = ventana.read()
         if event == None:
             break
         elif event == 'blanquear':
             puntuaciones._vaciar_puntajes()
-            actualizar_puntaje(puntuaciones)
+            actualizar_puntaje(puntuaciones,ventana)
         elif event == 'reestablecer':
             puntuaciones.inicializar_puntuacion()
-            actualizar_puntaje(puntuaciones)
+            actualizar_puntaje(puntuaciones,ventana)
     ventana.close()
