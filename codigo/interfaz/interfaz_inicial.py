@@ -3,6 +3,9 @@ import os
 import codigo.interfaz.visorAvatar as va
 from codigo.logica.jugador import Jugador
 import codigo.interfaz.interfaz_puntaje as pun
+from codigo.interfaz.tema import *
+
+
 def nivel(ventana):
     '''Esta función devolvera el nivel elegido por el usuario según el
     el estado de los elementos "Radio", que se usan en el layout de nueva partida'''
@@ -19,17 +22,7 @@ def jugar (avatar, value, ventana):
     jugador = Jugador(nombre=value['apodo'], dificultad=nivel(ventana), avatar=avatar)
     return jugador
 
-def mi_tema():
-    sg.LOOK_AND_FEEL_TABLE['scrabble'] = {'BACKGROUND': '#4f280a', ##133d51',
-                                            'TEXT': '#fff4c9',
-                                            'INPUT': '#c7e78b',
-                                            'TEXT_INPUT': '#000000',
-                                            'SCROLL': '#c7e78b',
-                                            'BUTTON': ('black', '#4f280a'),
-                                            'PROGRESS': ('#01826B', '#D0D0D0'),
-                                            'BORDER': 1, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 0,
-                                            }
-    sg.theme('scrabble')
+
 
 
 def actualizar_columnas(ventana, *columna):
