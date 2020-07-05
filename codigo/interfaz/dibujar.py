@@ -58,9 +58,6 @@ class Dibujar():
         for i in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(i).keys())[0]
             fichas.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {letra}.png', key=f'ficha {str(i)}', pad=(0, None), image_size=self._ficha_tamano, button_color=('white','#4f280a')))
-        fichas_oponente = []
-        for i in range(0, atril.get_cant_fichas()):
-            fichas_oponente.append(sg.Button(image_filename=f'{self._directorio_fichas}unaFichaOponente.png', pad=(0, None), image_size=self._ficha_tamano, key=f'oponente {str(i)}'))
 
         temporizador = [[sg.Text('Jugado:', size=(10, 1), font=('Impact', 14), justification='center', text_color='white'),sg.Text('00:00', size=(10, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),],
