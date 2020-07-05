@@ -282,8 +282,9 @@ class Dibujar():
     def popUpOkCancel(self, cadena):
         '''Ventana PopUp simple que imprime un string y
         posee botones de OK y CANCEL.'''
-        return sg.popup_ok_cancel(cadena, keep_on_top=True,background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, non_blocking=True)
-
+        pestaña = sg.popup_ok_cancel(cadena, keep_on_top=True,background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, non_blocking=True)
+        return pestaña
+    
     def ventanaPausa(self):
         event = menuPausa.menu_pausa()
         return event
