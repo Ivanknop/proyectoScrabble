@@ -282,7 +282,7 @@ def lazo_principal(jugador, cargar_partida=True):
                 break
 
             #Busca una palabra y un lugar en el tablero
-            mejor_opcion = cp.check_compu(atril_pc, unTablero, preferencias.getNivel())
+            mejor_opcion, pal_pc = cp.check_compu(atril_pc, unTablero, preferencias.getNivel())
 
             #Si encontró al menos una opcíón, la inserta y actualiza la información
             if len(mejor_opcion) != 0:
