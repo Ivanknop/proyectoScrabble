@@ -5,6 +5,28 @@ from codigo.logica.jugador import Jugador
 import codigo.interfaz.interfaz_puntaje as pun
 from codigo.interfaz.tema import *
 
+def check_apodo(apodo):
+    '''esta función se encarga de evaluar el campo del APODO  al momento
+    decrear una partida. Los apodos deben tener mas de 3 caracteres, no poseer espacion en blanco
+    no poseer caracteres especiales, y no ser solo numeros'''
+
+    carEspecial = '!@#$%^&*()[]{};:,./<>?\|`~-=_+'
+    if len(apodo) < 3 :
+        print('longitud')
+        return False
+    elif (apodo == '') or  (apodo.isspace()== True) or (' ' in apodo):
+        print('epacios')
+        return False
+    elif apodo.isdigit()==True:
+        print('digitos')
+        return False
+
+    for c in apodo:
+        print(f'for {c}')
+        if c in carEspecial:
+            return False
+    print('luego del for')
+    return True
 
 def nivel(ventana):
     '''Esta función devolvera el nivel elegido por el usuario según el
@@ -143,14 +165,14 @@ def lazo_principal():
         elif event == 'cancelar':
             actualizar_columnas(ventana, 'colJugar2')
         elif event == 'confirmar':  
-            if ventana.FindElement('apodo').Get() !=  '':
+            if  check_apodo(ventana.FindElement('apodo').Get()):
                 avatarSelec = avatar.getActualRuta()
                 jugador = jugar(avatarSelec, value, ventana)
                 decision = sg.popup_yes_no(f'¿Confirmar los datos?\nNombre: {jugador.getNombre()}\nDificultad: {jugador.getDificultad()}',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
                 if decision == 'Yes':
                     break
             else:
-                sg.popup_ok('Debe ingresar un Apodo',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
+                sg.popup_ok('Debe ingresar un Apodo (debe tener mas de 3 caracteres,puede ser alfanumerico, pero no debe contener caracteres especiales)',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
         elif event in ('<<<', '>>>'):
             avatarSelec = avatar.controles(event, ventana.FindElement('avatarVisor'))
 
