@@ -7,6 +7,7 @@ from codigo.interfaz.dibujar import Dibujar
 import codigo.logica.check_palabra as cp
 from codigo.logica.guardar_partida import Juego_Guardado
 from codigo.logica.jugador import Jugador
+from codigo.interfaz.interfaz_palabras import *
 import os.path
 import time
 import random
@@ -34,6 +35,9 @@ def lazo_principal(jugador, cargar_partida=True):
     #Instancia la información en diferentes objetos
     preferencias = Preferencias(configuracion['filas'],configuracion['columnas'],configuracion['especiales'], configuracion['nivel'])
     unTablero = Tablero(preferencias)
+    palabras_jugador=[]
+    palabras_pc=[]
+    palabra={}
 
     #Crea un string con el directorio donde se almacenan las partidas. El formato
     #de la ruta depende del sistema operativo en el que se esté ejecutando
@@ -211,6 +215,8 @@ def lazo_principal(jugador, cargar_partida=True):
 
                                         interfaz.actualizarAtril(atril_jugador)
                                         interfaz.actualizarTablero(unTablero)
+                                        palabra = {palabra:puntaje_palabra}
+                                        palabras_jugador.append(palabra)
                                         elegir_posicion = False
                                         break
 
@@ -257,6 +263,7 @@ def lazo_principal(jugador, cargar_partida=True):
                 event = interfaz.ventanaPausa() 
                 instante = interfaz.paralizarTimer(instante)
                 if (event == 'abandonar'):
+                    listado_palabras(palabras_jugador,palabras_pc)
                     jugar = False
 
                 #-----EVENTO: Guardar partida-----
@@ -279,6 +286,8 @@ def lazo_principal(jugador, cargar_partida=True):
 
             #Si encontró al menos una opcíón, la inserta y actualiza la información
             if len(mejor_opcion) != 0:
+                palabra = {pal_pc:mejor_opcion['interes']}
+                palabras_pc.append(palabra)
                 puntaje_pc += unTablero.insertarPalabra(mejor_opcion['fichas'], mejor_opcion['coordenada'], mejor_opcion['sentido'])
                 for ficha in mejor_opcion['fichas']:
                     indice = atril_pc.ver_atril().index(ficha)
