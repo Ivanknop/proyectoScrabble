@@ -43,7 +43,7 @@ class Dibujar():
             insercion = []
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas,button_color=self._botoncolor, enable_events=True))
+                    insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas,button_color=self._botoncolor, enable_events=True),)
                 else:
                     if (dato==''):
                         insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}azul.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas, button_color=self._botoncolor,enable_events=True))
@@ -57,7 +57,8 @@ class Dibujar():
         fichas = []
         for i in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(i).keys())[0]
-            fichas.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {letra}.png', key=f'ficha {str(i)}', pad=(0, None), image_size=self._ficha_tamano, button_color=('white','#4f280a')))
+            punto = list(atril.get_ficha(i).values())
+            fichas.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {letra}.png', key=f'ficha {str(i)}', pad=(0, None), image_size=self._ficha_tamano, button_color=('white','#4f280a'),tooltip= f'{punto} puntos'))
 
         temporizador = [[sg.Text('Jugado:', size=(10, 1), font=('Impact', 14), justification='center', text_color='white'),sg.Text('00:00', size=(10, 1), font=('Impact', 26), justification='center', text_color='white',
                         key='timer', background_color='black'),],
@@ -89,8 +90,8 @@ class Dibujar():
 
         columna_derecha = [[sg.Text(f'Nivel: {preferencias.getNivel()}', font=('Arial', 14))],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
-                            [sg.Text(f'         ¡Comencemos, {jugador.getNombre()}!           ', background_color='black', font=('Nimbus Mono PS', 14), text_color='White', key='textoPC')],
-                            [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 14), background_color='Black', text_color='White', key='textoJugador')],
+                            [sg.Text(f'         ¡Comencemos, {jugador.getNombre()}!           ', background_color='black', font=('Nimbus Mono PS', 18), text_color='White', key='textoPC')],
+                            [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 24), background_color='Black', text_color='White', key='textoJugador')],
                             fichas,
                             [sg.Text('_'*30)],
                             [sg.Button(image_filename=f'{self._directorio_media}validar.png', border_width=0, key='validar'),
@@ -233,7 +234,7 @@ class Dibujar():
                 else:
                     self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}{casilleros[f][c][1:]}.png', image_size=self._getCasilleroTamano())
 
-    def actualizarTexto(self, texto, color=None, fondo=None, tamaño=14, pc=False):
+    def actualizarTexto(self, texto, color=None, fondo=None, tamaño=24, pc=False):
         '''Actualiza el elemento que muestra texto relativo a las interacciones del
         jugador, o actualiza los diálogos de la PC si :param: pc=True.
         :param texto: String. Nuevo texto que contendrá la caja de mensajes.
