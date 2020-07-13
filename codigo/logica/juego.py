@@ -274,6 +274,9 @@ def lazo_principal(jugador, cargar_partida=True):
                         archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar())
                         archivo_partida.crear_guardado()
                         jugar = False
+
+            if (event == 'infoPartida'):
+                infoConfiguracion(configuracion)
             interfaz.actualizarTimer()
 
         #Turno de la PC

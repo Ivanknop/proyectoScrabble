@@ -1,5 +1,30 @@
 import random
+import PySimpleGUI as sg
+from codigo.interfaz.tema import mi_tema
 
+def infoConfiguracion(conf):
+    '''esta funcion crea una ventana con la configuracion
+    de la partida que se esta jugando'.
+    Al cerrar la ventana returna True'''
+
+    layout = []
+    for elemento in conf:
+
+        layout.append([sg.Text(f'{elemento}: '),sg.Text(f'{conf[elemento]}')])
+    layout.append([sg.Button('Volver',button_color=('black', '#f75404'),key='volverConf')])
+
+    mi_tema()
+    ventana = sg.Window('configuracion',layout=layout,size=(300,300),no_titlebar=True).Finalize()
+
+    while True:
+        event, value = ventana.read()
+        if event == 'volverConf'  :
+
+            break
+        elif event == None:
+            break
+    ventana.close()
+    return True
 
 def especial(fila, col,nivel):
     ''' esta funci{on genera casilleros especiales, segun el nivel
