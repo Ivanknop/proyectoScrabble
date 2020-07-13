@@ -1,4 +1,9 @@
 ScrabbleAR es un proyecto realizado para el Seminario de Lenguaje Python.
+Fue realizado por: 
+Diego Vilardebó - https://github.com/elrecursante -
+Enzo Diaz - https://github.com/enzodiaz25 -
+Ivan Knopoff - https://github.com/Ivanknop - ivan.knopoff@gmail.com 
+
 
 Simula una aplicación donde un usuario/jugador debe enfrentarse a la computadora. El objetivo del juego es obtener la mayor cantidad de puntos posibles colocando las palabras en horizontal o vertical; pero sin cruzarse ninguna palabra entre sí. Pueden escogerse entre tres dificultades -Fácil, Medio, Difícil- o configurar directamente la partida y la dificultad.
 
