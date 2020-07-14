@@ -60,7 +60,7 @@ class Dibujar():
         fichas = []
         for i in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(i).keys())[0]
-            punto = list(atril.get_ficha(i).values())
+            punto = atril.get_ficha(i)[letra]
             fichas.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {letra}.png', key=f'ficha {str(i)}', pad=(0, None), image_size=self._ficha_tamano, button_color=('white','#4f280a'),tooltip= f'{punto} puntos'))
 
         temporizador = [[sg.Text('Jugado:', size=(10, 1), font=('Impact', 14), justification='center', text_color='white'),sg.Text('00:00', size=(10, 1), font=('Impact', 26), justification='center', text_color='white',
@@ -77,7 +77,7 @@ class Dibujar():
                sg.Button(image_filename=f'{self._directorio_media}pausa.png',button_color=('black','#4f280a'), pad=self._padin, border_width=0,
                           key='pausar'),
                sg.Button(image_filename=f'{self._directorio_media_ii}AYUDA.png', button_color=('black', '#4f280a'),
-                         pad=self._padin, border_width=0, tooltip='Obetenga Ayuda ',
+                         pad=self._padin, border_width=0, tooltip='Obtenga ayuda clickeando aquí',
                          key='ayuda')
                ]
 
@@ -91,7 +91,7 @@ class Dibujar():
                   [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')]]
 
-        columna_derecha = [[sg.Button(button_text=f'Nivel: {preferencias.getNivel()}', font=('Arial', 14),border_width=1,tooltip='Configuración de la Partida',key='infoPartida')],
+        columna_derecha = [[sg.Button(button_text=f'Nivel: {preferencias.getNivel()}', font=('Arial', 14),border_width=1,tooltip='Configuración de la partida',key='infoPartida')],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
                             [sg.Text(f'         ¡Comencemos, {jugador.getNombre()}!           ', background_color='black', font=('Nimbus Mono PS', 14), text_color='White', key='textoPC')],
                             [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 14), background_color='Black', text_color='White', key='textoJugador')],
@@ -192,6 +192,7 @@ class Dibujar():
         '''Actualiza el atril en la interfaz gráfica.'''
         for f in range(0, atril.get_cant_fichas()):
             letra = list(atril.get_ficha(f).keys())[0]
+            punto = atril.get_ficha(f)[letra]
             self._getInterfaz()[f'ficha {f}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {letra}.png', disabled=False, image_size=self._getFichaTamano())
         if (atril.get_cant_fichas() < atril.getCantMaxima()):
             for f in range(atril.get_cant_fichas(), atril.getCantMaxima()):
