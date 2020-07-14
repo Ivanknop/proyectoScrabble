@@ -266,7 +266,7 @@ def lazo_principal(jugador, cargar_partida=True):
                 event = interfaz.ventanaPausa()
                 if (event == 'abandonar'):
                     #Si abandonó la partida, muestra la lista completa de palabras usadas antes de salir
-                    listado_palabras(palabras_jugador,palabras_pc)
+                    listado_palabras(palabras_jugador, palabras_pc)
                     jugar = False
 
                 #-----EVENTO: Guardar partida-----
