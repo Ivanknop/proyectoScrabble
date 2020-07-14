@@ -3,28 +3,48 @@ import PySimpleGUI as sg
 from codigo.interfaz.tema import mi_tema
 
 def infoConfiguracion(conf):
-    '''esta funcion crea una ventana con la configuracion
-    de la partida que se esta jugando'.
-    Al cerrar la ventana returna True'''
-
-    layout = []
-    for elemento in conf:
-
-        layout.append([sg.Text(f'{elemento}: '),sg.Text(f'{conf[elemento]}')])
+    '''Esta función crea una ventana con la configuración
+    de la partida que se está jugando.'''
+    layout = [
+                [sg.Text('Nivel: '), sg.Text(f'{conf["nivel"].capitalize()}')],
+                [sg.Text('Filas: '), sg.Text(f'{conf["filas"]}')],
+                [sg.Text('Columnas: '), sg.Text(f'{conf["columnas"]}')],
+                [sg.Text('Tiempo: '), sg.Text(f'{conf["tiempo"]} minutos')],
+                [sg.Text('Cantidad de letras: ')]
+                ]
+    contador_salto = 6
+    letras = []
+    for clave, valor in sorted(conf['cant_fichas'].items()):
+        letras.append(sg.Text(f'{clave}: {valor}'))
+        contador_salto = contador_salto - 1
+        if (contador_salto == 0):
+            contador_salto = 6
+            layout.append(letras)
+            letras = []
+    #Si quedaron letras por insertar antes de que se completara una fila, las agrega
+    if (len(letras) != 0):
+        layout.append(letras)
+    layout.append([sg.Text('Puntajes de las fichas: ')])
+    letras = []
+    for clave in sorted(conf['puntaje_ficha'].keys()):
+        letras.append(sg.Text(f'{clave}: '))
+        for fichas in conf['puntaje_ficha'][clave]:
+            letras.append(sg.Text(fichas))
+        layout.append(letras)
+        letras=[]
+    layout.extend([[sg.Text('Casiilleros especiales: ')], [sg.Text('+: Obtienes 5 puntos adicionales')], [sg.Text('-: Pierdes 5 puntos del total conseguido')], [sg.Text('x2: Duplica el valor de la palabra')], [sg.Text('%2: Divide a la mitad el total de la palabra')], [sg.Text('0: Anula el valor de la palabra')]])
     layout.append([sg.Button('Volver',button_color=('black', '#f75404'),key='volverConf')])
 
     mi_tema()
-    ventana = sg.Window('configuracion',layout=layout,size=(300,300),no_titlebar=True).Finalize()
+    ventana = sg.Window('configuracion',layout=layout,size=(300,670),no_titlebar=True, keep_on_top=True).Finalize()
 
     while True:
         event, value = ventana.read()
         if event == 'volverConf'  :
-
             break
         elif event == None:
             break
     ventana.close()
-    return True
 
 def especial(fila, col,nivel):
     ''' esta funci{on genera casilleros especiales, segun el nivel

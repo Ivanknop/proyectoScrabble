@@ -279,8 +279,10 @@ def lazo_principal(jugador, cargar_partida=True):
                         jugar = False
                 instante = interfaz.paralizarTimer(instante)
 
+            #-----EVENTO: Información sobre la partida-----
             if (event == 'infoPartida'):
                 infoConfiguracion(configuracion)
+
             interfaz.actualizarTimer()
 
         #Turno de la PC

@@ -91,7 +91,7 @@ class Dibujar():
                   [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')]]
 
-        columna_derecha = [[sg.Button(button_text=f'Nivel: {preferencias.getNivel()}', font=('Arial', 14),border_width=1,tooltip='Configuración de la partida',key='infoPartida')],
+        columna_derecha = [[sg.Button(button_text=f'Nivel: {preferencias.getNivel().capitalize()}', font=('Arial', 14),border_width=1,tooltip='Configuración de la partida',key='infoPartida')],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
                             [sg.Text(f'         ¡Comencemos, {jugador.getNombre()}!           ', background_color='black', font=('Nimbus Mono PS', 14), text_color='White', key='textoPC')],
                             [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 14), background_color='Black', text_color='White', key='textoJugador')],
