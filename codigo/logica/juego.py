@@ -35,10 +35,6 @@ def lazo_principal(jugador, cargar_partida=True):
     #Instancia la información en diferentes objetos
     preferencias = Preferencias(configuracion['filas'],configuracion['columnas'],configuracion['especiales'], configuracion['nivel'])
     unTablero = Tablero(preferencias)
-    palabras_jugador=[]
-    palabras_pc=[]
-    palabra={}
-
     #Crea un string con el directorio donde se almacenan las partidas. El formato
     #de la ruta depende del sistema operativo en el que se esté ejecutando
     ruta_guardado = os.path.join('guardados', '')
@@ -59,6 +55,8 @@ def lazo_principal(jugador, cargar_partida=True):
             preferencias = archivo_partida.getPreferencias()
             cant_cambiar = archivo_partida.getCantCambiar()
             puntaje_pc = archivo_partida.getPuntajePC()
+            palabras_jugador = archivo_partida.getPalabrasJugador()
+            palabras_pc = archivo_partida.getPalabrasPC()
             #La partida sólo se puede guardar en el turno del jugador. Al cargarla,
             #continuará siendo su turno
             turno_jugador = True
@@ -78,7 +76,6 @@ def lazo_principal(jugador, cargar_partida=True):
         bolsa_fichas = crear_bolsa(configuracion['cant_fichas'],configuracion['puntaje_ficha'])
         atril_jugador = Atril (bolsa_fichas, 7)
         atril_pc = Atril(bolsa_fichas, 7)
-
         #El primer turno se decide al azar
         turno_jugador = random.choice([True, False])
         #Asigna la cantidad de veces que se pueden cambiar las fichas
@@ -89,6 +86,9 @@ def lazo_principal(jugador, cargar_partida=True):
         #El tiempo de la partida se determina según el nivel de dificultad
         tiempo_partida = configuracion['tiempo']
         interfaz.setTimer(tiempo_partida)
+        #Prepara los listados donde se guardarán las palabras utilizadas
+        palabras_jugador=[]
+        palabras_pc=[]
 
     #Lazo principal del juego
     jugar = True
@@ -217,8 +217,7 @@ def lazo_principal(jugador, cargar_partida=True):
                                         interfaz.actualizarTablero(unTablero)
 
                                         #Guarda la palabra elegida por el jugador en la lista "palabras_jugador"
-                                        palabra = {palabra: puntaje_palabra}
-                                        palabras_jugador.append(palabra)
+                                        palabras_jugador.append({palabra: puntaje_palabra})
 
                                         elegir_posicion = False
                                         break
@@ -274,11 +273,11 @@ def lazo_principal(jugador, cargar_partida=True):
                     eleccion = interfaz.popUpOkCancel('¿Estas seguro que deseas guardar la partida?')
                     if eleccion == 'OK':
                         jugador.setPuntaje(puntaje)
-                        archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar())
+                        archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar(), palabras_jugador, palabras_pc)
                         archivo_partida.crear_guardado()
                         jugar = False
                 instante = interfaz.paralizarTimer(instante)
-                
+
             if (event == 'infoPartida'):
                 infoConfiguracion(configuracion)
             interfaz.actualizarTimer()
@@ -294,8 +293,7 @@ def lazo_principal(jugador, cargar_partida=True):
             #Si encontró al menos una opcíón, la inserta y actualiza la información
             if len(mejor_opcion) != 0:
                 #Guarda la palabra elegida por la PC en la lista "palabras_pc"
-                palabra = {pal_pc: mejor_opcion['interes']}
-                palabras_pc.append(palabra)
+                palabras_pc.append({pal_pc: mejor_opcion['interes']})
                 #Realiza la inserción
                 puntaje_pc += unTablero.insertarPalabra(mejor_opcion['fichas'], mejor_opcion['coordenada'], mejor_opcion['sentido'])
                 for ficha in mejor_opcion['fichas']:
