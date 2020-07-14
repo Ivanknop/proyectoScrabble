@@ -6,12 +6,12 @@ import codigo.interfaz.interfaz_puntaje as pun
 from codigo.interfaz.tema import *
 
 def check_apodo(apodo):
-    '''Esta función se encarga de evaluar el campo del APODO al momento
-    de crear una partida. Los apodos deben tener mas de 3 caracteres, no poseer espacion en blanco
-    ni poseer caracteres especiales, y no ser solo numeros'''
+    '''esta función se encarga de evaluar el campo del APODO  al momento
+    decrear una partida. Los apodos deben tener mas de 3 caracteres, no poseer espacion en blanco
+    no poseer caracteres especiales, y no ser solo numeros'''
 
     carEspecial = '!@#$%^&*()[]{};:,./<>?\|`~-=_+'
-    if len(apodo) < 3 :
+    if len(apodo) < 3 or len(apodo) > 10:
         print('longitud')
         return False
     elif (apodo == '') or  (apodo.isspace()== True) or (' ' in apodo):
@@ -20,6 +20,7 @@ def check_apodo(apodo):
     elif apodo.isdigit()==True:
         print('digitos')
         return False
+
     for c in apodo:
         print(f'for {c}')
         if c in carEspecial:
@@ -42,6 +43,9 @@ def jugar (avatar, value, ventana):
     '''Esta función crea una instancia del objeto jugador y lo retorna'''
     jugador = Jugador(nombre=value['apodo'], dificultad=nivel(ventana), avatar=avatar)
     return jugador
+
+
+
 
 def actualizar_columnas(ventana, *columna):
     '''Esta función hará visible la columna que recibe como parámetro
@@ -160,7 +164,7 @@ def lazo_principal():
             actualizar_columnas(ventana, 'colPartida','colAvatar')
         elif event == 'cancelar':
             actualizar_columnas(ventana, 'colJugar2')
-        elif event == 'confirmar':
+        elif event == 'confirmar':  
             if  check_apodo(ventana.FindElement('apodo').Get()):
                 avatarSelec = avatar.getActualRuta()
                 jugador = jugar(avatarSelec, value, ventana)
@@ -168,7 +172,7 @@ def lazo_principal():
                 if decision == 'Yes':
                     break
             else:
-                sg.popup_ok('Debe ingresar un Apodo de 3 o más caracteres. Puede ser alfanumerico, pero no debe contener caracteres especiales.',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
+                sg.popup_ok('Debe ingresar un Apodo (debe tener entre 3 y 10 caracteres,puede ser alfanumerico, pero no debe contener caracteres especiales)',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
         elif event in ('<<<', '>>>'):
             avatarSelec = avatar.controles(event, ventana.FindElement('avatarVisor'))
 
@@ -180,3 +184,4 @@ def lazo_principal():
 
 if __name__ == '__main__':
     lazo_principal()
+
