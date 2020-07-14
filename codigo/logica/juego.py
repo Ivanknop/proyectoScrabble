@@ -204,20 +204,21 @@ def lazo_principal(jugador, cargar_partida=True):
                                             for f in fichas_seleccionadas:
                                                 atril_jugador.usar_ficha(f)
 
-                                            #Se completan los espacios que vacios en el atril
+                                            #Se completan los espacios vacios en el atril
                                             atril_jugador.llenar_atril(bolsa_fichas)
 
                                             #Se incremente el puntaje del jugador y actualizan en la interfaz
                                             puntaje += puntaje_palabra
                                             interfaz.actualizarPuntaje(puntaje)
                                             interfaz.textoEstandar()
+
+                                            #Se guarda la palabra elegida por el jugador en la lista "palabras_jugador"
+                                            palabras_jugador.append({palabra: puntaje_palabra})
+
                                             turno_jugador = False
 
                                         interfaz.actualizarAtril(atril_jugador)
                                         interfaz.actualizarTablero(unTablero)
-
-                                        #Guarda la palabra elegida por el jugador en la lista "palabras_jugador"
-                                        palabras_jugador.append({palabra: puntaje_palabra})
 
                                         elegir_posicion = False
                                         break

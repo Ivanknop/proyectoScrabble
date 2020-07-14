@@ -90,8 +90,8 @@ class Dibujar():
 
         columna_derecha = [[sg.Button(button_text=f'Nivel: {preferencias.getNivel()}', font=('Arial', 14),border_width=1,tooltip='Configuración de la Partida',key='infoPartida')],
                             [sg.Column(avatarJ, element_justification='center'),sg.Column(avatarPC, element_justification='center')],
-                            [sg.Text(f'         ¡Comencemos, {jugador.getNombre()}!           ', background_color='black', font=('Nimbus Mono PS', 18), text_color='White', key='textoPC')],
-                            [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 24), background_color='Black', text_color='White', key='textoJugador')],
+                            [sg.Text(f'         ¡Comencemos, {jugador.getNombre()}!           ', background_color='black', font=('Nimbus Mono PS', 14), text_color='White', key='textoPC')],
+                            [sg.Text('                ---TUS FICHAS---              ', font=('Arial', 14), background_color='Black', text_color='White', key='textoJugador')],
                             fichas,
                             [sg.Text('_'*30)],
                             [sg.Button(image_filename=f'{self._directorio_media}validar.png', border_width=0, key='validar'),
@@ -172,7 +172,7 @@ class Dibujar():
         for fila in tablero.getCasilleros():
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self._getCasilleroTamano())
+                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self._getCasilleroTamano(), button_color=(None, None))
                 else:
                     if (dato == ''):
                         self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png' , image_size=self._getCasilleroTamano())
