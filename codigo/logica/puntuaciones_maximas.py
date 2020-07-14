@@ -36,10 +36,10 @@ class Puntuacion_Maxima():
         try:
             fichero = open(self.ruta_guardado, 'rb')
             self.puntajes = pickle.load(fichero)
+            fichero.close()
         except:
             print("El fichero no existe")
-        finally:
-            fichero.close()
+            
 
     def mostrar(self):
         if len(self.puntajes) == 0:
