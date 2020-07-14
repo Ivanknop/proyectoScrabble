@@ -74,7 +74,7 @@ def lazo_principal(jugador, cargar_partida=True):
     else:
         #Si no se clickeó "Cargar" en la interfaz inicial, crea una bolsa y nuevos atriles
         bolsa_fichas = crear_bolsa(configuracion['cant_fichas'],configuracion['puntaje_ficha'])
-        atril_jugador = Atril (bolsa_fichas, 7)
+        atril_jugador = Atril(bolsa_fichas, 7)
         atril_pc = Atril(bolsa_fichas, 7)
         #El primer turno se decide al azar
         turno_jugador = random.choice([True, False])
@@ -293,13 +293,19 @@ def lazo_principal(jugador, cargar_partida=True):
 
             #Si encontró al menos una opcíón, la inserta y actualiza la información
             if len(mejor_opcion) != 0:
-                #Guarda la palabra elegida por la PC en la lista "palabras_pc"
+                #Guarda la palabra elegida por la IA en la lista "palabras_pc"
                 palabras_pc.append({pal_pc: mejor_opcion['interes']})
-                #Realiza la inserción
-                puntaje_pc += unTablero.insertarPalabra(mejor_opcion['fichas'], mejor_opcion['coordenada'], mejor_opcion['sentido'])
+                #Marca las fichas utilizadas como pertenecientes a la IA y las elimina de su atril
                 for ficha in mejor_opcion['fichas']:
+                    #Recordar que mejor_opcion['fichas'] podría contener diccionarios/fichas repetidas (en términos
+                    #del lenguaje, con la misma referencia), por lo que al modificar una cambiaría su gemela. Por este
+                    #motivo, no es conveniente alterar su contenido hasta acabado el proceso de búsqueda de indices en el atril.
                     indice = atril_pc.ver_atril().index(ficha)
                     atril_pc.usar_ficha(indice)
+                for ficha in mejor_opcion['fichas']:
+                    ficha['propietario'] = 'PC'
+                #Realiza la inserción
+                puntaje_pc += unTablero.insertarPalabra(mejor_opcion['fichas'], mejor_opcion['coordenada'], mejor_opcion['sentido'])
                 atril_pc.llenar_atril(bolsa_fichas)
                 interfaz.actualizarTablero(unTablero)
                 interfaz.actualizarPuntajePC(puntaje_pc)

@@ -43,7 +43,10 @@ class Dibujar():
             insercion = []
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas,button_color=self._botoncolor, enable_events=True),)
+                    if (dato['propietario'] == 'jugador'):
+                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas,button_color=(None, '#06FF64'), enable_events=True))
+                    else:
+                        insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}ficha {list(dato.keys())[0]}.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas,button_color=(None, '#FF0606'), enable_events=True))
                 else:
                     if (dato==''):
                         insercion.append(sg.Button(image_filename=f'{self._directorio_fichas}azul.png', pad=self._padin, key=f'tablero {f},{c}', image_size=self._tamcas, button_color=self._botoncolor,enable_events=True))
@@ -172,7 +175,10 @@ class Dibujar():
         for fila in tablero.getCasilleros():
             for dato in fila:
                 if (tablero.esFicha(ficha=dato)):
-                    self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self._getCasilleroTamano(), button_color=(None, None))
+                    if (dato['propietario'] == 'jugador'):
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self._getCasilleroTamano(), button_color=(None, '#06FF64'))
+                    else:
+                        self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {list(dato.keys())[0]}.png', image_size=self._getCasilleroTamano(), button_color=(None, '#FF0606'))
                 else:
                     if (dato == ''):
                         self._getInterfaz()[f'tablero {f},{c}'].Update(image_filename=f'{self._getDirectorioFicha()}azul.png' , image_size=self._getCasilleroTamano())

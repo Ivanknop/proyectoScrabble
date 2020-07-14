@@ -1,46 +1,29 @@
 from codigo.logica.configuracion import *
 
-
-
-def crear_bolsa(cant, puntos):
-    ''' esta funcion returna una bolsa de fichas (una lista, donde cada ficha
+def crear_bolsa(cant, puntos, propietario='jugador'):
+    '''Esta funcion returna una bolsa de fichas (una lista, donde cada ficha
     es un diccionario' donde la clave es la letra y el valor su puntaje)
     recibe la cantidad y los puntos segun el nivel, el nivel no se determina en este modulo'''
     bolsa = []
 
+    #l = cantidad de veces que aparece una ficha
+    #k = puntaje de una ficha
     for l in cant:
-
         ficha = {}
-        puntaje = 0
         ok = False
         k = 1
         while not ok:
             if k in puntos:
                 if l in puntos[k]:
-                    #aca armo la ficha
+                    #Arma la ficha
                     puntaje = k
-                    ficha[l.lower()] = puntaje
                     ok = True
                 else:
                     k += 1
             else:
                 k += 1
-        #aca la agrego la cantidad de veces especificada segun la dificultad, a la bolsa
+        #Agrega la cantidad de veces especificada según la dificultad a la bolsa
         for f in range(cant[l.upper()]):
-            bolsa.append(ficha)
-
-
-
-
-
-
-
+            #La ficha posee un puntaje y un indicador de a quién pertenece
+            bolsa.append({l.lower(): puntaje, 'propietario': propietario})
     return bolsa
-
-
-
-""" ejemplo de su uso
-conf = nivel_dificil()
-
-bolsa_fichas = crear_bolsa(conf['cant_fichas'],conf['puntaje_ficha'])
-print(bolsa_fichas)"""

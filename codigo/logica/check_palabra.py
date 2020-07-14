@@ -1,7 +1,7 @@
 '''ESTA VERSION DEL CODIGO ESTA BASADA EN LA ULTIMA MODIFICACION DE LA ENTREGA,
 EN LA CUAL SE ESTABLECIERON PAUTAS DISTINTAS POR PARTE DE LA CATEDRA PARA LAS DIFERENTE DIFICULTADES.
 SEGUIREMOS PEMRITIENDO PALABRAS CON ACENTOS YA QUE ESTABA SOLUCIONADO ESE PROBLEMA,
-PERO ESTA VEZ CHEQUEARÁ LA PALABRA (EN EL MODULO check_jugador()) TENIENDO ENCUENTA LA DIFICULTAD EN 
+PERO ESTA VEZ CHEQUEARÁ LA PALABRA (EN EL MODULO check_jugador()) TENIENDO ENCUENTA LA DIFICULTAD EN
 LA QUE SE ESTE JUGANDO'''
 
 import pattern.es as pes
@@ -131,6 +131,10 @@ def check_compu(atril_pc, tablero, dificultad):
             for letra in pal:
                 for ficha in fichas_pc:
                     if list(ficha.keys())[0] == letra:
+                        #Notar algo importante: A la primera aparición de una ficha que coincida con la letra que busca,
+                        #agrega la ficha a la lista. Esto es correcto; sin embargo es conveniente no olvidar que,
+                        #si una letra se repitiese, estaría agregando dos veces la misma ficha a la lista
+                        #(el mismo diccionario). En usos futuros, si se modificase una, también cambiaría la otra.
                         fichas_pal.append(ficha)
                         break
             busqueda = tablero.buscarEspacio(fichas_pal, dificultad)

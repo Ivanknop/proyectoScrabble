@@ -11,7 +11,7 @@ class Atril():
         mostrar el atril íntegro
         devolver la cantidad de fichas disponibles
     '''
-    def __init__ (self,bolsa_fichas,cant_fichas):
+    def __init__ (self, bolsa_fichas, cant_fichas):
         random.shuffle(bolsa_fichas)
         self._cant_maxima = cant_fichas
         self._cant_Fichas = cant_fichas
@@ -28,7 +28,7 @@ class Atril():
             bolsa_fichas.append(self._lista_Fichas[i])
         self._cant_Fichas = 0
         self._lista_Fichas = []
-        random.shuffle(bolsa_fichas)                        
+        random.shuffle(bolsa_fichas)
         while bolsa_fichas and self._cant_Fichas < self._cant_maxima:
             self._lista_Fichas.append(bolsa_fichas[0])
             bolsa_fichas.remove(bolsa_fichas[0])
