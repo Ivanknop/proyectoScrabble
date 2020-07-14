@@ -6,38 +6,38 @@ class Jugador():
     def __init__(self,nombre,puntaje):
         self.nombre = nombre
         self.puntuacion = puntaje
-    
+
     def __str__(self):
         return '{:^15} {:10} {:^15}'.format(self.nombre,' ', self.puntuacion)
 
 class Puntuacion_Maxima():
     ruta_guardado = os.path.join("guardados", "puntuacion_maxima.pckl")
-    puntajes = []
-    MAXIMOS = 10    
+    MAXIMOS = 10
+
     def __init__ (self):
+        self.puntajes = []
         self.cargar()
-    
+
     def guardar(self):
         fichero = open(self.ruta_guardado, 'wb')
         pickle.dump(self.puntajes, fichero)
         fichero.close()
 
-    def agregar(self,jug): 
+    def agregar(self,jug):
         '''
         Recibe un jugador y evalúa si su puntuación es mayor a las guardadas. Produce el desplazamiento y elimina a la posición 11
-        '''  
+        '''
         self.puntajes.append(jug)
         self.puntajes.sort(key=lambda jugador: jugador.puntuacion,reverse=True)
         self.puntajes.pop()
-        self.guardar() 
+        self.guardar()
 
     def cargar(self):
-        fichero = open(self.ruta_guardado, 'ab+')
-        fichero.seek(0)
         try:
+            fichero = open(self.ruta_guardado, 'rb')
             self.puntajes = pickle.load(fichero)
         except:
-            print("El fichero está vacío")
+            print("El fichero no existe")
         finally:
             fichero.close()
 
@@ -47,14 +47,14 @@ class Puntuacion_Maxima():
             return
         for j in self.puntajes:
             print(j)
-    
+
     def ver_puntaje(self,pos):
         '''
         Devuelve una posición particular a partir de una posición específica
         '''
         return self.puntajes[pos]
-    
-    def _vaciar_puntajes (self): 
+
+    def _vaciar_puntajes (self):
         '''
             Es un método que solo se invoca desde la propia clase.
             Vacía la lista de puntuaciones
@@ -62,13 +62,14 @@ class Puntuacion_Maxima():
         self.puntajes = []
         for p in range (10):
             self.puntajes.append(Jugador('Vacío',0))
+        self.puntajes = self.puntajes[0:self.MAXIMOS]
         self.guardar()
-        
 
-    def inicializar_puntuacion (self): 
+    def inicializar_puntuacion (self):
         '''
         Reinicializa las puntuaciones máximas
-        '''        
+        '''
+        #Siempre, antes de agregarse por primera vez un jugador, debe invocarse a "_vaciar_puntajes()"
         self._vaciar_puntajes()
         self.agregar(Jugador('Enzo',300))
         self.agregar(Jugador('Iván',300))

@@ -4,7 +4,7 @@ from codigo.interfaz.tema import *
 
 def actualizar_puntaje (puntaje,ventana):
     listado_puntos =''
-    for p in range(len(puntaje.puntajes)): 
+    for p in range(len(puntaje.puntajes)):
         listado_puntos = listado_puntos + str(puntaje.puntajes[p]) + '\n'
         ventana['puntos'].update(value=listado_puntos)
 
@@ -27,8 +27,8 @@ def puntajes():
     ventana = sg.Window ('Puntaje Máximo',layout=contenido,size= (420,400), no_titlebar=True, keep_on_top=True)
     ventana.finalize()
 
+    puntuaciones = Puntuacion_Maxima()
     while True:
-        puntuaciones = Puntuacion_Maxima()
         actualizar_puntaje(puntuaciones,ventana)
         event, values = ventana.read()
         if event in ( None,'volver'):
