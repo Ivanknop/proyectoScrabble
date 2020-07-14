@@ -27,7 +27,7 @@ def determinar_dificultad(jugador):
 def lazo_principal(jugador, cargar_partida=True):
     '''Lazo que controla el flujo normal de la partida. Determina qué
     sucede ante cada evento que ocurre en el juego.
-    :param jugador: Objeto que contiene los datos del jugador, lo 
+    :param jugador: Objeto que contiene los datos del jugador, lo
     utiliza al crear una nueva partida o cargar una anterior.'''
 
     configuracion = determinar_dificultad(jugador)
@@ -215,8 +215,11 @@ def lazo_principal(jugador, cargar_partida=True):
 
                                         interfaz.actualizarAtril(atril_jugador)
                                         interfaz.actualizarTablero(unTablero)
-                                        palabra = {palabra:puntaje_palabra}
+
+                                        #Guarda la palabra elegida por el jugador en la lista "palabras_jugador"
+                                        palabra = {palabra: puntaje_palabra}
                                         palabras_jugador.append(palabra)
+
                                         elegir_posicion = False
                                         break
 
@@ -255,14 +258,14 @@ def lazo_principal(jugador, cargar_partida=True):
                 else:
                     #Si se clickea "Finalizar juego", se termina la ronda
                     jugar = False
-                
+
             #-----EVENTO: Pausar juego-----
             if (event == 'pausar'):
                  #Paraliza el timer y muestra un pop de confirmación
                 instante = time.time()
-                event = interfaz.ventanaPausa() 
-                instante = interfaz.paralizarTimer(instante)
+                event = interfaz.ventanaPausa()
                 if (event == 'abandonar'):
+                    #Si abandonó la partida, muestra la lista completa de palabras usadas antes de salir
                     listado_palabras(palabras_jugador,palabras_pc)
                     jugar = False
 
@@ -274,7 +277,8 @@ def lazo_principal(jugador, cargar_partida=True):
                         archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar())
                         archivo_partida.crear_guardado()
                         jugar = False
-
+                instante = interfaz.paralizarTimer(instante)
+                
             if (event == 'infoPartida'):
                 infoConfiguracion(configuracion)
             interfaz.actualizarTimer()
@@ -289,8 +293,10 @@ def lazo_principal(jugador, cargar_partida=True):
 
             #Si encontró al menos una opcíón, la inserta y actualiza la información
             if len(mejor_opcion) != 0:
-                palabra = {pal_pc:mejor_opcion['interes']}
+                #Guarda la palabra elegida por la PC en la lista "palabras_pc"
+                palabra = {pal_pc: mejor_opcion['interes']}
                 palabras_pc.append(palabra)
+                #Realiza la inserción
                 puntaje_pc += unTablero.insertarPalabra(mejor_opcion['fichas'], mejor_opcion['coordenada'], mejor_opcion['sentido'])
                 for ficha in mejor_opcion['fichas']:
                     indice = atril_pc.ver_atril().index(ficha)

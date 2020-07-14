@@ -21,7 +21,7 @@ PIL
 Pattern 3.6
 
 
-Se recomienda compilar en Python 3.6.10 o anterior por un problema entre el mismo y la librería Pattern.
+Se recomienda ejecutar en Python 3.6.10 o anterior por un problema entre el mismo y la librería Pattern.
 
 
 Dinámica del juego:

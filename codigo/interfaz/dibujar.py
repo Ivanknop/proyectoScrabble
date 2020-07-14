@@ -82,8 +82,8 @@ class Dibujar():
         avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='#4f280a', key='avatar_j')],
                   [sg.Text(text=self._jugador.getNombre(), border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text=f'  {self._jugador.getPuntaje()}  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
-        
-        #(Implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente)     
+
+        #(Implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente)
         avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='#4f280a', key='avatar_pc')],
                   [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
                   [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')]]
@@ -280,9 +280,9 @@ class Dibujar():
     def popUpOkCancel(self, cadena):
         '''Ventana PopUp simple que imprime un string y
         posee botones de OK y CANCEL.'''
-        pestaña = sg.popup_ok_cancel(cadena, keep_on_top=True,background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, non_blocking=True)
+        pestaña = sg.popup_ok_cancel(cadena, keep_on_top=True,background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True)
         return pestaña
-    
+
     def ventanaPausa(self):
         event = menuPausa.menu_pausa()
         return event
