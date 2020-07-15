@@ -15,17 +15,17 @@ def check_apodo(apodo):
         print('longitud')
         return False
     elif (apodo == '') or  (apodo.isspace()== True) or (' ' in apodo):
-        print('epacios')
+
         return False
     elif apodo.isdigit()==True:
-        print('digitos')
+
         return False
 
     for c in apodo:
-        print(f'for {c}')
+
         if c in carEspecial:
             return False
-    print('luego del for')
+    
     return True
 
 def nivel(ventana):
