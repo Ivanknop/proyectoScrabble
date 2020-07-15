@@ -25,7 +25,7 @@ def check_apodo(apodo):
 
         if c in carEspecial:
             return False
-    
+
     return True
 
 def nivel(ventana):
