@@ -282,7 +282,6 @@ def lazo_principal(jugador, cargar_partida=True):
                         jugador.setPuntaje(puntaje)
                         archivo_partida = Juego_Guardado(ruta_guardado, unTablero, jugador.getNombre(), atril_jugador, atril_pc, bolsa_fichas, jugador.getPuntaje(), puntaje_pc, interfaz.getTiempoRestante(), preferencias, cant_cambiar, jugador.getAvatar(), palabras_jugador, palabras_pc)
                         archivo_partida.crear_guardado()
-                        terminar(jugador.getNombre(),puntaje,puntaje_pc,palabras_jugador,palabras_pc)
                         jugar = False
                 instante = interfaz.paralizarTimer(instante)
 
