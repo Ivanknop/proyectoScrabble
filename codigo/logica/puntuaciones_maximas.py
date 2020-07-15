@@ -8,7 +8,7 @@ class Jugador():
         self.puntuacion = puntaje
 
     def __str__(self):
-        return '{:^15} {:10} {:^15}'.format(self.nombre,' ', self.puntuacion)
+        return '{:^15} {:15} {:^15}'.format(self.nombre,' ', self.puntuacion)
 
 class Puntuacion_Maxima():
     ruta_guardado = os.path.join("guardados", "puntuacion_maxima.pckl")

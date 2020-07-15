@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 from codigo.logica.puntuaciones_maximas import *
 from codigo.interfaz.tema import *
-
+import os
 def actualizar_puntaje (puntaje,ventana):
     listado_puntos =''
     for p in range(len(puntaje.puntajes)):
@@ -15,16 +15,18 @@ def blanquear (puntaje):
 
 def puntajes():
 
+    imgPuntos = os.path.join('media', 'puntuaciones2.png')
     contenido = [
-        [sg.Text('Puntuaciones máximas',size=(20,1),font=('Impact',18),text_color=('black'),key='_puntos')],
-        [sg.Text(key='puntos',size=(200,10),justification='center',font=('Arial',18),background_color='Black',text_color='white')],
+        #[sg.Text('Puntuaciones máximas',size=(20,1),font=('Impact',18),text_color=('black'),key='_puntos')],
+        [sg.Image(filename=imgPuntos, )],
+        [sg.Text(key='puntos',size=(200,10),justification='center',font=('Impact',16),background_color='#afad71',text_color='Black')],
         [sg.Button('Borrar puntuación',font=('Arial',16),size=(10,3),button_color=('black', '#f75404'),key='blanquear'),
         sg.Button('Reestablecer puntuación',font=('Arial',16),size=(10,3),button_color=('black', '#f75404'),key='reestablecer'),
          sg.Button('volver', font=('Arial', 16), size=(14, 3),button_color=('black', '#f75404'), key='volver') ]
 
         ]
     mi_tema()
-    ventana = sg.Window ('Puntaje Máximo',layout=contenido,size= (420,400), no_titlebar=True, keep_on_top=True)
+    ventana = sg.Window ('Puntaje Máximo',layout=contenido,size= (420,500),element_justification='center', no_titlebar=False, keep_on_top=True)
     ventana.finalize()
 
     puntuaciones = Puntuacion_Maxima()
