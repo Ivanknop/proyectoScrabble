@@ -1,6 +1,7 @@
 from PIL import Image,ImageDraw,ImageFont
 import PySimpleGUI as sg
 import time
+from codigo.interfaz.tema import*
 import os.path
 
 def crear_ficha (ficha,directorio):
@@ -67,7 +68,7 @@ def crear_avatar(av,directorio):
         dibujo.line((0, 0) + img.size, fill=(255,0,0,255),width=3)
         dibujo.line((0, img.size[1], img.size[0], 0), fill=(255,0,0,255),width=3)
         img.save(f'{directorio}avatarError.png')
-     return img
+    return img
 
 def crear_error ():
     directorio = os.path.join('media', 'media_ii','')
@@ -133,11 +134,9 @@ def check_avatares():
 
 def loading():
     img_logo = os.path.join('media', 'scrabbleArLogo.png')
-    contenido = [[sg.Image(img_logo, background_color='#4f280a')],
-                [sg.Text(font=('Arial',12),size=(20,5),justification='center',
-                background_color='#4f280a',text_color = 'yellow',key='texto')],
-                [sg.Text(font=('Arial',12),size=(20,5),justification='center',
-                background_color='#4f280a',text_color = 'yellow',key='ok')]
+    contenido = [[sg.Image(img_logo)],
+                [sg.Text(font=('Arial',12),size=(20,12),justification='center',key='texto')],
+                [sg.Text(font=('Arial',12),size=(15,5),justification='center',key='ok')]
                 ]
     v = sg.Window('Loading',layout=contenido,size=(400,400), background_color='#4f280a',element_justification='center', keep_on_top=True, grab_anywhere=True)
     texto = ['Chequeando imágenes de fichas','Chequeando imágenes de casilleros especiales','Chequeando imágenes de avatares','LISTO PARA JUGAR']
