@@ -36,11 +36,15 @@ def puntajes():
         if event in ( None,'volver'):
             break
         elif event == 'blanquear':
-            puntuaciones._vaciar_puntajes()
-            actualizar_puntaje(puntuaciones,ventana)
+            decision = sg.popup_yes_no('Realmente desea borrar los puntajes?',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
+            if decision == 'Yes':
+                puntuaciones._vaciar_puntajes()
+                actualizar_puntaje(puntuaciones,ventana)
         elif event == 'reestablecer':
-            puntuaciones.inicializar_puntuacion()
-            actualizar_puntaje(puntuaciones,ventana)
+            decision = sg.popup_yes_no('Realmente desea reestablecer los puntajes?',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
+            if decision == 'Yes':
+                puntuaciones.inicializar_puntuacion()
+                actualizar_puntaje(puntuaciones,ventana)
     ventana.close()
 
 
