@@ -9,6 +9,8 @@ from codigo.logica.guardar_partida import Juego_Guardado
 from codigo.logica.jugador import Jugador
 from codigo.interfaz.interfaz_palabras import *
 from codigo.interfaz.final import*
+from codigo.interfaz.ayuda import ayuda
+
 import os.path
 import time
 import random
@@ -300,6 +302,10 @@ def lazo_principal(jugador, cargar_partida=True):
             #-----EVENTO: Información sobre la partida-----
             if (event == 'infoPartida'):
                 infoConfiguracion(configuracion)
+            if (event == 'ayuda'):
+                ayuda()
+
+   
 
             interfaz.actualizarTimer()
 

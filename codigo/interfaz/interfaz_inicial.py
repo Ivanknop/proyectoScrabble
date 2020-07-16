@@ -4,6 +4,8 @@ import codigo.interfaz.visorAvatar as va
 from codigo.logica.jugador import Jugador
 import codigo.interfaz.interfaz_puntaje as pun
 from codigo.interfaz.tema import *
+from  codigo.interfaz.ayuda import ayuda
+
 
 def check_apodo(apodo):
     '''esta función se encarga de evaluar el campo del APODO  al momento
@@ -178,6 +180,8 @@ def lazo_principal():
 
         elif event == 'puntajes':
             pun.puntajes()
+        elif event == 'ayuda':
+            ayuda()
 
     ventana.Close()
     return jugador, cargar_partida
