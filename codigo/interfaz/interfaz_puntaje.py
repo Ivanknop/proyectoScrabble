@@ -26,7 +26,7 @@ def puntajes():
 
         ]
     mi_tema()
-    ventana = sg.Window ('Puntaje Máximo',layout=contenido,size= (420,500),element_justification='center', no_titlebar=False, keep_on_top=True)
+    ventana = sg.Window ('Puntaje Máximo',layout=contenido,size= (420,500),element_justification='center', no_titlebar=True,grab_anywhere=True, keep_on_top=True)
     ventana.finalize()
 
     puntuaciones = Puntuacion_Maxima()

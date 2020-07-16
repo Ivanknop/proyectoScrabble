@@ -36,7 +36,7 @@ def infoConfiguracion(conf):
     layout.append([sg.Button('Volver',button_color=('black', '#f75404'),key='volverConf')])
 
     mi_tema()
-    ventana = sg.Window('configuracion',layout=layout,size=(300,670),no_titlebar=True, keep_on_top=True).Finalize()
+    ventana = sg.Window('configuracion',layout=layout,size=(300,670),no_titlebar=True,grab_anywhere=True, keep_on_top=False).Finalize()
 
     while True:
         event, value = ventana.read()

@@ -45,7 +45,7 @@ def listado_palabras (jugador,pc):
 
         ]
     mi_tema()
-    ven = sg.Window ('Listado de Palabras',layout=contenido,size= (400,600), no_titlebar=False)
+    ven = sg.Window ('Listado de Palabras',layout=contenido,size= (400,600), no_titlebar=True,grab_anywhere=True,)
     ven.finalize()
 
     while True:
