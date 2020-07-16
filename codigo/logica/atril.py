@@ -56,11 +56,3 @@ class Atril():
 
     def getCantMaxima(self):
         return self._cant_maxima
-
-'''
-Ejemplo de uso ==>
-conf = nivel_dificil()
-bolsa_fichas = crear_bolsa(conf['cant_fichas'],conf['puntaje_ficha'])
-FICHAS = 7
-jugador = Atril (bolsa_fichas, FICHAS)
-print (jugador.ver_atril())'''
