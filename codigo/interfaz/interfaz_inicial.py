@@ -164,10 +164,10 @@ def lazo_principal():
             actualizar_columnas(ventana, 'colPartida','colAvatar')
         elif event == 'cancelar':
             actualizar_columnas(ventana, 'colJugar2')
-        elif event == 'confirmar':  
+        elif event == 'confirmar':
             if  check_apodo(ventana.FindElement('apodo').Get()):
                 avatarSelec = avatar.getActualRuta()
-                decision = sg.popup_yes_no(f'¿Confirmar los datos?\nNombre: {jugador.getNombre()}\nDificultad: {jugador.getDificultad()}',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
+                decision = sg.popup_yes_no(f'¿Confirmar los datos?\nNombre: {value["apodo"]}\nDificultad: {nivel(ventana)}',background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True, keep_on_top=True)
                 if decision == 'Yes':
                     jugador = jugar(avatarSelec, value, ventana)
                     break
@@ -184,4 +184,3 @@ def lazo_principal():
 
 if __name__ == '__main__':
     lazo_principal()
-

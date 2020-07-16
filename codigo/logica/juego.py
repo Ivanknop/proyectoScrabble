@@ -92,6 +92,7 @@ def lazo_principal(jugador, cargar_partida=True):
         palabras_pc=[]
 
     #Lazo principal del juego
+    interfaz.turnoJugador(turno_jugador)
     jugar = True
     while jugar:
 
@@ -99,8 +100,10 @@ def lazo_principal(jugador, cargar_partida=True):
         if (turno_jugador):
             event, value = interfaz.leer()
 
-            #Si se acabo el tiempo o se cerró la ventana, se termina el juego
-            if (interfaz.terminoTimer()) or (event == None):
+            #Si se acabo el tiempo o se cerró la ventana, se termina el jueg
+            if (event == None):
+                break
+            if (interfaz.terminoTimer()):
                 terminar(jugador.getNombre(),puntaje,puntaje_pc,palabras_jugador,palabras_pc)
                 break
 
@@ -127,8 +130,11 @@ def lazo_principal(jugador, cargar_partida=True):
                 while (not click_validar):
                     event, value = interfaz.leer()
 
-                    #Circunstancias que cierran el lazo
-                    if (interfaz.terminoTimer()) or (event == None):
+                    #Circunstancias que cierran el lazo}
+                    if (event == None):
+                        jugar = False
+                        break
+                    if (interfaz.terminoTimer()):
                         terminar(jugador.getNombre(),puntaje,puntaje_pc,palabras_jugador,palabras_pc)
                         jugar = False
                         break
@@ -161,7 +167,10 @@ def lazo_principal(jugador, cargar_partida=True):
                             #La primera vez, se esperará que decida donde insertarla
                             if not (cambio_posicion):
                                 event, value = interfaz.leer()
-                            if (interfaz.terminoTimer()) or (event == None):
+                            if (event == None):
+                                jugar = False
+                                break
+                            if (interfaz.terminoTimer()):
                                 terminar(jugador.getNombre(),puntaje,puntaje_pc,palabras_jugador,palabras_pc)
                                 jugar = False
                                 break
@@ -182,7 +191,10 @@ def lazo_principal(jugador, cargar_partida=True):
                                 #-----EVENTO: Decidir sentido-----
                                 while True:
                                     event, value = interfaz.leer()
-                                    if (interfaz.terminoTimer()) or (event == None):
+                                    if (event == None):
+                                        jugar = False
+                                        break
+                                    if (interfaz.terminoTimer()):
                                         terminar(jugador.getNombre(),puntaje,puntaje_pc,palabras_jugador,palabras_pc)
                                         jugar = False
                                         break
@@ -293,6 +305,8 @@ def lazo_principal(jugador, cargar_partida=True):
 
         #Turno de la PC
         else:
+            interfaz.turnoJugador(False)
+            interfaz.leer()
             if (interfaz.terminoTimer()):
                 terminar(jugador.getNombre(),puntaje,puntaje_pc,palabras_jugador,palabras_pc)
                 break
@@ -329,4 +343,5 @@ def lazo_principal(jugador, cargar_partida=True):
                     interfaz.actualizarTexto('PC: La bolsa de fichas se vació', tamaño=14, color='#EBDEB6', fondo='#A9084F')
                     cant_cambiar = 0
                     interfaz.habilitarFinalizacion()
+            interfaz.turnoJugador(True)
             turno_jugador = True

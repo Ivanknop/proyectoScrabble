@@ -32,7 +32,7 @@ def infoConfiguracion(conf):
             letras.append(sg.Text(fichas))
         layout.append(letras)
         letras=[]
-    layout.extend([[sg.Text('Casiilleros especiales: ')], [sg.Text('+: Obtienes 5 puntos adicionales')], [sg.Text('-: Pierdes 5 puntos del total conseguido')], [sg.Text('x2: Duplica el valor de la palabra')], [sg.Text('%2: Divide a la mitad el total de la palabra')], [sg.Text('0: Anula el valor de la palabra')]])
+    layout.extend([[sg.Text('Casilleros especiales: ')], [sg.Text('+: Obtienes 5 puntos adicionales')], [sg.Text('-: Pierdes 5 puntos del total conseguido')], [sg.Text('x2: Duplica el valor de la palabra')], [sg.Text('%2: Divide a la mitad el total de la palabra')], [sg.Text('0: Anula el valor de la palabra')]])
     layout.append([sg.Button('Volver',button_color=('black', '#f75404'),key='volverConf')])
 
     mi_tema()

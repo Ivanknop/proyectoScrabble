@@ -1,12 +1,12 @@
 ScrabbleAR es un proyecto realizado para el Seminario de Lenguaje Python.
 
-Fue realizado por: 
+Fue realizado por:
 
-Diego Vilardebó - https://github.com/elrecursante -
+Diego Vilardebó (quien además diseñó las imagenes para el proyecto) - https://github.com/elrecursante -
 
 Enzo Diaz - https://github.com/enzodiaz25 -
 
-Ivan Knopoff - https://github.com/Ivanknop - ivan.knopoff@gmail.com 
+Ivan Knopoff - https://github.com/Ivanknop - ivan.knopoff@gmail.com
 
 
 
@@ -27,7 +27,7 @@ Se recomienda ejecutar en Python 3.6.10 o anterior por un problema entre el mism
 Dinámica del juego:
 1) Se determina al azar quién empieza.
 2) El jugador selecciona la mejor combinación de palabras posibles y la inserta en el tablero. En este hay casilleros ordinarios y otros especiales que alteran el puntaje final de la palabra insertada. En el caso del computador, la selección de la palabra y del lugar del tablero está determinado por el algoritmo de dificultad.
-3) Una vez seleccionadas las letras se corrobora que sea una palabra válida. 
+3) Una vez seleccionadas las letras se corrobora que sea una palabra válida.
 4) En caso afirmativo, se decide dónde insertar y la orientación. Si hay lugar -es decir que la palabra no termina fuera del tablero ni se cruza con alguna letra de otra palabra-, se inserta y se incrementa el puntaje total.
 5) En caso negativo, se debe seleccionar otra combinación de letras.
 6) El Usuario/Jugador dispone de 3 (tres) cambios de sus fichas antes de tener que dar por terminada la partida.

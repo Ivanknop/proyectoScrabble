@@ -83,12 +83,12 @@ class Dibujar():
 
         #Contenedores para los avatares, el nombre y el puntaje
         avatarJ = [[sg.Image(filename=self._jugador.getAvatar(), size=(200, 200), background_color='#4f280a', key='avatar_j')],
-                  [sg.Text(text=self._jugador.getNombre(), border_width=2, justification='center', font=('Arial', 20))],
+                  [sg.Text(text=self._jugador.getNombre(), border_width=2, justification='center', font=('Arial', 20), key='nombre_jugador')],
                   [sg.Text(text=f'  {self._jugador.getPuntaje()}  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje')], ]
 
         #(Implementar un random para el avatar de la pc, por ahora se le selecciona uno explicitamente)
         avatarPC = [[sg.Image(filename=f'{self._directorio_avatars}avatar1.png', size=(200, 200), background_color='#4f280a', key='avatar_pc')],
-                  [sg.Text(text='COMPUTADORA', border_width=2, justification='center', font=('Arial', 20))],
+                  [sg.Text(text='PC', border_width=2, justification='center', font=('Arial', 20), key='nombre_pc')],
                   [sg.Text(text='  0  ', border_width=2, justification='center', font=('Arial', 20), key='puntaje_pc')]]
 
         columna_derecha = [[sg.Button(button_text=f'Nivel: {preferencias.getNivel().capitalize()}', font=('Arial', 14),border_width=1,tooltip='Configuración de la partida',key='infoPartida')],
@@ -194,6 +194,7 @@ class Dibujar():
             letra = list(atril.get_ficha(f).keys())[0]
             punto = atril.get_ficha(f)[letra]
             self._getInterfaz()[f'ficha {f}'].Update(image_filename=f'{self._getDirectorioFicha()}ficha {letra}.png', disabled=False, image_size=self._getFichaTamano())
+            self._getInterfaz()[f'ficha {f}'].SetTooltip(f'{punto} puntos')
         if (atril.get_cant_fichas() < atril.getCantMaxima()):
             for f in range(atril.get_cant_fichas(), atril.getCantMaxima()):
                 self.borrarElemento(f'ficha {f}')
@@ -289,6 +290,14 @@ class Dibujar():
         posee botones de OK y CANCEL.'''
         pestaña = sg.popup_ok_cancel(cadena, keep_on_top=True,background_color='#ece6eb',text_color='black', button_color=('black','#f75404'),font=('Arial',14), no_titlebar=True)
         return pestaña
+
+    def turnoJugador(self, turno_jugador):
+        if (turno_jugador):
+            self._getInterfaz()['nombre_pc'].Update(background_color='#4f280a')
+            self._getInterfaz()['nombre_jugador'].Update(background_color='Green')
+        else:
+            self._getInterfaz()['nombre_jugador'].Update(background_color='#4f280a')
+            self._getInterfaz()['nombre_pc'].Update(background_color='Green')
 
     def ventanaPausa(self):
         event = menuPausa.menu_pausa()
